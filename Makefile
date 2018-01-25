@@ -35,7 +35,8 @@ LDFLAGS =
 all: $(NAME)
 
 $(NAME): #$(OBJ)
-	gcc -shared -o malloc.so srcs/malloc.c $(IFLAGS)
+	gcc -shared -o libft_malloc_$(HOSTTYPE).so srcs/malloc.c $(IFLAGS)
+	ln -s libft_malloc_$(HOSTTYPE).so libft_malloc.so
 	#$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(LDFLAGS)
 
 $(OBJ_DIR)/main.o: main.c
