@@ -41,15 +41,9 @@ $(NAME): #$(OBJ)
 
 #$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(LDFLAGS)
 test:
-	gcc -o test0_my test/test0.c  -L. -lft_malloc -I includes
-	gcc -o test1_my test/test1.c  -L. -lft_malloc -I includes
-	gcc -o test2_my test/test2.c  -L. -lft_malloc -I includes
-	gcc -o test3_my test/test3.c  -L. -lft_malloc -I includes
-	gcc -o test3_2_my test/test3_2.c -L. -lft_malloc -I includes
-	gcc -o test4_my test/test4.c  -L. -lft_malloc -I includes
 	gcc -o test0 test/test0.c -I includes
 	gcc -o test1 test/test1.c -I includes
-	gcc -o test2 test/test2.c -I includes
+	gcc -o test2 test/test2.c -L. -lft_malloc  -I includes
 	gcc -o test3 test/test3.c -I includes
 	gcc -o test3_2 test/test3_2.c -I includes
 	gcc -o test4 test/test4.c -I includes

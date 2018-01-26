@@ -18,7 +18,6 @@ int main()
         addr = (char*)malloc(1024);
         printf("adrr : %zu\n", (size_t)addr);
         addr[0] = 42;
-        addr[1024] = 42;
         i++;
     }
     return (0);
