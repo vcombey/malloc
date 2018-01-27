@@ -56,7 +56,7 @@ char	*ft_sizetoa_base_str(size_t value, char *str, int base)
         if (!str) 
             return (ft_strdup("0"));
         else
-            str[0] = "0";
+            str[0] = '0';
         return str;
     }
     nb_digit = itoa_base_len(value, base);

@@ -1,118 +1,37 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_lst_del_one.c                                   :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ade-sede <adrien.de.sede@gmail.com>        +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/24 23:13:39 by ade-sede          #+#    #+#             */
-/*   Updated: 2017/11/24 23:14:56 by ade-sede         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "list.h"
 
-static void	is_middle_right(t_lst_head **head)
+void	ft_lst_del_one(void **first, void *node, void (*f)(void*))
 {
-	if ((*head)->shift_middle == 1)
-	{
-		if ((*head)->middle->next != NULL)
-		{
-			(*head)->shift_middle = 0;
-			(*head)->middle = (*head)->middle->next;
-		}
-		else
-		{
-			if ((*head)->middle->prev != NULL)
-				(*head)->middle = (*head)->middle->prev;
-		}
-	}
+    t_gen_lst	*node_cast;
+    t_gen_lst	*prev_node;
+
+    node_cast = node;
+    prev_node = *first;
+    if (*first == node_cast)
+        *first = node_cast->next;
+    else
+    {
+        while (prev_node->next != node_cast)
+            prev_node = prev_node->next;
+        prev_node->next = node_cast->next;
+    }
+    if (f)
+        (f)(node_cast);
+    free(node_cast);
 }
 
-static void	is_middle_left(t_lst_head **head)
+void		ft_dlst_del_one(void **first, void *node, void (*f)(void*))
 {
-	if ((*head)->shift_middle == -1)
-	{
-		if ((*head)->middle->prev != NULL)
-		{
-			(*head)->middle = (*head)->middle->prev;
-			(*head)->shift_middle = 0;
-		}
-		else
-		{
-			if ((*head)->middle->next != NULL)
-				(*head)->middle = (*head)->middle->next;
-		}
-	}
-}
+    t_gen_dlst *node_cast = node;
 
-static void	pos_2(t_lst_head **head)
-{
-	if ((*head)->shift_middle == -1)
-		is_middle_left(head);
-	if ((*head)->shift_middle == 1)
-		is_middle_right(head);
-	if ((*head)->shift_middle == 0)
-	{
-		if ((*head)->middle->next != NULL)
-		{
-			(*head)->shift_middle -= 1;
-			(*head)->middle = (*head)->middle->next;
-		}
-		else if ((*head)->middle->prev != NULL)
-		{
-			(*head)->shift_middle += 1;
-			(*head)->middle = (*head)->middle->prev;
-		}
-	}
-}
+    if (node_cast->prev)
+        node_cast->prev->next = node_cast->next;
+    if (node_cast->next)
+        node_cast->next->prev = node_cast->prev;
 
-static void	relink_head(t_lst_head **head, int pos)
-{
-	if (pos == 1)
-		if ((*head) && (*head)->first)
-		{
-			(*head)->first = (*head)->first->next;
-			if ((*head)->first)
-				(*head)->first->prev = NULL;
-		}
-	if (pos == 3)
-		if ((*head) && (*head)->last)
-		{
-			(*head)->last = (*head)->last->prev;
-			if ((*head)->last)
-				(*head)->last->next = NULL;
-		}
-	if (pos == 2)
-		pos_2(head);
-}
-
-void		ft_double_lst_del_one(t_lst_head **head, t_list_d *node, \
-		void (*f)(void*))
-{
-	int			pos;
-	t_list_d	*prev;
-	t_list_d	*next;
-
-	if (node)
-	{
-		pos = 0;
-		if (node == (*head)->first)
-			pos = 1;
-		else if (node == (*head)->last)
-			pos = 3;
-		prev = node->prev;
-		next = node->next;
-		relink_head(head, pos);
-		if (pos == 0)
-		{
-			if (prev != NULL)
-				prev->next = next;
-			if (next != NULL)
-				next->prev = prev;
-		}
-		(f != NULL) ? (f)(node->data) : 0;
-		free(node);
-		(*head)->node_count -= 1;
-	}
+    if (node_cast == *first)
+        *first = node_cast->next;
+    if (f)
+        (f)(node_cast);
+    free(node_cast);
 }

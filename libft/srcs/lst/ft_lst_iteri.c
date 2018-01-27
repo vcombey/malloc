@@ -1,59 +1,35 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_lst_iteri.c                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ade-sede <adrien.de.sede@gmail.com>        +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/24 23:13:39 by ade-sede          #+#    #+#             */
-/*   Updated: 2017/11/24 23:14:57 by ade-sede         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "list.h"
 
-void	ft_simple_lst_iteri(t_list *start, t_list *end, \
-		void (*f)(t_list*, size_t))
+void	ft_lst_iteri(void *start, void *end, void (*f)(void*, size_t))
 {
-	size_t	i;
+    size_t	i;
+    t_gen_lst	*start_cast;
 
-	i = 0;
-	if (start)
-	{
-		while (start != end)
-		{
-			(*f)(start, i);
-			i++;
-			start = start->next;
-		}
-	}
+    i = 0;
+
+    start_cast = start;
+    while (start_cast != end)
+    {
+        (*f)(start_cast, i);
+        start_cast = start_cast->next;
+        i++;
+    }
 }
 
-void	ft_double_lst_iteri(t_list_d *start, t_list_d *end, \
-		void (*f)(t_list_d*, size_t), int order)
+void	ft_dlst_iteri(void *start, void *end, void (*f)(void*, size_t), int order)
 {
-	size_t	i;
+    size_t	i;
+    t_gen_dlst	*start_cast;
 
-	i = 0;
-	if (start)
-	{
-		if (order == 1)
-		{
-			while (start != end)
-			{
-				(*f)(start, i);
-				i++;
-				start = start->next;
-			}
-		}
-		else if (order == -1)
-		{
-			while (start != end)
-			{
-				(*f)(start, i);
-				i++;
-				start = start->prev;
-			}
-		}
-	}
+    i = 0;
+    start_cast = start;
+    while (start_cast != end)
+    {
+        (*f)(start_cast, i);
+        if (order > 0)
+            start_cast = start_cast->next;
+        else if (order < 0)
+            start_cast = start_cast->prev;
+        i++;
+    }
 }

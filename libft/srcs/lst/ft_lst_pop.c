@@ -1,23 +1,11 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_lst_pop.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ade-sede <adrien.de.sede@gmail.com>        +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/24 23:13:39 by ade-sede          #+#    #+#             */
-/*   Updated: 2017/11/24 23:14:58 by ade-sede         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "list.h"
 
-t_list	*ft_lst_pop(t_list **list)
+void	*ft_lst_pop(void **first)
 {
-	t_list	*res;
+	t_gen_lst	*res;
 
-	res = *list;
-	if (*list)
-		*list = (*list)->next;
+	res = *first;
+	if (*first)
+		*first = ((t_gen_lst *)*first)->next;
 	return (res);
 }

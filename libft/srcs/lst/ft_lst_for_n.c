@@ -1,37 +1,30 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_lst_for_n.c                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ade-sede <adrien.de.sede@gmail.com>        +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/24 23:13:39 by ade-sede          #+#    #+#             */
-/*   Updated: 2017/11/24 23:14:57 by ade-sede         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "list.h"
 
-void	ft_double_lst_for_n(t_list_d *start, int count, void (*f)(t_list_d*), \
-		int order)
+void	ft_lst_for_n(void *start, int count, void (*f)(void*))
 {
-	while (start && count)
+    t_gen_lst	*start_cast;
+
+    start_cast = start;
+	while (start_cast && count)
 	{
-		(*f)(start);
-		if (order == 1)
-			start = start->next;
-		if (order == -1)
-			start = start->prev;
+		(*f)(start_cast);
+		start_cast = start_cast->next;
 		count--;
 	}
 }
 
-void	ft_simple_lst_for_n(t_list *start, int count, void (*f)(t_list*))
+void	ft_dlst_for_n(void *start, int count, void (*f)(void*), int order)
 {
-	while (start && count)
+    t_gen_dlst	*start_cast;
+
+    start_cast = start;
+	while (start_cast && count)
 	{
-		(*f)(start);
-		start = start->next;
+		(*f)(start_cast);
+		if (order > 0)
+			start_cast = start_cast->next;
+		if (order < 0)
+			start_cast = start_cast->prev;
 		count--;
 	}
 }

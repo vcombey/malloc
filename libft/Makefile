@@ -40,11 +40,8 @@ SRC = \
 	io/ft_putnstr.c \
 	io/ft_putstr.c \
 	lst/ft_lst_add.c \
-	lst/ft_lstint.c \
 	lst/ft_lst_pop.c \
-	lst/ft_lst_create.c \
 	lst/ft_lst_del_one.c \
-	lst/ft_lst_dup.c \
 	lst/ft_lst_for_n.c \
 	lst/ft_lst_foreach.c \
 	lst/ft_lst_get_n.c \
@@ -55,8 +52,6 @@ SRC = \
 	lst/ft_lst_remove.c \
 	lst/ft_lst_return_if.c \
 	lst/ft_lst_rev.c \
-	lst/ft_lst_sort_insert.c \
-	lst/ft_simple_lst_del_one.c \
 	math/ft_abs.c \
 	math/ft_power.c \
 	math/ft_sort_int_tab.c \
