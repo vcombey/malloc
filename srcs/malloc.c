@@ -27,44 +27,41 @@
 **
 */
 
-struct s_mem
+struct dlst_mem
 {
-    struct s_mem    *next;
+    struct dlst_mem    *next;
+    struct dlst_mem    *prev;
     char            free;
     size_t          len;
 };
 
-struct s_mem *g_medium_mem = NULL;
-struct s_mem *g_large_mem = NULL;
+struct dlst_mem *g_medium_mem = NULL;
+struct dlst_mem *g_large_mem = NULL;
 
 void    ft_free(void *ptr) {
     if (ptr == NULL)
         return ;
 
-    if (size > LITTLE_MAX && size < MEDIUM_MAX) {
-    }
-    if (size > MEDIUM_MAX) {
-        struct s_mem *tmp = g_large_mem;
-        struct s_mem *prev = g_large_mem;
+    struct dlst_mem *tmp = g_large_mem;
+    struct dlst_mem *prev = g_large_mem;
 
-        while (tmp) {
-            if (tmp == ptr - sizeof(struct s_mem)) {
-                ft_putstr_fd("munmap\n", 2);
-                prev->next = tmp->next;
-                if (tmp == g_large_mem) {
-                    g_large_mem = NULL;
-                }
-                if (munmap(tmp, tmp->len) == -1)
-                    perror("mmunmap err: ");
-                break ;
+    while (tmp) {
+        if (tmp == ptr - sizeof(struct dlst_mem)) {
+            ft_putstr_fd("munmap\n", 2);
+            prev->next = tmp->next;
+            if (tmp == g_large_mem) {
+                g_large_mem = NULL;
             }
-            prev = tmp;
-            tmp = tmp->next;
+            if (munmap(tmp, tmp->len) == -1)
+                perror("mmunmap err: ");
+            break ;
         }
+        prev = tmp;
+        tmp = tmp->next;
     }
 }
 
-void    display(struct s_mem *elem) {
+void    display(struct dlst_mem *elem) {
     char    info_mem[50];
     sprintf(info_mem, "%p - %p : %zu octets\n", elem, elem + elem->len, elem->len);
     ft_putstr_fd((char*)info_mem, 2);
@@ -80,20 +77,21 @@ void    *ft_realloc(void *ptr, size_t size) {
 void    *ft_malloc(size_t size) {
     ft_putstr_fd("malloc\n", 2);
 
-    if (size > LITTLE_MAX && size < MEDIUM_MAX) {
+/*    if (size > LITTLE_MAX && size < MEDIUM_MAX) {
     }
     if (size > MEDIUM_MAX) {
-        void    *addr = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
-        struct s_mem *m = addr;
+    */
+        void    *addr = mmap(NULL, size + sizeof(struct dlst_mem), PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
+        struct dlst_mem *m = addr;
         m->len = size;
         display(m);
-        ft_genlst_pushback((void*)&g_large_mem, m);
-        return (addr + sizeof(struct s_mem));
-    }
+        ft_dlst_pushback((void*)&g_large_mem, m);
+        return (addr + sizeof(struct dlst_mem));
+    return NULL;
 }
 
 void show_alloc_mem(void) {
-    struct s_mem *tmp = g_large_mem;
+    struct dlst_mem *tmp = g_large_mem;
 
     ft_putstr_fd("show_alloc_mem\n", 2);
     while (tmp) {

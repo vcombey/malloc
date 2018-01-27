@@ -9,10 +9,6 @@ int main()
     char *addr;
 
     i = 0;
-    printf("stack: %zu\n", (size_t)&i);
-    printf("stack: %zu\n", (size_t)&j);
-    printf("stack: %zu\n", (size_t)&k);
-
     while (i < 1024)
     {
         addr = (char*)ft_malloc(1024);
