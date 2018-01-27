@@ -28,25 +28,25 @@ OBJ_DIR = objs
 TMP = $(basename $(notdir $(SRC_CORE)))
 OBJ = $(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(TMP)))
 
-IFLAGS = -I ./includes/
-LDFLAGS = 
+IFLAGS = -I ./includes/ -I ./libft/includes
+LDFLAGS = -L ./libft -lft
 
 .PHONY: all clean fclean re help test
 
 all: $(NAME)
 
 $(NAME): #$(OBJ)
-	gcc -shared -o $(LIBRARY) srcs/malloc.c $(IFLAGS)
+	gcc -shared -o $(LIBRARY) $(LDFLAGS) srcs/malloc.c $(IFLAGS)
 	ln -s $(LIBRARY) $(NAME)
 
 #$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(LDFLAGS)
 test:
-	gcc -o test0 test/test0.c -I includes
-	gcc -o test1 test/test1.c -I includes
+	gcc -o test0 test/test0.c -L. -lft_malloc   -I includes
+	gcc -o test1 test/test1.c -L. -lft_malloc   -I includes
 	gcc -o test2 test/test2.c -L. -lft_malloc  -I includes
-	gcc -o test3 test/test3.c -I includes
-	gcc -o test3_2 test/test3_2.c -I includes
-	gcc -o test4 test/test4.c -I includes
+	gcc -o test3 test/test3.c  -L. -lft_malloc  -I includes
+	gcc -o test3_2 test/test3_2.c  -L. -lft_malloc  -I includes
+	gcc -o test4 test/test4.c  -L. -lft_malloc  -I includes
 	gcc -o test5 test/test5.c -L. -lft_malloc -I includes
 
 test_clean:

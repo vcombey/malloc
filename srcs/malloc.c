@@ -8,10 +8,13 @@
 
 #include <stdio.h>
 
-const size_t n = 10;
-const size_t N = 100 * n;
-const size_t m = 100;
-const size_t M = 100 * m;
+#define LITTLE_MAX 10
+/* Litlle_zone_size must be > 100 * little_max an a multiple of 4096 */
+#define LITTLE_ZONE_SIZE 4096
+
+#define MEDIUM_MAX 4096
+/* medium_zone_size must be > 100 * little_max an a multiple of 4096 */
+#define MEDIUM_ZONE_SIZE 101 * MEDIUM_MAX
 
 /*
 **
@@ -27,54 +30,74 @@ const size_t M = 100 * m;
 struct s_mem
 {
     struct s_mem    *next;
+    char            free;
     size_t          len;
 };
 
-struct s_mem *g_mem = NULL;
+struct s_mem *g_medium_mem = NULL;
+struct s_mem *g_large_mem = NULL;
 
-void    free(void *ptr) {
-    struct s_mem *tmp = g_mem;
-    struct s_mem *prev = g_mem;
-
+void    ft_free(void *ptr) {
     if (ptr == NULL)
         return ;
-    while (tmp) {
-        if (tmp == ptr - sizeof(struct s_mem)) {
-            write(2, "munmap\n", 8);
-            prev->next = tmp->next;
-            if (munmap(tmp, tmp->len) == -1)
-                perror("mmunmap err: ");
-            break ;
-        }
-        prev = tmp;
-        tmp = tmp->next;
+
+    if (size > LITTLE_MAX && size < MEDIUM_MAX) {
     }
-    return ;
+    if (size > MEDIUM_MAX) {
+        struct s_mem *tmp = g_large_mem;
+        struct s_mem *prev = g_large_mem;
+
+        while (tmp) {
+            if (tmp == ptr - sizeof(struct s_mem)) {
+                ft_putstr_fd("munmap\n", 2);
+                prev->next = tmp->next;
+                if (tmp == g_large_mem) {
+                    g_large_mem = NULL;
+                }
+                if (munmap(tmp, tmp->len) == -1)
+                    perror("mmunmap err: ");
+                break ;
+            }
+            prev = tmp;
+            tmp = tmp->next;
+        }
+    }
 }
 
-void    *realloc(void *ptr, size_t size) {
-    write(2, "realoc\n", 8);
+void    display(struct s_mem *elem) {
+    char    info_mem[50];
+    sprintf(info_mem, "%p - %p : %zu octets\n", elem, elem + elem->len, elem->len);
+    ft_putstr_fd((char*)info_mem, 2);
+}
+
+void    *ft_realloc(void *ptr, size_t size) {
+    ft_putstr_fd("realloc\n", 2);
+    ft_free(ptr);
+    ft_malloc(size);
     return mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
-
-    
 }
 
-void    *malloc(size_t size) {
-    write(2, "malloc\n", 8);
+void    *ft_malloc(size_t size) {
+    ft_putstr_fd("malloc\n", 2);
 
-    void    *addr = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
-    struct s_mem *m = addr;
-    m->len = size;
-    ft_genlst_pushback(&g_mem, m);
-    return (addr + sizeof(struct s_mem));
+    if (size > LITTLE_MAX && size < MEDIUM_MAX) {
+    }
+    if (size > MEDIUM_MAX) {
+        void    *addr = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
+        struct s_mem *m = addr;
+        m->len = size;
+        display(m);
+        ft_genlst_pushback((void*)&g_large_mem, m);
+        return (addr + sizeof(struct s_mem));
+    }
 }
 
 void show_alloc_mem(void) {
-    struct s_mem *tmp = g_mem;
+    struct s_mem *tmp = g_large_mem;
 
-    write(2, "show_alloc_mem\n", 8);
+    ft_putstr_fd("show_alloc_mem\n", 2);
     while (tmp) {
-        printf("%p - %p : %zu octets", tmp, tmp + tmp->len, tmp->len);
+        display(tmp);
         tmp = tmp->next;
     }
     return ;

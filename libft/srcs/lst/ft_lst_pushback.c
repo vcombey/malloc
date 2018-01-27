@@ -39,8 +39,6 @@ void	*ft_genlst_pushback(void **first, void *new_node)
 {
 	t_gen_lst *first_point;
 
-	if (!first)
-		return (NULL);
 	if (!(*first))
 	{
 		*first = new_node;

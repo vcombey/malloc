@@ -104,6 +104,10 @@ char				*ft_lowstr(char *s);
 
 char				*ft_itoa(int n);
 char				*ft_itoa_base(intmax_t value, int base);
+char				*ft_itoa_base(intmax_t value, int base);
+char                *ft_sizetoa_base_str(size_t value, char *str, int base);
+char            	*ft_sizetoa_base_word(size_t n, char nbr[20], int base);
+char	            *ft_itoa_base_str(intmax_t value, char *str, int base);
 char				*ft_unsigned_itoa_base(uintmax_t value, int base);
 int					uitoa_base_len(uintmax_t value, int base);
 int					itoa_base_len(intmax_t value, int base);

@@ -13,7 +13,7 @@
 #include "alloc.h"
 #include "mem.h"
 
-void	*ft_realloc(size_t curr_size, void *ptr, size_t new_size)
+void	*ft_trealloc(size_t curr_size, void *ptr, size_t new_size)
 {
 	void	*new_memory;
 

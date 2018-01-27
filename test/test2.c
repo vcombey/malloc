@@ -8,9 +8,9 @@ int main()
     i = 0;
     while (i < 1024)
     {
-        addr = (char*)malloc(1024);
+        addr = (char*)ft_malloc(1024);
         addr[0] = 42;
-        free(addr);
+        ft_free(addr);
         show_alloc_mem();
         i++;
     }

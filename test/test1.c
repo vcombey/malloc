@@ -15,7 +15,7 @@ int main()
 
     while (i < 1024)
     {
-        addr = (char*)malloc(1024);
+        addr = (char*)ft_malloc(1024);
         printf("adrr : %zu\n", (size_t)addr);
         addr[0] = 42;
         i++;

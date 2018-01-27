@@ -14,17 +14,14 @@
 #include "alloc.h"
 #include "mem.h"
 
-char	*ft_itoa_word(int n, char nbr[20])
+char	*ft_itoa_base_word(int n, char nbr[20], int base)
 {
-	char	*res;
-	int		i;
-
-	i = -1;
 	ft_bzero(nbr, 20);
-	res = ft_itoa_base(n, 10);
-	while (res[++i])
-		nbr[i] = res[i];
-	nbr[i] = '\0';
-	free(res);
-	return (nbr);
+    return (ft_itoa_base_str(n, (char*)nbr, base));
+}
+
+char	*ft_sizetoa_base_word(size_t n, char nbr[20], int base)
+{
+	ft_bzero(nbr, 20);
+    return (ft_sizetoa_base_str(n, (char*)nbr, base));
 }
