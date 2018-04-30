@@ -1,4 +1,5 @@
 #include "malloc.h"
+#include "internal_malloc.h"
 
 struct zones g_zones;
 
@@ -8,58 +9,60 @@ void    constructor(struct zones *z)
     z->page_size = getpagesize();
 }
 
-size_t  get_zone_size(enum e_zone_type zone_type)
+size_t  size_block_bitmask(size_t size_block)
 {
-    if (zone_type == LITTLE) {
-        return LITTLE_ZONE_SIZE;
+    
+    __uint128_t   bitmask = 0;
+
+    while (size_block > 0)
+    {
+        bitmask <<= 1;
+        bitmask += 1;
+        size_block--;
     }
-    else if (zone_type == MEDIUM_ZONE_SIZE) {
-        return MEDIUM_ZONE_SIZE;
-    }
-    return -1; 
+    return bitmask;
 }
 
-size_t  get_zone_block(enum e_zone_type zone_type)
+int     offset_place_chunk(__uint128_t  allocated_chunks, size_t size_block, __uint128_t bitmask)
 {
-    if (zone_type == LITTLE) {
-        return LITTLE_BLOCK;
+    int         i = 0;
+
+    while (i < 128 - size_block)
+    {
+        if (bitmask & allocated_chunks == 0)
+            return i;
+        bitmask <<= 1;
+        i++;
     }
-    else if (zone_type == MEDIUM_ZONE_SIZE) {
-        return MEDIUM_BLOCK;
-    }
-    return -1; 
+    return -1;
 }
 
-int     new_zone_reference(enum e_zone_type zone_type, struct zone_reference *new_zone_ref)
+/* return the addr for the user */
+void    *try_add_chunk_zone_reference(struct zone_reference *zone_ref, size_t size_block, enum e_zone_type zone_type)
 {
-    void                *addr;
-
-    if ((addr = mmap(NULL, get_zone_size(zone_type), PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0)) == -1)
-        return -1;
+    __uint128_t bitmask = size_block_bitmask(size_block);
+    if ((offset = offset_place_chunk(zone_ref->allocated_chunks, size_block, bitmask)) == -1)
+    {
+        return NULL;
     }
-    new_zone_ref->ptr = addr;
-    new_zone_ref->allocated_chunks = 0;
-    new_zone_ref->free_space = 0;
-    return 0;
-}
-
-void    *try_add_chunk_zone_reference(struct zone_reference *zone_ref, size_t size_block)
-{
-
+    zone_ref->allocated_chunks &= bitmask << offset;
+    zone_ref->free_space -= size_block;
+    struct chunk *chunk_cast = (char *)zone_ref->ptr + offset * get_zone_block(zone_type);
+    chunk_cast->size = size_block;
+    return chunk_cast + 1;
 }
 
 void    *move_another_place(struct  priority_queue *pq, size_t size_block, enum e_zone_type zone_type)
 {
     void *addr;
-
     struct zone_reference new_zone_ref;
-    if (new_zone_ref = new_zone_reference(size_block, zone_type) == -1)
+
+    if (new_zone_reference(zone_type, &new_zone_ref) == -1)
         return NULL;
     addr = try_add_chunk_zone_reference(new_zone_ref, size_block);
     add_priority_queue(pq, new_zone_ref);
 }
 
-// get the size in nb zone_type block
 void    *allocator_in_zone(struct  priority_queue *pq, size_t size_block, enum e_zone_type zone_type)
 {
     void *addr;
@@ -97,15 +100,11 @@ void    *ft_malloc(size_t size)
 
 
     size += 16;
-
+    if (size <= 0)
+        return NULL;
     if (!g_zones.init)
     {
         constructor(&g_zones);
     }
-    void    *addr = mmap(NULL, , PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
-    if (mmap == -1) {
-        return NULL;
-    }
-
-    return NULL;
+    return allocator(&g_zones, size);
 }

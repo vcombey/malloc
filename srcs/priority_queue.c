@@ -1,4 +1,5 @@
 #include "malloc.h"
+#include "internal_malloc.h"
 
 void    unimplemented(char *mess)
 {
@@ -18,7 +19,7 @@ void    swap_nodes(struct priority_queue *a, struct priority_queue *b)
 void    sift_up(struct priority_queue *pq, size_t pos)
 {
     while (pos > 0 && pq[pos].nb_free > pq[pos / 2].nb_free) {
-        swap(&pq[pos], &pq[pos / 2]);
+        swap_nodes(&pq[pos], &pq[pos / 2]);
         pos /= 2;
     }
 }
@@ -33,7 +34,4 @@ void    add_priority_queue(struct priority_queue *pq, struct zone_reference new)
     pq->lenght += 1;
 }
 
-void    del_priority_queue(struct priority_queue *pq)
-{
-
-}
+/*void    del_priority_queue(struct priority_queue *pq)*/
