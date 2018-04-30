@@ -1,103 +1,113 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <errno.h>
-#include <sys/mman.h>
 #include "malloc.h"
-#include "libft.h"
+#include "internal_malloc.h"
 
-#include <stdio.h>
+struct zones g_zones;
 
-/* 128 * LITTLE_BLOCK = LITTLE_ZONE_SIZE */
-/* LITTLE_MAX = 31 * LITTLE_BLOCK */
-
-/* MEDIUM_BLOCK = 33 * LITTLE_MAX */
-/* 128 * MEDIUM_BLOCK = MEDIUM_ZONE_SIZE */
-/* MEDIUM_MAX = 31 * MEDIUM_BLOCK */
-
-/* MEDIUM_BLOCK > 1040 */
-
-/* 
-**
-** “TINY” mallocs, from 1 to n bytes, will be stored in N bytes big zones.
-** 
-** “SMALL” mallocs, from (n+1) to m bytes, will be stored in M bytes big zones.
-** 
-** “LARGE” mallocs, fron (m+1) bytes and more, will be stored out of zone,
-** which simply means with mmap(), they will be in a zone on their own.
-**
-*/
-
-struct dlst_mem
+void    constructor(struct zones *z)
 {
-    struct dlst_mem    *next;
-    struct dlst_mem    *prev;
-    char            free;
-    size_t          len;
-};
+    z->init = true;
+    z->page_size = getpagesize();
+}
 
-struct dlst_mem *g_medium_mem = NULL;
-struct dlst_mem *g_large_mem = NULL;
+size_t  size_block_bitmask(size_t size_block)
+{
+    
+    __uint128_t   bitmask = 0;
 
-void    ft_free(void *ptr) {
-    if (ptr == NULL)
-        return ;
+    while (size_block > 0)
+    {
+        bitmask <<= 1;
+        bitmask += 1;
+        size_block--;
+    }
+    return bitmask;
+}
 
-    struct dlst_mem *tmp = g_large_mem;
-    struct dlst_mem *prev = g_large_mem;
+int     offset_place_chunk(__uint128_t  allocated_chunks, size_t size_block, __uint128_t bitmask)
+{
+    int         i = 0;
 
-    while (tmp) {
-        if (tmp == ptr - sizeof(struct dlst_mem)) {
-            ft_putstr_fd("munmap\n", 2);
-            prev->next = tmp->next;
-            if (tmp == g_large_mem) {
-                g_large_mem = NULL;
-            }
-            if (munmap(tmp, tmp->len) == -1)
-                perror("mmunmap err: ");
-            break ;
-        }
-        prev = tmp;
-        tmp = tmp->next;
+    while (i < 128 - size_block)
+    {
+        if ((bitmask & allocated_chunks) == 0)
+            return i;
+        bitmask <<= 1;
+        i++;
+    }
+    return -1;
+}
+
+/* return the addr for the user */
+void    *try_add_chunk_zone_reference(struct zone_reference *zone_ref, size_t size_block, enum e_zone_type zone_type)
+{
+    __uint128_t bitmask = size_block_bitmask(size_block);
+    int offset;
+
+    if ((offset = offset_place_chunk(zone_ref->allocated_chunks, size_block, bitmask)) == -1)
+    {
+        return NULL;
+    }
+    zone_ref->allocated_chunks &= bitmask << offset;
+    zone_ref->free_space -= size_block;
+    struct chunk *chunk_cast = (struct chunk *)((size_t)zone_ref->ptr + offset * get_zone_block(zone_type));
+    chunk_cast->size_block = size_block;
+    return chunk_cast + 1;
+}
+
+void    *move_another_place(struct  priority_queue *pq, size_t size_block, enum e_zone_type zone_type)
+{
+    void *addr;
+    struct zone_reference new_zone_ref;
+
+    if (new_zone_reference(zone_type, &new_zone_ref) == -1)
+        return NULL;
+    addr = try_add_chunk_zone_reference(&new_zone_ref, size_block, zone_type);
+    add_priority_queue(pq, new_zone_ref);
+    return addr;
+}
+
+void    *allocator_in_zone(struct  priority_queue *pq, size_t size_block, enum e_zone_type zone_type)
+{
+    void *addr;
+
+    if (pq->lenght != 0 && pq->vec[0].free_space > size_block)
+    {
+        if ((addr = try_add_chunk_zone_reference(&pq->vec[0], size_block, zone_type)) == NULL)
+             return move_another_place(pq, size_block, zone_type);
+        return addr;
+    }
+    else
+    {
+        return move_another_place(pq, size_block, zone_type);
     }
 }
 
-void    display(struct dlst_mem *elem) {
-    char    info_mem[50];
-    sprintf(info_mem, "%p - %p : %zu octets\n", elem, elem + elem->len, elem->len);
-    ft_putstr_fd((char*)info_mem, 2);
-}
-
-void    *ft_realloc(void *ptr, size_t size) {
-    ft_putstr_fd("realloc\n", 2);
-    ft_free(ptr);
-    ft_malloc(size);
-    return mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
-}
-
-void    *ft_malloc(size_t size) {
-    ft_putstr_fd("malloc\n", 2);
-
-/*    if (size > LITTLE_MAX && size < MEDIUM_MAX) {
+void    *allocator(struct zones *z, size_t size)
+{
+    if (size <= LITTLE_MAX) {
+        // TODO: see the + 1
+        return allocator_in_zone(&z->little_heap, size / get_zone_block(LITTLE) + 1, LITTLE);
+    }
+    if (size > LITTLE_MAX && size <= MEDIUM_MAX) {
+        return allocator_in_zone(&z->medium_heap, size / get_zone_block(MEDIUM) + 1, MEDIUM);
     }
     if (size > MEDIUM_MAX) {
-    */
-        void    *addr = mmap(NULL, size + sizeof(struct dlst_mem), PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
-        struct dlst_mem *m = addr;
-        m->len = size;
-        display(m);
-        ft_dlst_pushback((void*)&g_large_mem, m);
-        return (addr + sizeof(struct dlst_mem));
+        unimplemented("large zone unimplemented");
+        return NULL;
+    }
     return NULL;
 }
 
-void show_alloc_mem(void) {
-    struct dlst_mem *tmp = g_large_mem;
+void    *ft_malloc(size_t size)
+{
+    ft_putstr_fd("malloc\n", 2);
 
-    ft_putstr_fd("show_alloc_mem\n", 2);
-    while (tmp) {
-        display(tmp);
-        tmp = tmp->next;
+    size += 16;
+    if (size <= 0)
+        return NULL;
+    if (!g_zones.init)
+    {
+        constructor(&g_zones);
     }
-    return ;
+    return allocator(&g_zones, size);
 }

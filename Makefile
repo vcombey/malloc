@@ -20,7 +20,7 @@ CFLAGS = -Wall -Wextra -Werror -g -O0 $(DEBUG)
 
 ### SOURCES ###
 
-SRC_CORE = main malloc
+SRC_CORE = malloc priority_queue zone_reference
 
 VPATH = srcs
 
@@ -28,18 +28,18 @@ OBJ_DIR = objs
 TMP = $(basename $(notdir $(SRC_CORE)))
 OBJ = $(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(TMP)))
 
-IFLAGS = -I ./includes/ -I ./libft/includes
+IFLAGS = -I ./include/ -I ./libft/includes
 LDFLAGS = -L ./libft -lft
 
 .PHONY: all clean fclean re help test
 
 all: $(NAME)
 
-$(NAME): #$(OBJ)
-	gcc -shared -o $(LIBRARY) $(LDFLAGS) srcs/malloc.c $(IFLAGS)
+$(NAME): $(OBJ_DIR) $(OBJ)
+	echo lala
+	gcc -shared -o $(LIBRARY) $@ $(IFLAGS)
 	ln -s $(LIBRARY) $(NAME)
 
-#$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(LDFLAGS)
 test:
 	gcc -o test0 test/test0.c -L. -lft_malloc   -I includes
 	gcc -o test1 test/test1.c -L. -lft_malloc   -I includes
@@ -52,11 +52,12 @@ test:
 test_clean:
 	rm -f test*
 
-$(OBJ_DIR)/main.o: main.c
-	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
+$(OBJ_DIR):
+	mkdir -p objs
 
-$(OBJ_DIR)/malloc.o: malloc.c
-	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
+$(OBJ)%.o: $(VPATH)/$(SRC_CORE)%.c
+	echo lol
+	$(CC) $(CFLAGS) -c -o $@ $< $(IFLAGS)
 
 clean:
 	rm -f $(OBJ)
