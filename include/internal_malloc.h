@@ -36,8 +36,9 @@ extern struct zones g_zones;
 
 /* 16 */
 struct  chunk {
-    void    *parent;
-    size_t  size_block;
+    size_t              offset_zone_ref;
+    size_t              size_block;
+    enum    e_zone_type zone_type;
 };
 
 enum    e_zone_type {
@@ -68,7 +69,7 @@ struct  zones {
 };
 
 void    unimplemented(char *mess);
-void    add_priority_queue(struct priority_queue *pq, struct zone_reference new);
+int    add_priority_queue(struct priority_queue *pq, struct zone_reference new);
 size_t  get_zone_size(enum e_zone_type zone_type);
 size_t  get_zone_block(enum e_zone_type zone_type);
 int     new_zone_reference(enum e_zone_type zone_type, struct zone_reference *new_zone_ref);

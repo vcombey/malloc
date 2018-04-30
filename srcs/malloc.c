@@ -62,7 +62,8 @@ void    *move_another_place(struct  priority_queue *pq, size_t size_block, enum 
     if (new_zone_reference(zone_type, &new_zone_ref) == -1)
         return NULL;
     addr = try_add_chunk_zone_reference(&new_zone_ref, size_block, zone_type);
-    add_priority_queue(pq, new_zone_ref);
+    if (add_priority_queue(pq, new_zone_ref) == -1)
+        return NULL;
     return addr;
 }
 
@@ -100,7 +101,7 @@ void    *allocator(struct zones *z, size_t size)
 
 void    *ft_malloc(size_t size)
 {
-    ft_putstr_fd("malloc\n", 2);
+    printf("malloc\n");
 
     size += 16;
     if (size <= 0)

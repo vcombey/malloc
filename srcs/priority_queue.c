@@ -24,14 +24,22 @@ void    sift_up(struct priority_queue *pq, size_t pos)
     }
 }
 
-void    add_priority_queue(struct priority_queue *pq, struct zone_reference new)
+int    add_priority_queue(struct priority_queue *pq, struct zone_reference new)
 {
-    if (pq->lenght == pq->size) {
+    if (pq->lenght == pq->size)
+    {
+        void *new_vec;
+        if ((new_vec = mmap(pq->ptr, pq->size + g_zones.size_block, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0)) == MAP_FAILED)
+            return -1;
+        memove(new_vec, pq->ptr, pq->size);
+        pq->size += g_zones.size_block;
+        pq->ptr = new_vec;
         unimplemented("out of size priority queue");
     }
     pq->vec[pq->lenght] = new;
     sift_up(pq, pq->lenght);
     pq->lenght += 1;
+    return 0;
 }
 
 /*void    del_priority_queue(struct priority_queue *pq)*/

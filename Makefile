@@ -41,17 +41,17 @@ all: $(NAME)
 
 $(NAME): $(OBJ_DIR) $(OBJ)
 	echo $(SRCS)
-	gcc -shared -o $(LIBRARY) $@ $(IFLAGS)
+	gcc -shared -o $(LIBRARY) $(OBJ) $(IFLAGS)
 	ln -s $(LIBRARY) $(NAME)
 
 test:
-	gcc -o test0 test/test0.c -L. -lft_malloc   -I includes
-	gcc -o test1 test/test1.c -L. -lft_malloc   -I includes
-	gcc -o test2 test/test2.c -L. -lft_malloc  -I includes
-	gcc -o test3 test/test3.c  -L. -lft_malloc  -I includes
-	gcc -o test3_2 test/test3_2.c  -L. -lft_malloc  -I includes
-	gcc -o test4 test/test4.c  -L. -lft_malloc  -I includes
-	gcc -o test5 test/test5.c -L. -lft_malloc -I includes
+	gcc -o test0 test/test0.c $(IFLAGS) -L. -lft_malloc -I includes
+	gcc -o test1 test/test1.c $(IFLAGS) -L. -lft_malloc -I includes
+	gcc -o test2 test/test2.c $(IFLAGS) -L. -lft_malloc -I includes
+	gcc -o test3 test/test3.c $(IFLAGS)  -L. -lft_malloc -I includes
+	gcc -o test3_2 test/test3_2.c $(IFLAGS)  -L. -lft_malloc -I includes
+	gcc -o test4 test/test4.c $(IFLAGS)  -L. -lft_malloc -I includes
+	gcc -o test5 test/test5.c $(IFLAGS) -L. -lft_malloc -I includes
 
 test_clean:
 	rm -f test*
