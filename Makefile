@@ -12,6 +12,7 @@ endif
 ifeq ($(HOSTTYPE),)
 	HOSTTYPE := $(shell uname -m)_$(shell uname -s)
 endif
+
 LIBRARY = libft_malloc_$(HOSTTYPE).so
 
 NAME = libft_malloc.so
@@ -21,12 +22,15 @@ CFLAGS = -Wall -Wextra -Werror -g -O0 $(DEBUG)
 ### SOURCES ###
 
 SRC_CORE = malloc priority_queue zone_reference
-
-VPATH = srcs
+SRC_DIR = srcs
 
 OBJ_DIR = objs
-TMP = $(basename $(notdir $(SRC_CORE)))
-OBJ = $(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(TMP)))
+
+SRCS = $(addprefix $(SRC_DIR)/, $(addsuffix .c, $(SRC_CORE)))
+OBJ = $(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(SRC_CORE)))
+
+#TMP = $(basename $(notdir $(SRC_CORE)))
+#OBJ = $(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(TMP)))
 
 IFLAGS = -I ./include/ -I ./libft/includes
 LDFLAGS = -L ./libft -lft
@@ -36,7 +40,7 @@ LDFLAGS = -L ./libft -lft
 all: $(NAME)
 
 $(NAME): $(OBJ_DIR) $(OBJ)
-	echo lala
+	echo $(SRCS)
 	gcc -shared -o $(LIBRARY) $@ $(IFLAGS)
 	ln -s $(LIBRARY) $(NAME)
 
@@ -53,11 +57,12 @@ test_clean:
 	rm -f test*
 
 $(OBJ_DIR):
+	echo lojl
 	mkdir -p objs
 
-$(OBJ)%.o: $(VPATH)/$(SRC_CORE)%.c
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	echo lol
-	$(CC) $(CFLAGS) -c -o $@ $< $(IFLAGS)
+	$(CC) $(CFLAGS) -o $@ -c $< $(IFLAGS)
 
 clean:
 	rm -f $(OBJ)

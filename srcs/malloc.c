@@ -27,7 +27,7 @@ int     offset_place_chunk(__uint128_t  allocated_chunks, size_t size_block, __u
 {
     int         i = 0;
 
-    while (i < 128 - size_block)
+    while (i < 128 - (int)size_block)
     {
         if ((bitmask & allocated_chunks) == 0)
             return i;

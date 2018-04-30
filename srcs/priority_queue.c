@@ -18,7 +18,7 @@ void    swap_nodes(struct priority_queue *a, struct priority_queue *b)
 
 void    sift_up(struct priority_queue *pq, size_t pos)
 {
-    while (pos > 0 && pq[pos].nb_free > pq[pos / 2].nb_free) {
+    while (pos > 0 && pq->vec[pos].free_space > pq->vec[pos / 2].free_space) {
         swap_nodes(&pq[pos], &pq[pos / 2]);
         pos /= 2;
     }
