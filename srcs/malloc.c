@@ -8,15 +8,18 @@
 
 #include <stdio.h>
 
-#define LITTLE_MAX 10
-/* Litlle_zone_size must be > 100 * little_max an a multiple of 4096 */
-#define LITTLE_ZONE_SIZE 4096
+/* 128 * LITTLE_BLOCK = LITTLE_ZONE_SIZE */
+/* LITTLE_MAX = 31 * LITTLE_BLOCK */
 
-#define MEDIUM_MAX 4096
-/* medium_zone_size must be > 100 * little_max an a multiple of 4096 */
-#define MEDIUM_ZONE_SIZE 101 * MEDIUM_MAX
+/* MEDIUM_BLOCK = 33 * LITTLE_MAX */
+/* 128 * MEDIUM_BLOCK = MEDIUM_ZONE_SIZE */
+/* MEDIUM_MAX = 31 * MEDIUM_BLOCK */
 
-/*
+/* MEDIUM_BLOCK > 1040 */
+
+
+
+/* 
 **
 ** “TINY” mallocs, from 1 to n bytes, will be stored in N bytes big zones.
 ** 
