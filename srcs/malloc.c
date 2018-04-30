@@ -51,6 +51,9 @@ void    *try_add_chunk_zone_reference(struct zone_reference *zone_ref, size_t si
     zone_ref->free_space -= size_block;
     struct chunk *chunk_cast = (struct chunk *)((size_t)zone_ref->ptr + offset * get_zone_block(zone_type));
     chunk_cast->size_block = size_block;
+    //WARN
+    chunk_cast->offset_zone_ref = 0;
+    chunk_cast->zone_type = zone_type;
     return chunk_cast + 1;
 }
 
