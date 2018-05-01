@@ -1,7 +1,23 @@
 #include <stdio.h>
+#include <sys/mman.h>
 
 int main() {
-    int *tab = malloc(100);
-    *tab = 100;
-    printf("%d", *tab);
+    void                *addr;
+
+    addr = mmap(NULL, getpagesize(), PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
+    printf("%lu\n", addr);
+    addr = mmap(NULL, getpagesize(), PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
+    printf("%lu\n", addr);
+    addr = mmap(NULL, getpagesize(), PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
+    printf("%lu\n", addr);
+    addr = mmap(NULL, getpagesize(), PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
+    printf("%lu\n", addr);
+    addr = mmap(NULL, getpagesize(), PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
+    printf("%lu\n", addr);
+    addr = mmap(NULL, getpagesize(), PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
+    printf("%lu\n", addr);
+    addr = mmap(NULL, getpagesize(), PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
+    printf("%lu\n", addr);
+    addr = mmap(NULL, getpagesize(), PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
+    printf("%lu\n", addr);
 }

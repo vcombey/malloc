@@ -32,7 +32,7 @@ OBJ = $(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(SRC_CORE)))
 #TMP = $(basename $(notdir $(SRC_CORE)))
 #OBJ = $(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(TMP)))
 
-IFLAGS = -I ./include/ -I ./libft/includes
+IFLAGS = -I ./include/
 LDFLAGS = -L ./libft -lft
 
 .PHONY: all clean fclean re help test
@@ -45,13 +45,13 @@ $(NAME): $(OBJ_DIR) $(OBJ)
 	ln -s $(LIBRARY) $(NAME)
 
 test:
-	gcc -o test0 test/test0.c $(IFLAGS) -L. -lft_malloc -I includes
-	gcc -o test1 test/test1.c $(IFLAGS) -L. -lft_malloc -I includes
-	gcc -o test2 test/test2.c $(IFLAGS) -L. -lft_malloc -I includes
-	gcc -o test3 test/test3.c $(IFLAGS)  -L. -lft_malloc -I includes
-	gcc -o test3_2 test/test3_2.c $(IFLAGS)  -L. -lft_malloc -I includes
-	gcc -o test4 test/test4.c $(IFLAGS)  -L. -lft_malloc -I includes
-	gcc -o test5 test/test5.c $(IFLAGS) -L. -lft_malloc -I includes
+	gcc -o test0 test/test0.c $(IFLAGS)  -L. -lft_malloc -I include
+	gcc -o test1 test/test1.c $(IFLAGS) -L. -lft_malloc -I include
+	gcc -o test2 test/test2.c $(IFLAGS) -L. -lft_malloc -I include
+	gcc -o test3 test/test3.c $(IFLAGS) -L. -lft_malloc  -I include
+	gcc -o test3_2 test/test3_2.c $(IFLAGS) -L. -lft_malloc  -I include
+	gcc -o test4 test/test4.c $(IFLAGS) -L. -lft_malloc  -I include
+	gcc -o test5 test/test5.c $(IFLAGS)-L. -lft_malloc -I include
 
 test_clean:
 	rm -f test*
