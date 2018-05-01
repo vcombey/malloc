@@ -5,6 +5,7 @@ struct zones g_zones;
 
 void    constructor(struct zones *z)
 {
+    printf("constructor \n");
     z->init = true;
     z->page_size = getpagesize();
 }
@@ -50,12 +51,16 @@ void    *allocator_in_zone(struct  priority_queue *pq, size_t size_block, enum e
     if (pq->lenght != 0 && pq->vec[0].free_space > size_block)
     {
         if ((addr = try_add_chunk_zone_reference(&pq->vec[0], size_block, zone_type)) == NULL)
+        {
+            printf("root is filled, move another place \n");
              return move_another_place(pq, size_block, zone_type);
+        }
         sift_down(pq, 0);
         return addr;
     }
     else
     {
+        printf("priority queue is empty \n");
         return move_another_place(pq, size_block, zone_type);
     }
 }
@@ -63,10 +68,12 @@ void    *allocator_in_zone(struct  priority_queue *pq, size_t size_block, enum e
 void    *allocator(struct zones *z, size_t size)
 {
     if (size <= LITTLE_MAX) {
+        printf("allocator little \n");
         // TODO: see the + 1
         return allocator_in_zone(&z->little_heap, size / get_zone_block(LITTLE) + 1, LITTLE);
     }
     if (size > LITTLE_MAX && size <= MEDIUM_MAX) {
+        printf("allocator medium \n");
         return allocator_in_zone(&z->medium_heap, size / get_zone_block(MEDIUM) + 1, MEDIUM);
     }
     if (size > MEDIUM_MAX) {
@@ -79,7 +86,6 @@ void    *allocator(struct zones *z, size_t size)
 void    *ft_malloc(size_t size)
 {
     printf("malloc\n");
-    printf("je suis la \n");
 
 
     size += 16;
@@ -89,5 +95,6 @@ void    *ft_malloc(size_t size)
     {
         constructor(&g_zones);
     }
+    printf("---------------\n");
     return allocator(&g_zones, size);
 }
