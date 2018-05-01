@@ -41,7 +41,7 @@ int     new_zone_reference(enum e_zone_type zone_type, struct zone_reference *ne
         return -1;
     new_zone_ref->ptr = addr;
     new_zone_ref->allocated_chunks = 0;
-    new_zone_ref->free_space = 0;
+    new_zone_ref->free_space = 128;
     return 0;
 }
 
@@ -62,7 +62,7 @@ int     offset_place_chunk(__uint128_t  allocated_chunks, size_t size_block, __u
 {
     int         i = 0;
 
-    while (i < 128 - (int)size_block)
+    while (i <= 128 - (int)size_block)
     {
         if ((bitmask & allocated_chunks) == 0)
             return i;

@@ -88,5 +88,6 @@ size_t  size_block_bitmask(size_t size_block);
 int     offset_place_chunk(__uint128_t  allocated_chunks, size_t size_block, __uint128_t bitmask);
 size_t  get_offset_zone_header(enum e_zone_type zone_type);
 void    sift_down(struct priority_queue *pq, size_t pos);
+void    print_binary(__uint128_t nb);
 
 #endif
