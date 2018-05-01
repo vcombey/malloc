@@ -51,6 +51,7 @@ void    *allocator_in_zone(struct  priority_queue *pq, size_t size_block, enum e
     {
         if ((addr = try_add_chunk_zone_reference(&pq->vec[0], size_block, zone_type)) == NULL)
              return move_another_place(pq, size_block, zone_type);
+        sift_down(pq, 0);
         return addr;
     }
     else
