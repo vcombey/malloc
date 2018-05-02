@@ -46,6 +46,8 @@ $(NAME): $(OBJ_DIR) $(OBJ)
 
 test:
 	gcc -o ptest0 test/ptest0.c $(IFLAGS)  -L. -lft_malloc -I include
+	gcc -o ptest1 test/ptest1.c $(IFLAGS)  -L. -lft_malloc -I include
+	gcc -o ptest2 test/ptest2.c $(IFLAGS)  -L. -lft_malloc -I include
 	gcc -o test0 test/test0.c $(IFLAGS)  -L. -lft_malloc -I include
 	gcc -o test1 test/test1.c $(IFLAGS) -L. -lft_malloc -I include
 	gcc -o test2 test/test2.c $(IFLAGS) -L. -lft_malloc -I include

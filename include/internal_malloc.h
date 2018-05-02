@@ -48,7 +48,7 @@ enum    e_zone_type {
 
 /* 24 */
 struct  chunk {
-    size_t              offset_zone_header;
+    size_t              offset_block; //offset counted in nb block
     size_t              size_block;
     enum    e_zone_type zone_type;
 };

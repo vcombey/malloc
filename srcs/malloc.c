@@ -37,7 +37,7 @@ void    *try_add_chunk_zone_reference(struct zone_reference *zone_ref, size_t si
     printf("chunk addr %#zx \n", (size_t)chunk_cast);
     chunk_cast->size_block = size_block;
     //WARN
-    chunk_cast->offset_zone_header = offset;
+    chunk_cast->offset_block = offset;
     chunk_cast->zone_type = zone_type;
     return chunk_cast + 1;
 }
@@ -113,4 +113,58 @@ void    *ft_malloc(size_t size)
     void *addr = allocator(&g_zones, size);
     printf("---------------\n");
     return addr;
+}
+
+void ft_free(void *ptr)
+{
+    printf("**********************\n");
+    if (ptr == NULL)
+        return ;
+    struct chunk *chunk_cast = ((struct chunk *)ptr) - 1;
+    
+    struct  header_zone *header = (struct header_zone *)((size_t)chunk_cast - chunk_cast->offset_block * get_zone_block(chunk_cast->zone_type) - get_offset_zone_header(chunk_cast->zone_type));
+    struct zone_reference *zone_ref = header->parent;
+    printf("zone ref %#zx \n", (size_t)zone_ref->ptr);
+    
+    __uint128_t bitmask = size_block_bitmask(chunk_cast->size_block);
+    printf("allocated chunks ");
+    print_binary(zone_ref->allocated_chunks);
+    zone_ref->allocated_chunks ^= bitmask << chunk_cast->offset_block;
+    printf("allocated chunks ");
+    print_binary(zone_ref->allocated_chunks);
+    zone_ref->free_space += chunk_cast->size_block;
+    printf("**********************\n");
+
+
+    // TODO:siftup
+}
+
+void *ft_realloc(void *ptr, size_t size)
+{
+    printf("**********************\n");
+    if (ptr == NULL) {
+        unimplemented("null ptr in realoc");
+        return NULL;
+    }
+    struct chunk *chunk_cast = ((struct chunk *)ptr) - 1;
+    size_t size_block = size / get_zone_block(chunk_cast->zone_type) + 1;
+    struct  header_zone *header = (struct header_zone *)((size_t)chunk_cast - chunk_cast->offset_block * get_zone_block(chunk_cast->zone_type) - get_offset_zone_header(chunk_cast->zone_type));
+    struct zone_reference *zone_ref = header->parent;
+    printf("zone ref %#zx \n", (size_t)zone_ref->ptr);
+    
+    __uint128_t bitmask = size_block_bitmask(chunk_cast->size_block);
+    __uint128_t new_bitmask = size_block_bitmask(size_block);
+    if (new_bitmask <= bitmask) {
+        zone_ref->allocated_chunks ^= (bitmask << chunk_cast->offset_block ^ new_bitmask << chunk_cast->offset_block);
+        return ptr;
+    }
+    if ((new_bitmask > bitmask) &&
+        (((zone_ref->allocated_chunks & ((bitmask ^ new_bitmask) << chunk_cast->offset_block)) == 0)
+            && chunk_cast->offset_block + size_block <= 128))
+    {
+        zone_ref->allocated_chunks |= new_bitmask << chunk_cast->offset_block;
+        return ptr;
+    }
+    free(ptr);
+    return (malloc(size));
 }
