@@ -11,16 +11,10 @@ void    *try_add_chunk_zone_reference(struct zone_reference *zone_ref, size_t si
         printf("can t allocate in this zone reference\n");
         return NULL;
     }
-    printf("offset %i \n", offset);/*{{{*/
-    printf("allocated chunks ");
-    print_binary(zone_ref->allocated_chunks);
-    printf("bitmask << offset ");
-    print_binary(bitmask << offset);/*}}}*/
     zone_ref->allocated_chunks |= bitmask << offset;
     zone_ref->free_space -= size_block;
     struct chunk *chunk_cast = (struct chunk *)((size_t)zone_ref->ptr + get_offset_zone_header(zone_type) + offset * get_zone_block(zone_type));
     chunk_cast->size_block = size_block;
-    //WARN
     chunk_cast->offset_block = offset;
     chunk_cast->zone_type = zone_type;
     return chunk_cast + 1;

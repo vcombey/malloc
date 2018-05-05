@@ -1,5 +1,6 @@
 #include "malloc.h"
 #include "internal_malloc.h"
+#include <string.h>
 
 void    unimplemented(char *mess)
 {
@@ -77,7 +78,6 @@ void    recalc_header_zone(struct  priority_queue *new_vec, size_t size)
     }
 }
 
-#include <string.h>
 int    add_priority_queue(struct priority_queue *pq, struct zone_reference new_node)
 {
     if (pq->lenght == pq->size)
@@ -99,21 +99,26 @@ int    add_priority_queue(struct priority_queue *pq, struct zone_reference new_n
 }
 
 
+void    del_priority_queue(struct priority_queue *pq, size_t pos, enum e_zone_type zone_type)
+{
+    munmap(pq->vec[pos].ptr, get_zone_size(zone_type));
+    pq->vec[pos] = pq->vec[pq->lenght - 1];
+    pq->lenght--;
+    sift_down(pq, pos);
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+void    update_priority_queue(struct  priority_queue *pq, struct zone_reference *zone_ref, enum e_zone_type zone_type)
+{
+    size_t  pos = zone_ref - pq->vec;
+    if (zone_ref->free_space == 128 && pq->vec[0].free_space == 128 && pos != 0)
+    {
+        printf("del priority_queue\n");
+        del_priority_queue(pq, pos, zone_type);
+    }
+    else
+    {
+        printf("sift up\n");
+        sift_up(pq, pos);
+    }
+}
 

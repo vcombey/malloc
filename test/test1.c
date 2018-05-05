@@ -17,5 +17,6 @@ int main()
         addr[1023] = 42;
         i++;
     }
+    show_alloc_mem();
     return (0);
 } 
