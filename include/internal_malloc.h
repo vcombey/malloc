@@ -48,9 +48,15 @@ enum    e_zone_type {
 
 /* 24 */
 struct  chunk {
-    size_t              offset_block; //offset counted in nb block
-    size_t              size_block;
-    enum    e_zone_type zone_type;
+    uint8_t                 offset_block; //offset counted in nb block
+    uint8_t                 size_block;
+    enum    e_zone_type     zone_type;
+};
+
+struct  chunk_large_zone {
+    struct chunk_large_zone *next;
+    struct chunk_large_zone *prev;
+    struct  chunk           data;
 };
 
 /* 8 */
@@ -75,6 +81,7 @@ struct  priority_queue {
 struct  zones {
     struct priority_queue     little_heap;
     struct priority_queue     medium_heap;
+    struct  chunk_large_zone  *large_zone_first;
     size_t                    page_size;
     bool                      init;
 };
@@ -89,5 +96,10 @@ int     offset_place_chunk(__uint128_t  allocated_chunks, size_t size_block, __u
 size_t  get_offset_zone_header(enum e_zone_type zone_type);
 void    sift_down(struct priority_queue *pq, size_t pos);
 void    print_binary(__uint128_t nb);
+void	add_chunk_large_zone(struct  chunk_large_zone  **first, struct  chunk_large_zone  *new);
+void	del_chunk_large_zone(struct  chunk_large_zone  **first, struct  chunk_large_zone  *node);
+void    show_alloc_priority_queue(struct priority_queue pq, enum e_zone_type zone_type);
+void    show_alloc_zone(struct zone_reference zone_ref, enum e_zone_type zone_type);
+void    show_alloc_chunk(void *ptr, enum e_zone_type zone_type, int *i);
 
 #endif

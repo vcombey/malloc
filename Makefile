@@ -21,7 +21,7 @@ CFLAGS = -Wall -Wextra -Werror -g -O0 $(DEBUG)
 
 ### SOURCES ###
 
-SRC_CORE = malloc priority_queue zone_reference utils
+SRC_CORE = malloc priority_queue zone_reference utils chunck
 SRC_DIR = srcs
 
 OBJ_DIR = objs
@@ -54,7 +54,7 @@ test:
 	gcc -o test3 test/test3.c $(IFLAGS) -L. -lft_malloc  -I include
 	gcc -o test3_2 test/test3_2.c $(IFLAGS) -L. -lft_malloc  -I include
 	gcc -o test4 test/test4.c $(IFLAGS) -L. -lft_malloc  -I include
-	gcc -o test5 test/test5.c $(IFLAGS)-L. -lft_malloc -I include
+	gcc -o test5 test/test5.c $(IFLAGS) -L. -lft_malloc -I include
 
 test_clean:
 	rm -f test*

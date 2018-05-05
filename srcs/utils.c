@@ -9,3 +9,24 @@ void    print_binary(__uint128_t nb) {
     }
     printf("\n");
 }
+
+void	add_chunk_large_zone(struct  chunk_large_zone  **first, struct  chunk_large_zone  *new)
+{
+    new->next = *first;
+    new->prev = NULL;
+    if (*first) {
+        (*first)->prev = new;
+    }
+    *first = new;
+}
+
+void	del_chunk_large_zone(struct  chunk_large_zone  **first, struct  chunk_large_zone  *node)
+{
+    if (node->prev)
+        node->prev->next = node->next;
+    if (node->next)
+        node->next->prev = node->prev;
+
+    if (node == *first)
+        *first = node->next;
+}
