@@ -1,33 +1,27 @@
 #include "malloc.h"
 #include "internal_malloc.h"
+#include <string.h>
 
 struct zones g_zones;
 
 void    constructor(struct zones *z)
 {
-    printf("constructor \n");
     z->init = true;
     z->page_size = getpagesize();
 }
 
 void    *ft_malloc(size_t size)
 {
-    printf("malloc\n");
-
     if (size <= 0)
         return NULL;
     if (!g_zones.init)
-    {
         constructor(&g_zones);
-    }
     void *addr = allocator(&g_zones, size);
-    printf("---------------\n");
     return addr;
 }
 
 void ft_free(void *ptr)
 {
-    printf("**********************\n");
     if (ptr == NULL || (size_t)ptr % 8 != 0)
         return ;
     struct chunk *chunk_cast = ((struct chunk *)ptr) - 1;
@@ -40,24 +34,17 @@ void ft_free(void *ptr)
     }
     struct  header_zone *header = (struct header_zone *)((size_t)chunk_cast - chunk_cast->offset_block * get_zone_block(chunk_cast->zone_type) - get_offset_zone_header(chunk_cast->zone_type));
     struct zone_reference *zone_ref = header->parent;
-    printf("zone ref %#zx \n", (size_t)zone_ref->ptr);
     
     __uint128_t bitmask = size_block_bitmask(chunk_cast->size_block);
-    printf("allocated chunks ");/*{{{*/
-    print_binary(zone_ref->allocated_chunks);/*}}}*/
     zone_ref->allocated_chunks ^= bitmask << chunk_cast->offset_block;
-    printf("allocated chunks ");/*{{{*/
-    print_binary(zone_ref->allocated_chunks);/*}}}*/
     zone_ref->free_space += chunk_cast->size_block;
-    printf("**********************\n");
 
 
     // TODO:siftup
 }
-#include <string.h>
+
 void *ft_realloc(void *ptr, size_t size)
 {
-    printf("**********************\n");
     if (ptr == NULL || (size_t)ptr % 8 != 0)
     {
         return NULL;
@@ -75,7 +62,6 @@ void *ft_realloc(void *ptr, size_t size)
     size_t size_block = size / get_zone_block(chunk_cast->zone_type) + 1;
     struct  header_zone *header = (struct header_zone *)((size_t)chunk_cast - chunk_cast->offset_block * get_zone_block(chunk_cast->zone_type) - get_offset_zone_header(chunk_cast->zone_type));
     struct zone_reference *zone_ref = header->parent;
-    printf("zone ref %#zx \n", (size_t)zone_ref->ptr);
     
     __uint128_t bitmask = size_block_bitmask(chunk_cast->size_block);
     __uint128_t new_bitmask = size_block_bitmask(size_block);
