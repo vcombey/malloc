@@ -105,5 +105,7 @@ void    sift_up(struct priority_queue *pq, size_t pos);;
 int     add_priority_queue(struct priority_queue *pq, struct zone_reference new);
 void    del_priority_queue(struct priority_queue *pq, size_t pos, enum e_zone_type zone_type);
 void    update_priority_queue(struct  priority_queue *pq, struct zone_reference *zone_ref, enum e_zone_type zone_type);
+struct  chunk_large_zone  *find_min_large_zone(struct chunk_large_zone  *first, void *previous_min);
+void	show_alloc_large_zone(struct  chunk_large_zone  *large_zone_first);
 
 #endif

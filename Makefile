@@ -21,7 +21,7 @@ CFLAGS = -Wall -Wextra -Werror -g -O0 $(DEBUG)
 
 ### SOURCES ###
 
-SRC_CORE = malloc priority_queue zone_reference utils chunck allocator show_alloc
+SRC_CORE = malloc priority_queue zone_reference utils chunck allocator show_alloc sift show_alloc_large_zone
 SRC_DIR = srcs
 
 OBJ_DIR = objs
