@@ -1,11 +1,35 @@
 #include "malloc.h"
 #include "internal_malloc.h"
 
-void    show_alloc_chunk(void *ptr, enum e_zone_type zone_type, int *i)
+void	add_chunk_large_zone(struct  chunk_large_zone  **first, struct  chunk_large_zone  *new)
 {
-    struct chunk *c = (struct chunk *)((size_t)ptr + get_offset_zone_header(zone_type) + *i * get_zone_block(zone_type));
-    size_t inf = (size_t)c + sizeof(*c);
-    size_t sup = (size_t)c + c->size_block * get_zone_block(zone_type);
-    printf("%#zx - %#zx: %zu\n", inf, sup, sup - inf);
-    *i += c->size_block;
+    new->next = *first;
+    new->prev = NULL;
+    if (*first) {
+        (*first)->prev = new;
+    }
+    *first = new;
+}
+
+void	del_chunk_large_zone(struct  chunk_large_zone  **first, struct  chunk_large_zone  *node)
+{
+    if (node->prev)
+        node->prev->next = node->next;
+    if (node->next)
+        node->next->prev = node->prev;
+
+    if (node == *first)
+        *first = node->next;
+}
+
+size_t  len_chunk_large_zone(struct chunk_large_zone *first)
+{
+    size_t  i = 0;
+
+    while (first)
+    {
+        first = first->next;
+        i++;
+    }
+    return i;
 }

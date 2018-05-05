@@ -56,6 +56,7 @@ struct  chunk {
 struct  chunk_large_zone {
     struct chunk_large_zone *next;
     struct chunk_large_zone *prev;
+    size_t                  size_octet;
     struct  chunk           data;
 };
 
@@ -100,6 +101,8 @@ void	add_chunk_large_zone(struct  chunk_large_zone  **first, struct  chunk_large
 void	del_chunk_large_zone(struct  chunk_large_zone  **first, struct  chunk_large_zone  *node);
 void    show_alloc_priority_queue(struct priority_queue pq, enum e_zone_type zone_type);
 void    show_alloc_zone(struct zone_reference zone_ref, enum e_zone_type zone_type);
-void    show_alloc_chunk(void *ptr, enum e_zone_type zone_type, int *i);
+void    show_alloc_chunk(void *ptr, enum e_zone_type zone_type, size_t *i);
+void    *allocator(struct zones *z, size_t size);
+size_t  len_chunk_large_zone(struct chunk_large_zone *first);
 
 #endif

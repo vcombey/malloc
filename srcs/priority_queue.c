@@ -98,37 +98,6 @@ int    add_priority_queue(struct priority_queue *pq, struct zone_reference new_n
     return 0;
 }
 
-struct  zone_reference  find_minimum_addr(struct priority_queue pq, struct  zone_reference previous_min)
-{
-    size_t i = 0;
-    struct  zone_reference new_min = {.allocated_chunks=0, .free_space=0 , .ptr=NULL};
-
-    while (i < pq.lenght)
-    {
-        if (pq.vec[i].ptr < new_min.ptr && pq.vec[i].ptr > previous_min.ptr)
-        {
-            new_min = pq.vec[i];
-        }
-        i++;
-    }
-    return new_min;
-}
-
-/*void    del_priority_queue(struct priority_queue *pq)*/
-
-void    show_alloc_priority_queue(struct priority_queue pq, enum e_zone_type zone_type)
-{
-    size_t i = 0;
-    struct  zone_reference min = {.allocated_chunks=0, .free_space=0 , .ptr=NULL};
-
-    while (i < pq.lenght)
-    {
-        min = find_minimum_addr(pq, min);
-        show_alloc_zone(min, zone_type);
-        printf("\n");
-        i++;
-    }
-}
 
 
 

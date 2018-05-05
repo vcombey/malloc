@@ -71,28 +71,3 @@ int     offset_place_chunk(__uint128_t  allocated_chunks, size_t size_block, __u
     }
     return -1;
 }
-
-void    show_alloc_zone(struct zone_reference zone_ref, enum e_zone_type zone_type)
-{
-    int i = 0;
-
-    while (i < 128)
-    {
-        if (zone_ref.allocated_chunks & (1 << i))
-            show_alloc_chunk(zone_ref.ptr, zone_type, &i);
-        else
-            i++;
-    }
-}
-
-
-
-
-
-
-
-
-
-
-
-
