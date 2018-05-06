@@ -67,8 +67,12 @@ void	*reallocator(void *ptr, size_t size)
 	if (!is_in_chunk_large_zone(((struct chunk_large_zone *)ptr) - 1, g_zones.large_zone_first) &&
 		(!is_in_priority_queue(&g_zones.little_heap, ((struct chunk *)ptr) - 1, LITTLE)) &&
 		(!is_in_priority_queue(&g_zones.medium_heap, ((struct chunk *)ptr) - 1, MEDIUM)))
+	{
 		return NULL;
+		printf("pointer being reallocated was not allocated\n");
+	}
 #endif
+	printf("pointer being reallocated was allocated\n");
 	if (chunk_cast->zone_type == LARGE)
 		return realloc_large_zone(ptr, size);
 	else if (chunk_cast->zone_type == LITTLE)

@@ -41,9 +41,9 @@ bool	is_in_chunk_large_zone(struct chunk_large_zone *node, struct chunk_large_zo
 {
 	while (first)
 	{
-		first = first->next;
 		if (first == node)
 			return true;
+		first = first->next;
 	}
 	return (false);
 

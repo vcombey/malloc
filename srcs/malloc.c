@@ -2,6 +2,14 @@
 #include "internal_malloc.h"
 #include <string.h>
 
+void	ft_putstr(char *str)
+{
+	while (*str)
+	{ 
+		write(1, str, 1);
+		str++;
+	}
+}
 struct zones g_zones;
 
 void	constructor(struct zones *z)
@@ -12,7 +20,7 @@ void	constructor(struct zones *z)
 
 void	*malloc(size_t size)
 {
-	dprintf(2, "malloc\n");
+	ft_putstr("malloc\n");
 	if (size <= 0)
 		return (NULL);
 	if (!g_zones.init)
@@ -22,7 +30,7 @@ void	*malloc(size_t size)
 
 void	free(void *ptr)
 {
-	dprintf(2, "free\n");
+	ft_putstr("free\n");
 	if (ptr == NULL || (size_t)ptr % 8 != 0)
 		return ;
 	if (!g_zones.init)
@@ -32,7 +40,7 @@ void	free(void *ptr)
 
 void	*realloc(void *ptr, size_t size)
 {
-	dprintf(2, "realloc\n");
+	ft_putstr("realloc\n");
 	if (ptr == NULL || (size_t)ptr % 8 != 0)
 		return (NULL);
 	if (!g_zones.init)

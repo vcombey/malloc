@@ -36,8 +36,12 @@ void	desalocator(void *ptr)
 	if (!is_in_chunk_large_zone(((struct chunk_large_zone *)ptr) - 1, g_zones.large_zone_first) &&
 		(!is_in_priority_queue(&g_zones.little_heap, ((struct chunk *)ptr) - 1, LITTLE)) &&
 		(!is_in_priority_queue(&g_zones.medium_heap, ((struct chunk *)ptr) - 1, MEDIUM)))
+	{
+		printf("pointer being freed was not allocated\n");
 		return ;
+	}
 #endif
+	printf("pointer being freed was allocated\n");
 	chunk_cast = ((struct chunk *)ptr) - 1;
 	if (chunk_cast->zone_type == LARGE)
         return desalocator_large_zone(ptr);
