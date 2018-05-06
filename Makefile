@@ -18,7 +18,7 @@ LIBRARY = libft_malloc_$(HOSTTYPE).so
 
 NAME = libft_malloc.so
 
-CFLAGS = -Wall -Wextra -Werror -g -O0 $(ASAN)
+CFLAGS = -Wall -Wextra -Werror -g3 -O0 $(ASAN)
 
 ### SOURCES ###
 

@@ -25,7 +25,9 @@ void	*malloc(size_t size)
 		return (NULL);
 	if (!g_zones.init)
 		constructor(&g_zones);
-	return (allocator(&g_zones, size));
+	void *addr = allocator(&g_zones, size);
+	ft_putstr("tout va bien\n");
+	return (addr);
 }
 
 void	free(void *ptr)
@@ -36,6 +38,7 @@ void	free(void *ptr)
 	if (!g_zones.init)
 		constructor(&g_zones);
 	desalocator(ptr);
+	ft_putstr("tout va bien\n");
 }
 
 void	*realloc(void *ptr, size_t size)
@@ -45,5 +48,7 @@ void	*realloc(void *ptr, size_t size)
 		return (NULL);
 	if (!g_zones.init)
 		constructor(&g_zones);
-	return (reallocator(ptr, size));
+	void *addr = reallocator(ptr, size);
+	ft_putstr("tout va bien\n");
+	return (addr);
 }

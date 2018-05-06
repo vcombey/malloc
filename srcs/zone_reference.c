@@ -39,6 +39,7 @@ int		new_zone_reference(enum e_zone_type zone_type,\
 			== MAP_FAILED)
 		return (-1);
 	new_zone_ref->ptr = addr;
+	new_zone_ref->ptr->magic = MAGIC;
 	new_zone_ref->allocated_chunks = 0;
 	new_zone_ref->free_space = 128;
 	return (0);
@@ -73,4 +74,18 @@ int		offset_place_chunk(__uint128_t allocated_chunks,\
 		i++;
 	}
 	return (-1);
+}
+
+bool	pointer_belong_to_us(void *ptr)
+{
+	if (is_in_chunk_large_zone(((struct chunk_large_zone *)ptr) - 1, g_zones.large_zone_first) ||
+		(is_in_priority_queue(&g_zones.little_heap, ((struct chunk *)ptr) - 1, LITTLE)) ||
+		(is_in_priority_queue(&g_zones.medium_heap, ((struct chunk *)ptr) - 1, MEDIUM)))
+		return true;
+	return false;
+}
+
+bool	check_header(struct header_zone *header)
+{
+	return (header->magic == MAGIC);
 }

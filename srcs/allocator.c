@@ -20,6 +20,7 @@ void	*try_add_chunk_zone_reference(struct zone_reference *zone_ref,\
 	chunk_cast->size_block = size_block;
 	chunk_cast->offset_block = offset;
 	chunk_cast->zone_type = zone_type;
+	chunk_cast->is_free = false;
 	return (chunk_cast + 1);
 }
 

@@ -20,13 +20,6 @@ void	*realloc_large_zone(void *ptr, size_t size)
 	return realloc_another_place(ptr, node->size_octet, size);
 }
 
-struct zone_reference	*get_zone_ref(struct chunk *chunk)
-{
-	return (((struct header_zone *)((size_t)chunk - chunk->offset_block *\
-			get_zone_block(chunk->zone_type) -\
-			get_offset_zone_header(chunk->zone_type)))->parent);
-}
-
 void	*realloc_zone(struct priority_queue *pq, void *ptr, struct chunk *chunk, size_t size)
 {
 	size_t					new_size_block;
@@ -35,7 +28,8 @@ void	*realloc_zone(struct priority_queue *pq, void *ptr, struct chunk *chunk, si
 	__uint128_t				new_bitmask;
 
 	new_size_block = size / get_zone_block(chunk->zone_type) + 1;
-	zone_ref = get_zone_ref(chunk);
+	if ((zone_ref = get_zone_ref(chunk)) == NULL)
+		return NULL;
 	bitmask = size_block_bitmask(chunk->size_block);
 	new_bitmask = size_block_bitmask(new_size_block);
 	if (new_bitmask <= bitmask)
@@ -64,14 +58,17 @@ void	*reallocator(void *ptr, size_t size)
 	struct chunk	*chunk_cast = ((struct chunk *)ptr) - 1;
 
 #ifndef UNSAFE_ALLOC
-	if (!is_in_chunk_large_zone(((struct chunk_large_zone *)ptr) - 1, g_zones.large_zone_first) &&
-		(!is_in_priority_queue(&g_zones.little_heap, ((struct chunk *)ptr) - 1, LITTLE)) &&
-		(!is_in_priority_queue(&g_zones.medium_heap, ((struct chunk *)ptr) - 1, MEDIUM)))
+	if (!pointer_belong_to_us(ptr))
 	{
 		return NULL;
 		printf("pointer being reallocated was not allocated\n");
 	}
 #endif
+	if (chunk_cast->is_free)
+	{
+		printf("double free\n");
+		return NULL;
+	}
 	printf("pointer being reallocated was allocated\n");
 	if (chunk_cast->zone_type == LARGE)
 		return realloc_large_zone(ptr, size);
