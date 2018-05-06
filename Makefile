@@ -57,6 +57,15 @@ test:
 	gcc -o test5 test/test5.c $(IFLAGS) -L. -lft_malloc -I include
 	gcc -o test6 test/test6.c $(IFLAGS) -L. -lft_malloc -I include
 
+test_shared:
+	gcc -o test_shared/test0 test_shared/test0.c $(IFLAGS) -I include
+	gcc -o test_shared/test1 test_shared/test1.c $(IFLAGS) -I include
+	gcc -o test_shared/test2 test_shared/test2.c $(IFLAGS) -I include
+	gcc -o test_shared/test3 test_shared/test3.c $(IFLAGS) -I include
+	gcc -o test_shared/test4 test_shared/test4.c $(IFLAGS) -I include
+	gcc -o test_shared/test5 test_shared/test5.c $(IFLAGS) -I include
+	gcc -o test_shared/test6 test_shared/test6.c $(IFLAGS) -I include
+
 test_clean:
 	rm -f test*
 

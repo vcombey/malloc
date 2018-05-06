@@ -10,7 +10,7 @@ void	constructor(struct zones *z)
 	z->page_size = getpagesize();
 }
 
-void	*ft_malloc(size_t size)
+void	*malloc(size_t size)
 {
 	if (size <= 0)
 		return (NULL);
@@ -19,7 +19,7 @@ void	*ft_malloc(size_t size)
 	return (allocator(&g_zones, size));
 }
 
-void	ft_free(void *ptr)
+void	free(void *ptr)
 {
 	if (ptr == NULL || (size_t)ptr % 8 != 0)
 		return ;
@@ -28,7 +28,7 @@ void	ft_free(void *ptr)
 	desalocator(ptr);
 }
 
-void	*ft_realloc(void *ptr, size_t size)
+void	*realloc(void *ptr, size_t size)
 {
 	if (ptr == NULL || (size_t)ptr % 8 != 0)
 		return (NULL);

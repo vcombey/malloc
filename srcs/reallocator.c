@@ -4,9 +4,9 @@
 
 void	*realloc_another_place(void *ptr, size_t old_size, size_t new_size)
 {
-	void	*new_ptr = ft_malloc(new_size);
+	void	*new_ptr = malloc(new_size);
 	memcpy(new_ptr, ptr, old_size);
-	ft_free(ptr);
+	free(ptr);
 	return (new_ptr);
 }
 
