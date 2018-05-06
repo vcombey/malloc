@@ -66,3 +66,17 @@ void	update_priority_queue(struct priority_queue *pq,\
 		sift_up(pq, pos);
 	}
 }
+
+bool	is_in_priority_queue(struct priority_queue *pq, void *ptr,
+		enum e_zone_type zone_type)
+{
+	size_t	i = 0;
+
+	while (i < pq->lenght)
+	{
+		if (ptr >= (void *)pq->vec[i].ptr && ptr <= (void *)pq->vec[i].ptr + get_zone_size(zone_type))
+			return true;
+		i++;
+	}
+	return false;
+}

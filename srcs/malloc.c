@@ -12,6 +12,7 @@ void	constructor(struct zones *z)
 
 void	*malloc(size_t size)
 {
+	dprintf(2, "malloc\n");
 	if (size <= 0)
 		return (NULL);
 	if (!g_zones.init)
@@ -21,6 +22,7 @@ void	*malloc(size_t size)
 
 void	free(void *ptr)
 {
+	dprintf(2, "free\n");
 	if (ptr == NULL || (size_t)ptr % 8 != 0)
 		return ;
 	if (!g_zones.init)
@@ -30,6 +32,7 @@ void	free(void *ptr)
 
 void	*realloc(void *ptr, size_t size)
 {
+	dprintf(2, "realloc\n");
 	if (ptr == NULL || (size_t)ptr % 8 != 0)
 		return (NULL);
 	if (!g_zones.init)

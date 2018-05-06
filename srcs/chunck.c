@@ -36,3 +36,15 @@ size_t	len_chunk_large_zone(struct chunk_large_zone *first)
 	}
 	return (i);
 }
+
+bool	is_in_chunk_large_zone(struct chunk_large_zone *node, struct chunk_large_zone *first)
+{
+	while (first)
+	{
+		first = first->next;
+		if (first == node)
+			return true;
+	}
+	return (false);
+
+}

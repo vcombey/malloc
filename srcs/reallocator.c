@@ -12,12 +12,12 @@ void	*realloc_another_place(void *ptr, size_t old_size, size_t new_size)
 
 void	*realloc_large_zone(void *ptr, size_t size)
 {
-		struct chunk_large_zone	*node;
-		
-		node = ((struct chunk_large_zone *)ptr) - 1;
-		if (node->data.size_block / g_zones.page_size >= size / g_zones.page_size)
-			return (ptr);
-		return realloc_another_place(ptr, node->size_octet, size);
+	struct chunk_large_zone	*node;
+	
+	node = ((struct chunk_large_zone *)ptr) - 1;
+	if (node->data.size_block / g_zones.page_size >= size / g_zones.page_size)
+		return (ptr);
+	return realloc_another_place(ptr, node->size_octet, size);
 }
 
 struct zone_reference	*get_zone_ref(struct chunk *chunk)
@@ -62,6 +62,13 @@ void	*realloc_zone(struct priority_queue *pq, void *ptr, struct chunk *chunk, si
 void	*reallocator(void *ptr, size_t size)
 {
 	struct chunk	*chunk_cast = ((struct chunk *)ptr) - 1;
+
+#ifndef UNSAFE_ALLOC
+	if (!is_in_chunk_large_zone(((struct chunk_large_zone *)ptr) - 1, g_zones.large_zone_first) &&
+		(!is_in_priority_queue(&g_zones.little_heap, ((struct chunk *)ptr) - 1, LITTLE)) &&
+		(!is_in_priority_queue(&g_zones.medium_heap, ((struct chunk *)ptr) - 1, MEDIUM)))
+		return NULL;
+#endif
 	if (chunk_cast->zone_type == LARGE)
 		return realloc_large_zone(ptr, size);
 	else if (chunk_cast->zone_type == LITTLE)

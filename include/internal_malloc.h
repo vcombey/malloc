@@ -93,18 +93,20 @@ int     offset_place_chunk(__uint128_t  allocated_chunks, size_t size_block, __u
 void	add_chunk_large_zone(struct  chunk_large_zone  **first, struct  chunk_large_zone  *new);
 void	del_chunk_large_zone(struct  chunk_large_zone  **first, struct  chunk_large_zone  *node);
 size_t  len_chunk_large_zone(struct chunk_large_zone *first);
+bool	is_in_chunk_large_zone(struct chunk_large_zone *node, struct chunk_large_zone *first);
 
 void    show_alloc_priority_queue(struct priority_queue pq, enum e_zone_type zone_type);
 void    show_alloc_zone(struct zone_reference zone_ref, enum e_zone_type zone_type);
 void    show_alloc_chunk(void *ptr, enum e_zone_type zone_type, size_t *i);
+struct  chunk_large_zone  *find_min_large_zone(struct chunk_large_zone  *first, void *previous_min);
+void	show_alloc_large_zone(struct  chunk_large_zone  *large_zone_first);
 
 void    sift_down(struct priority_queue *pq, size_t pos);
 void    sift_up(struct priority_queue *pq, size_t pos);;
 int     add_priority_queue(struct priority_queue *pq, struct zone_reference new);
 void    del_priority_queue(struct priority_queue *pq, size_t pos, enum e_zone_type zone_type);
 void    update_priority_queue(struct  priority_queue *pq, struct zone_reference *zone_ref, enum e_zone_type zone_type);
-struct  chunk_large_zone  *find_min_large_zone(struct chunk_large_zone  *first, void *previous_min);
-void	show_alloc_large_zone(struct  chunk_large_zone  *large_zone_first);
+bool	is_in_priority_queue(struct priority_queue *pq, void *ptr, enum e_zone_type zone_type);
 
 void	desalocator(void *ptr);
 void	*reallocator(void *ptr, size_t size);

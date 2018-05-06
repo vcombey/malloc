@@ -3,10 +3,11 @@ CC = gcc
 ### MAIN FLAGS ###
 
 APPEND=
+DEBUG=
 ASAN=
 
 ifeq ($(DEBUG),yes)
-	DEBUG = -fsanitize=address
+	ASAN=-fsanitize=address
 endif
 
 ifeq ($(HOSTTYPE),)
@@ -17,7 +18,7 @@ LIBRARY = libft_malloc_$(HOSTTYPE).so
 
 NAME = libft_malloc.so
 
-CFLAGS = -Wall -Wextra -Werror -g -O0 $(DEBUG)
+CFLAGS = -Wall -Wextra -Werror -g -O0 $(ASAN)
 
 ### SOURCES ###
 
@@ -41,7 +42,7 @@ all: $(NAME)
 
 $(NAME): $(OBJ_DIR) $(OBJ)
 	echo $(SRCS)
-	gcc -shared -o $(LIBRARY) $(OBJ) $(IFLAGS)
+	$(CC) $(CFLAGS) -shared -o $(LIBRARY) $(OBJ) $(IFLAGS)
 	ln -s $(LIBRARY) $(NAME)
 
 test:
@@ -70,12 +71,10 @@ test_clean:
 	rm -f test*
 
 $(OBJ_DIR):
-	echo lojl
 	mkdir -p objs
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
-	echo lol
-	$(CC) $(CFLAGS) -o $@ -c $< $(IFLAGS)
+	$(CC) $(CFLAGS) -o $@ -c $< $(IFLAGS) $(APPEND)
 
 clean:
 	rm -f $(OBJ)
