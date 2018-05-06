@@ -11,10 +11,7 @@ void	*try_add_chunk_zone_reference(struct zone_reference *zone_ref,\
 
 	bitmask = size_block_bitmask(size_block);
 	if ((offset = offset_place_chunk(zone_ref->allocated_chunks, size_block, bitmask)) == -1)
-	{
-		printf("can t allocate in this zone reference\n");
 		return (NULL);
-	}
 	zone_ref->allocated_chunks |= bitmask << offset;
 	zone_ref->free_space -= size_block;
 	chunk_cast = (struct chunk *)((size_t)zone_ref->ptr +\

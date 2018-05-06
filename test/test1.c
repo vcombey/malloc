@@ -12,11 +12,9 @@ int main()
     while (i < 1024)
     {
         addr = (char*)ft_malloc(1024);
-        printf("adrr : %zu\n", (size_t)addr);
         addr[0] = 42;
         addr[1023] = 42;
         i++;
     }
-    show_alloc_mem();
     return (0);
 } 
