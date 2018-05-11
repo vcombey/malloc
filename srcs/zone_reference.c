@@ -82,6 +82,7 @@ bool	pointer_belong_to_us(void *ptr)
 		(is_in_priority_queue(&g_zones.little_heap, ((struct chunk *)ptr) - 1, LITTLE)) ||
 		(is_in_priority_queue(&g_zones.medium_heap, ((struct chunk *)ptr) - 1, MEDIUM)))
 		return true;
+	printf("pointer belong to us\n");
 	return false;
 }
 

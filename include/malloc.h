@@ -3,6 +3,10 @@
 
 #include <stdlib.h>
 
+#define malloc ft_malloc
+#define free ft_free
+#define realloc ft_realloc
+
 void free(void *ptr);
 void *malloc(size_t size);
 void *realloc(void *ptr, size_t size);

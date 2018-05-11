@@ -34,7 +34,10 @@ void	free(void *ptr)
 {
 	ft_putstr("free\n");
 	if (ptr == NULL || (size_t)ptr % 8 != 0)
+	{
+		ft_putstr("bad alignement free\n");
 		return ;
+	}
 	if (!g_zones.init)
 		constructor(&g_zones);
 	desalocator(ptr);
@@ -45,7 +48,10 @@ void	*realloc(void *ptr, size_t size)
 {
 	ft_putstr("realloc\n");
 	if (ptr == NULL || (size_t)ptr % 8 != 0)
+	{
+		printf("bad allignement\n");
 		return (NULL);
+	}
 	if (!g_zones.init)
 		constructor(&g_zones);
 	void *addr = reallocator(ptr, size);

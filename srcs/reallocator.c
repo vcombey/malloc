@@ -57,11 +57,12 @@ void	*reallocator(void *ptr, size_t size)
 {
 	struct chunk	*chunk_cast = ((struct chunk *)ptr) - 1;
 
+	printf("reallocator\n");
 #ifndef UNSAFE_ALLOC
 	if (!pointer_belong_to_us(ptr))
 	{
-		return NULL;
 		printf("pointer being reallocated was not allocated\n");
+		return NULL;
 	}
 #endif
 	if (chunk_cast->is_free)
