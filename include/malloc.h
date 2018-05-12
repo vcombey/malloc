@@ -3,11 +3,9 @@
 
 #include <stdlib.h>
 
-/*
 #define malloc ft_malloc
 #define free ft_free
 #define realloc ft_realloc
-*/
 #define calloc ft_calloc
 
 void	free(void *ptr);

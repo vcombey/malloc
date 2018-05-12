@@ -2,14 +2,14 @@
 #include "internal_malloc.h"
 #include <string.h>
 
-void	recalc_header_zone(struct priority_queue *new_vec, size_t size)
+void	recalc_header_zone(struct zone_reference *new_vec, size_t size)
 {
 	size_t i;
 
 	i = 0;
 	while (i < size)
 	{
-		new_vec->vec[i].ptr->parent = &new_vec->vec[i];
+		new_vec[i].ptr->parent = &new_vec[i];
 		i++;
 	}
 }
@@ -26,8 +26,8 @@ int		add_priority_queue(struct priority_queue *pq,\
 						PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0))\
 				== MAP_FAILED)
 			return (-1);
-		memmove(new_vec, pq->vec, pq->size);
-		recalc_header_zone(new_vec, pq->size);
+		memmove(new_vec, pq->vec, pq->lenght * sizeof(*pq->vec));
+		recalc_header_zone(new_vec, pq->lenght);
 		munmap(pq->vec, pq->size * sizeof(*pq->vec));
 		pq->size += g_zones.page_size / sizeof(*pq->vec);
 		pq->vec = new_vec;

@@ -59,7 +59,7 @@ void	*reallocator(void *ptr, size_t size)
 
 	printf("reallocator\n");
 #ifndef UNSAFE_ALLOC
-	if (!pointer_belong_to_us(ptr))
+	if (!pointer_belong_to_us(((struct chunk *)ptr) - 1))
 	{
 		printf("pointer being reallocated was not allocated\n");
 		return NULL;
