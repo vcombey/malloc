@@ -45,8 +45,8 @@ void	desalocator(void *ptr)
 	}
 	if (chunk_cast->zone_type == LARGE)
         return desalocator_large_zone(ptr);
-	if (chunk_cast->zone_type == LITTLE)
-        desalocator_zone(&g_zones.little_heap, chunk_cast);
-	if (chunk_cast->zone_type == MEDIUM)
-        desalocator_zone(&g_zones.medium_heap, chunk_cast);
+	else if (chunk_cast->zone_type == LITTLE)
+        return desalocator_zone(&g_zones.little_heap, chunk_cast);
+	else if (chunk_cast->zone_type == MEDIUM)
+        return desalocator_zone(&g_zones.medium_heap, chunk_cast);
 }

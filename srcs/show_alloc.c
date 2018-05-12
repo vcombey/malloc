@@ -21,6 +21,7 @@ void					show_alloc_zone(struct zone_reference zone_ref,\
 	i = 0;
 	while (i < 128)
 	{
+		printf("i %zu\n", i);
 		bitmask = 1;
 		bitmask <<= i;
 		if (zone_ref.allocated_chunks & bitmask)
@@ -60,6 +61,7 @@ void					show_alloc_priority_queue(struct priority_queue pq,\
 	min = (struct zone_reference){.ptr=NULL};
 	while (i < pq.lenght)
 	{
+		printf("i %zu, length %zu\n", i, pq.lenght);
 		min = find_minimum_addr(pq, min);
 		show_alloc_zone(min, zone_type);
 		printf("\n");
