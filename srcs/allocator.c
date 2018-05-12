@@ -73,11 +73,8 @@ void	*allocator_large_zone(struct chunk_large_zone **first,\
 void	*allocator(struct zones *z, size_t size)
 {
 	// TODO: see the + 1
-	if (size <= LITTLE_MAX)
-		return (allocator_in_zone(&z->little_heap, (size + sizeof(struct chunk)) / get_zone_block(LITTLE) + 1, LITTLE));
-	if (size > LITTLE_MAX && size <= MEDIUM_MAX)
-		return (allocator_in_zone(&z->medium_heap, (size + sizeof(struct chunk)) / get_zone_block(MEDIUM) + 1, MEDIUM));
-	if (size > MEDIUM_MAX)
+	enum e_zone_type	zone_type = get_zone_type_from_size(size);
+	if (zone_type == LARGE)
 		return (allocator_large_zone(&z->large_zone_first, size));
-	return (NULL);
+	return (allocator_in_zone(get_priority_queue(z,zone_type), (size + sizeof(struct chunk)) / get_zone_block(zone_type) + 1, zone_type));
 }

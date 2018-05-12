@@ -119,4 +119,8 @@ void    *allocator(struct zones *z, size_t size);
 struct	zone_reference	*get_zone_ref(struct chunk *chunk);
 bool	check_header(struct header_zone *header);
 
+struct priority_queue	*get_priority_queue(struct zones *zones, enum e_zone_type zone_type);
+enum e_zone_type	get_zone_type_from_size(size_t size);
+
+void	panic(char *mess);
 #endif

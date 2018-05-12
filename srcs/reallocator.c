@@ -27,6 +27,9 @@ void	*realloc_zone(struct priority_queue *pq, void *ptr, struct chunk *chunk, si
 	__uint128_t				bitmask;
 	__uint128_t				new_bitmask;
 
+	enum e_zone_type new_zone_type = get_zone_type_from_size(size);
+	if (new_zone_type != chunk->zone_type)
+		return realloc_another_place(ptr, chunk->size_block * get_zone_block(chunk->zone_type), size);
 	new_size_block = size / get_zone_block(chunk->zone_type) + 1;
 	if ((zone_ref = get_zone_ref(chunk)) == NULL)
 		return NULL;
@@ -50,7 +53,7 @@ void	*realloc_zone(struct priority_queue *pq, void *ptr, struct chunk *chunk, si
 		sift_down(pq, zone_ref - pq->vec);
 		return (ptr);
 	}
-	return realloc_another_place(ptr, chunk->size_block, size);
+	return realloc_another_place(ptr, chunk->size_block * get_zone_block(chunk->zone_type), size);
 }
 
 void	*reallocator(void *ptr, size_t size)

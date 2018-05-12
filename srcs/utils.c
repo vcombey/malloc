@@ -16,3 +16,9 @@ void	unimplemented(char *mess)
 	exit(1);
 }
 
+void	panic(char *mess)
+{
+	printf("%s", mess);
+	exit(1);
+}
+

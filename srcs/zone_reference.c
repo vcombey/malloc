@@ -1,6 +1,17 @@
 #include "malloc.h"
 #include "internal_malloc.h"
 
+enum e_zone_type	get_zone_type_from_size(size_t size)
+{
+	if (size <= LITTLE_MAX)
+		return LITTLE;
+	if (size > LITTLE_MAX && size <= MEDIUM_MAX)
+		return MEDIUM;
+	if (size > MEDIUM_MAX)
+		return LARGE;
+	return -1;
+}
+
 size_t	get_zone_size(enum e_zone_type zone_type)
 {
 	if (zone_type == LITTLE)
@@ -16,6 +27,7 @@ size_t	get_zone_block(enum e_zone_type zone_type)
 		return (LITTLE_BLOCK);
 	else if (zone_type == MEDIUM)
 		return (MEDIUM_BLOCK);
+	panic("get One block call with a bad zone type");
 	return (-1);
 }
 

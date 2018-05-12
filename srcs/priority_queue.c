@@ -80,3 +80,12 @@ bool	is_in_priority_queue(struct priority_queue *pq, void *ptr,
 	}
 	return false;
 }
+
+struct priority_queue	*get_priority_queue(struct zones *zones, enum e_zone_type zone_type)
+{
+	if (zone_type == LITTLE)
+		return &zones->little_heap;
+	else if (zone_type == MEDIUM)
+		return &zones->medium_heap;
+	return NULL;
+}
