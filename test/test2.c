@@ -11,7 +11,6 @@ int main()
         addr = (char*)ft_malloc(1024);
         addr[0] = 42;
         ft_free(addr);
-        show_alloc_mem();
         i++;
     }
     return (0);

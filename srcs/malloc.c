@@ -1,6 +1,7 @@
 #include "malloc.h"
 #include "internal_malloc.h"
 #include <string.h>
+#include <assert.h>
 
 void	ft_putstr(char *str)
 {
@@ -27,19 +28,18 @@ void	*malloc(size_t size)
 		constructor(&g_zones);
 	void *addr = allocator(&g_zones, size);
 	ft_putstr("tout va bien\n");
+	assert((size_t)addr % 8 == 0);
 	return (addr);
 }
 
 void	*calloc(size_t count, size_t size)
 {
+	void *addr;
+
 	ft_putstr("calloc\n");
-	if (size <= 0 || count <= 0)
-		return (NULL);
-	if (!g_zones.init)
-		constructor(&g_zones);
-	void *addr = allocator(&g_zones, size * count);
-	ft_putstr("tout va bien\n");
-	bzero(addr, size * count);
+	addr = malloc(count * size);
+	if (addr)
+		bzero(addr, count * size);
 	return (addr);
 }
 
@@ -64,14 +64,17 @@ void	free(void *ptr)
 
 void	*realloc(void *ptr, size_t size)
 {
+	if (!g_zones.init)
+		constructor(&g_zones);
 	ft_putstr("realloc\n");
-	if (ptr == NULL || (size_t)ptr % 8 != 0)
+	if (ptr == NULL) {
+		return malloc(size);
+	}
+	if ((size_t)ptr % 8 != 0)
 	{
 		printf("bad allignement\n");
 		return (NULL);
 	}
-	if (!g_zones.init)
-		constructor(&g_zones);
 	void *addr = reallocator(ptr, size);
 	ft_putstr("tout va bien\n");
 	return (addr);
