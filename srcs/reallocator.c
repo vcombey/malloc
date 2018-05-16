@@ -44,6 +44,7 @@ void	*realloc_zone(struct priority_queue *pq, void *ptr, struct chunk *chunk, si
 		zone_ref->allocated_chunks ^= (bitmask << chunk->offset_block ^ \
 				new_bitmask << chunk->offset_block);
 		zone_ref->free_space -= new_size_block - chunk->size_block;
+		chunk->size_block = new_size_block;
 		sift_up(pq, zone_ref - pq->vec);
 		return (ptr);
 	}
@@ -54,6 +55,7 @@ void	*realloc_zone(struct priority_queue *pq, void *ptr, struct chunk *chunk, si
 	{
 		zone_ref->allocated_chunks |= new_bitmask << chunk->offset_block;
 		zone_ref->free_space -= new_size_block - chunk->size_block;
+		chunk->size_block = new_size_block;
 		sift_down(pq, zone_ref - pq->vec);
 		return (ptr);
 	}
