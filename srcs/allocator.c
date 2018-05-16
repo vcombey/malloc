@@ -14,6 +14,7 @@ void	*try_add_chunk_zone_reference(struct zone_reference *zone_ref,\
 		return (NULL);
 	zone_ref->allocated_chunks |= bitmask << offset;
 	zone_ref->free_space -= size_block;
+	printf("offset %i\n", offset);
 	chunk_cast = (struct chunk *)((size_t)zone_ref->ptr +\
 			get_offset_zone_header(zone_type) +\
 			offset * get_zone_block(zone_type));
@@ -76,5 +77,5 @@ void	*allocator(struct zones *z, size_t size)
 	enum e_zone_type	zone_type = get_zone_type_from_size(size);
 	if (zone_type == LARGE)
 		return (allocator_large_zone(&z->large_zone_first, size));
-	return (allocator_in_zone(get_priority_queue(z,zone_type), (size + sizeof(struct chunk)) / get_zone_block(zone_type) + 1, zone_type));
+	return (allocator_in_zone(get_priority_queue(z,zone_type), get_nb_block_from_size(size, zone_type), zone_type));
 }

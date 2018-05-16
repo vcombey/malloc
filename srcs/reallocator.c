@@ -5,7 +5,9 @@
 void	*realloc_another_place(void *ptr, size_t old_size, size_t new_size)
 {
 	void	*new_ptr = malloc(new_size);
-	memcpy(new_ptr, ptr, old_size);
+	printf("old size %zu new_size%zu \n", old_size, new_size);
+	size_t min_size = old_size < new_size ? old_size : new_size;
+	memcpy(new_ptr, ptr, min_size);
 	free(ptr);
 	return (new_ptr);
 }
@@ -28,9 +30,11 @@ void	*realloc_zone(struct priority_queue *pq, void *ptr, struct chunk *chunk, si
 	__uint128_t				new_bitmask;
 
 	enum e_zone_type new_zone_type = get_zone_type_from_size(size);
+	//TODO:chunk->size_block * get_zone_block(chunk->zone_type) - sizeof
+	//structchunk
 	if (new_zone_type != chunk->zone_type)
-		return realloc_another_place(ptr, chunk->size_block * get_zone_block(chunk->zone_type), size);
-	new_size_block = size / get_zone_block(chunk->zone_type) + 1;
+		return realloc_another_place(ptr, chunk->size_block * get_zone_block(chunk->zone_type) - sizeof(struct chunk), size);
+	new_size_block = get_nb_block_from_size(size, chunk->zone_type);
 	if ((zone_ref = get_zone_ref(chunk)) == NULL)
 		return NULL;
 	bitmask = size_block_bitmask(chunk->size_block);
@@ -53,7 +57,7 @@ void	*realloc_zone(struct priority_queue *pq, void *ptr, struct chunk *chunk, si
 		sift_down(pq, zone_ref - pq->vec);
 		return (ptr);
 	}
-	return realloc_another_place(ptr, chunk->size_block * get_zone_block(chunk->zone_type), size);
+	return realloc_another_place(ptr, chunk->size_block * get_zone_block(chunk->zone_type) - sizeof(struct chunk), size);
 }
 
 void	*reallocator(void *ptr, size_t size)

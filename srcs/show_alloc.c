@@ -18,10 +18,11 @@ void					show_alloc_zone(struct zone_reference zone_ref,\
 	size_t		i;
 	__uint128_t	bitmask;
 
+	printf("free_space: %i\n", zone_ref.free_space);
+	print_binary(zone_ref.allocated_chunks);
 	i = 0;
 	while (i < 128)
 	{
-		printf("i %zu\n", i);
 		bitmask = 1;
 		bitmask <<= i;
 		if (zone_ref.allocated_chunks & bitmask)
@@ -69,12 +70,35 @@ void					show_alloc_priority_queue(struct priority_queue pq,\
 	}
 }
 
+#include <math.h>
+
+void	show_priority_queue_largeur(struct priority_queue pq, enum e_zone_type zone_type)
+{
+	size_t i = 0;
+	int nb_parcour = 0;
+
+	while (i < pq.lenght)
+	{
+		size_t j = 0;
+		printf("\n\n depth %i \n\n", nb_parcour);
+		while (j < pow(2, nb_parcour) && i + j < pq.lenght)
+		{
+			show_alloc_zone(pq.vec[i + j], zone_type);
+			j++;
+		}
+		nb_parcour++;
+		i += j + 1;
+	}
+}
+
 void	show_alloc_mem(void)
 {
 	printf("TINY: \n");
-	show_alloc_priority_queue(g_zones.little_heap, LITTLE);
+	//show_alloc_priority_queue(g_zones.little_heap, LITTLE);
+	show_priority_queue_largeur(g_zones.little_heap, LITTLE);
 	printf("SMALL: \n");
-	show_alloc_priority_queue(g_zones.medium_heap, MEDIUM);
+	//show_alloc_priority_queue(g_zones.medium_heap, MEDIUM);
+	show_priority_queue_largeur(g_zones.medium_heap, MEDIUM);
 	printf("LARGE: \n");
 	show_alloc_large_zone(g_zones.large_zone_first);
 }

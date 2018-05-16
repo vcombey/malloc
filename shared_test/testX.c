@@ -5,7 +5,7 @@
 #define malloc ft_malloc
 #define free ft_free
 #define realloc ft_realloc
-#define TAB_SIZE 1
+#define TAB_SIZE 100
 
 int main()
 {

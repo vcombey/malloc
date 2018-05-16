@@ -12,14 +12,14 @@
 
 extern struct zones g_zones;
 
-#define LITTLE_HEADER_SIZE 32
-#define LITTLE_BLOCK 32
+#define LITTLE_HEADER_SIZE (128 * 8)
+#define LITTLE_BLOCK (32 - 8)
 /* Litlle_zone_size must be > 100 * little_max an a multiple of 4096 */
 #define LITTLE_ZONE_SIZE (128 * LITTLE_BLOCK)
 #define LITTLE_MAX (31 * LITTLE_BLOCK)
 
 #define MEDIUM_HEADER_SIZE (128 * 8)
-#define MEDIUM_BLOCK (33 * LITTLE_BLOCK - 8) //
+#define MEDIUM_BLOCK (33 * 32 - 8) //
 #define MEDIUM_ZONE_SIZE ((128 * MEDIUM_BLOCK) + MEDIUM_HEADER_SIZE)
 /* medium_zone_size must be > 100 * little_max an a multiple of 4096 */
 #define MEDIUM_MAX (31 * MEDIUM_BLOCK)
@@ -123,4 +123,5 @@ struct priority_queue	*get_priority_queue(struct zones *zones, enum e_zone_type 
 enum e_zone_type	get_zone_type_from_size(size_t size);
 
 void	panic(char *mess);
+size_t	get_nb_block_from_size(size_t size, enum e_zone_type zone_type);
 #endif

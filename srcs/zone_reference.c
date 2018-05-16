@@ -30,6 +30,10 @@ size_t	get_zone_block(enum e_zone_type zone_type)
 	panic("get One block call with a bad zone type");
 	return (-1);
 }
+size_t	get_nb_block_from_size(size_t size, enum e_zone_type zone_type)
+{
+	return (size + sizeof(struct chunk)) / get_zone_block(zone_type) + 1;
+}
 
 size_t	get_offset_zone_header(enum e_zone_type zone_type)
 {
