@@ -36,7 +36,6 @@ void	desalocator(void *ptr)
 		return ;
 	}
 #endif
-	printf("pointer being freed was allocated\n");
 	chunk = ((struct s_chunk *)ptr) - 1;
 	if (chunk->is_free)
 	{

@@ -141,5 +141,7 @@ enum e_zone_type	zone_type_from_size(size_t size);
 
 void	panic(char *mess);
 size_t	size_block_from_size(size_t size, enum e_zone_type zone_type);
+void	*allocator_large_zone(struct s_chunk_large_zone **first,\
+		size_t size_octet);
 
 #endif

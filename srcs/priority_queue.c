@@ -63,12 +63,10 @@ void	update_heap(struct s_heap *pq,\
 	pos = zone_ref - pq->vec;
 	if (zone_ref->free_space == 128 && pq->vec[0].free_space == 128 && pos != 0)
 	{
-		printf("del heap\n");
 		del_heap(pq, pos, zone_type);
 	}
 	else
 	{
-		printf("sift up\n");
 		sift_up(pq, pos);
 	}
 }

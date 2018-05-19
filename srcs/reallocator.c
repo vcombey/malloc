@@ -5,7 +5,6 @@
 void	*realloc_another_place(void *ptr, size_t old_size, size_t new_size)
 {
 	void	*new_ptr = malloc(new_size);
-	printf("old size %zu new_size%zu \n", old_size, new_size);
 	size_t min_size = old_size < new_size ? old_size : new_size;
 	memcpy(new_ptr, ptr, min_size);
 	free(ptr);
@@ -66,7 +65,6 @@ void	*reallocator(void *ptr, size_t size)
 {
 	struct s_chunk	*chunk = ((struct s_chunk *)ptr) - 1;
 
-	printf("reallocator\n");
 #ifndef UNSAFE_ALLOC
 	if (!pointer_belong_to_us(((struct s_chunk *)ptr) - 1))
 	{
@@ -79,7 +77,6 @@ void	*reallocator(void *ptr, size_t size)
 		printf("double free\n");
 		return NULL;
 	}
-	printf("pointer being reallocated was allocated\n");
 	if (chunk->zone_type == LARGE)
 		return realloc_large_zone(ptr, size);
 	else if (chunk->zone_type == LITTLE)

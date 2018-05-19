@@ -15,14 +15,14 @@ struct s_zones g_zones;
 
 void	constructor(struct s_zones *z)
 {
-	ft_putstr("boujour\n");
+	//ft_putstr("boujour\n");
 	z->init = true;
 	z->page_size = getpagesize();
 }
 
 void	*malloc(size_t size)
 {
-	ft_putstr("malloc\n");
+	//ft_putstr("malloc\n");
 	if (size <= 0)
 		return (NULL);
 	if (!g_zones.init)
@@ -34,7 +34,7 @@ void	*malloc(size_t size)
 
 void	*calloc(size_t count, size_t size)
 {
-	ft_putstr("calloc\n");
+	//ft_putstr("calloc\n");
 	void *addr;
 
 	addr = malloc(count * size);
@@ -45,14 +45,14 @@ void	*calloc(size_t count, size_t size)
 
 void	*valloc(size_t size)
 {
-	ft_putstr("valloc\n");
-	return malloc(size);
+	return (allocator_large_zone(&g_zones.large_zone_first, size));
 }
 
 void	free(void *ptr)
 {
-	ft_putstr("free\n");
-	if (ptr == NULL || (size_t)ptr % 8 != 0)
+	if (ptr == NULL)
+		return ;
+	if ( (size_t)ptr % 8 != 0)
 	{
 		ft_putstr("bad alignement free\n");
 		return ;
@@ -64,7 +64,7 @@ void	free(void *ptr)
 
 void	*realloc(void *ptr, size_t size)
 {
-	ft_putstr("realloc\n");
+	//ft_putstr("realloc\n");
 	if (!g_zones.init)
 		constructor(&g_zones);
 	if (ptr == NULL)

@@ -14,7 +14,6 @@ void	*try_add_chunk_zone_reference(struct s_zone_ref *zone_ref,\
 		return (NULL);
 	zone_ref->allocated_chunks |= bitmask << offset;
 	zone_ref->free_space -= size_block;
-	printf("offset %i\n", offset);
 	chunk = (struct s_chunk *)((size_t)zone_ref->ptr +\
 			offset_zone_header(zone_type) +\
 			offset * zone_block_from_zone_type(zone_type));
