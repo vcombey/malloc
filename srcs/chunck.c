@@ -49,14 +49,15 @@ bool	is_in_chunk_large_zone(struct chunk_large_zone *node, struct chunk_large_zo
 
 }
 
-struct zone_reference	*get_zone_ref(struct chunk *chunk)
+struct zone_reference	*zone_ref_from_chunk(struct chunk *chunk)
 {
     struct header_zone      *header;
 
 	header = (struct header_zone *)((size_t)chunk -\
-            chunk->offset_block * get_zone_block(chunk->zone_type)\
-            - get_offset_zone_header(chunk->zone_type));
-	check_header(header);
+            chunk->offset_block * zone_block_from_zone_type(chunk->zone_type)\
+            - offset_zone_header(chunk->zone_type));
+	if (!check_header(header))
+		panic("bad header magic");
 #ifndef UNSAFE_ALLOC
 	if (!pointer_belong_to_us((void *)header))
 		return NULL;

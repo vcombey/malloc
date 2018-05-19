@@ -29,16 +29,16 @@ void	*realloc_zone(struct priority_queue *pq, void *ptr, struct chunk *chunk, si
 	__uint128_t				bitmask;
 	__uint128_t				new_bitmask;
 
-	enum e_zone_type new_zone_type = get_zone_type_from_size(size);
-	//TODO:chunk->size_block * get_zone_block(chunk->zone_type) - sizeof
+	enum e_zone_type new_zone_type = zone_type_from_size(size);
+	//TODO:chunk->size_block * zone_block_from_zone_type(chunk->zone_type) - sizeof
 	//structchunk
 	if (new_zone_type != chunk->zone_type)
-		return realloc_another_place(ptr, chunk->size_block * get_zone_block(chunk->zone_type) - sizeof(struct chunk), size);
-	new_size_block = get_nb_block_from_size(size, chunk->zone_type);
-	if ((zone_ref = get_zone_ref(chunk)) == NULL)
+		return realloc_another_place(ptr, chunk->size_block * zone_block_from_zone_type(chunk->zone_type) - sizeof(struct chunk), size);
+	new_size_block = size_block_from_size(size, chunk->zone_type);
+	if ((zone_ref = zone_ref_from_chunk(chunk)) == NULL)
 		return NULL;
-	bitmask = size_block_bitmask(chunk->size_block);
-	new_bitmask = size_block_bitmask(new_size_block);
+	bitmask = bitmask_from_size_block(chunk->size_block);
+	new_bitmask = bitmask_from_size_block(new_size_block);
 	if (new_bitmask <= bitmask)
 	{
 		zone_ref->allocated_chunks ^= (bitmask << chunk->offset_block ^ \
@@ -59,12 +59,12 @@ void	*realloc_zone(struct priority_queue *pq, void *ptr, struct chunk *chunk, si
 		sift_down(pq, zone_ref - pq->vec);
 		return (ptr);
 	}
-	return realloc_another_place(ptr, chunk->size_block * get_zone_block(chunk->zone_type) - sizeof(struct chunk), size);
+	return realloc_another_place(ptr, chunk->size_block * zone_block_from_zone_type(chunk->zone_type) - sizeof(struct chunk), size);
 }
 
 void	*reallocator(void *ptr, size_t size)
 {
-	struct chunk	*chunk_cast = ((struct chunk *)ptr) - 1;
+	struct chunk	*chunk = ((struct chunk *)ptr) - 1;
 
 	printf("reallocator\n");
 #ifndef UNSAFE_ALLOC
@@ -74,17 +74,17 @@ void	*reallocator(void *ptr, size_t size)
 		return NULL;
 	}
 #endif
-	if (chunk_cast->is_free)
+	if (chunk->is_free)
 	{
 		printf("double free\n");
 		return NULL;
 	}
 	printf("pointer being reallocated was allocated\n");
-	if (chunk_cast->zone_type == LARGE)
+	if (chunk->zone_type == LARGE)
 		return realloc_large_zone(ptr, size);
-	else if (chunk_cast->zone_type == LITTLE)
-		return realloc_zone(&g_zones.little_heap, ptr, chunk_cast, size);
-	else if (chunk_cast->zone_type == MEDIUM)
-		return realloc_zone(&g_zones.medium_heap, ptr, chunk_cast, size);
+	else if (chunk->zone_type == LITTLE)
+		return realloc_zone(&g_zones.little_heap, ptr, chunk, size);
+	else if (chunk->zone_type == MEDIUM)
+		return realloc_zone(&g_zones.medium_heap, ptr, chunk, size);
 	return (NULL);
 }

@@ -70,6 +70,7 @@ void	*realloc(void *ptr, size_t size)
 	if (ptr == NULL) {
 		return malloc(size);
 	}
+	//TODO: size = 0 -> free
 	if ((size_t)ptr % 8 != 0)
 	{
 		printf("bad allignement\n");

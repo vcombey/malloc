@@ -12,22 +12,22 @@ void    desalocator_large_zone(void *ptr)
     return ;
 }
 
-void    desalocator_zone(struct priority_queue *pq, struct chunk *chunk_cast)
+void    desalocator_zone(struct priority_queue *pq, struct chunk *chunk)
 {
     struct zone_reference   *zone_ref;
     __uint128_t             bitmask;
 
-	if ((zone_ref = get_zone_ref(chunk_cast)) == NULL)
+	if ((zone_ref = zone_ref_from_chunk(chunk)) == NULL)
 		return ;
-	bitmask = size_block_bitmask(chunk_cast->size_block);
-	zone_ref->allocated_chunks ^= bitmask << chunk_cast->offset_block;
-	zone_ref->free_space += chunk_cast->size_block;
-    update_priority_queue(pq, zone_ref, chunk_cast->zone_type);
+	bitmask = bitmask_from_size_block(chunk->size_block);
+	zone_ref->allocated_chunks ^= bitmask << chunk->offset_block;
+	zone_ref->free_space += chunk->size_block;
+    update_priority_queue(pq, zone_ref, chunk->zone_type);
 }
 
 void	desalocator(void *ptr)
 {
-    struct chunk            *chunk_cast;
+    struct chunk            *chunk;
 
 #ifndef UNSAFE_ALLOC
 	if (!pointer_belong_to_us(ptr))
@@ -37,16 +37,17 @@ void	desalocator(void *ptr)
 	}
 #endif
 	printf("pointer being freed was allocated\n");
-	chunk_cast = ((struct chunk *)ptr) - 1;
-	if (chunk_cast->is_free)
+	chunk = ((struct chunk *)ptr) - 1;
+	if (chunk->is_free)
 	{
 		printf("double free\n");
 		return;
 	}
-	if (chunk_cast->zone_type == LARGE)
+	chunk->is_free = true;
+	if (chunk->zone_type == LARGE)
         return desalocator_large_zone(ptr);
-	else if (chunk_cast->zone_type == LITTLE)
-        return desalocator_zone(&g_zones.little_heap, chunk_cast);
-	else if (chunk_cast->zone_type == MEDIUM)
-        return desalocator_zone(&g_zones.medium_heap, chunk_cast);
+	else if (chunk->zone_type == LITTLE)
+        return desalocator_zone(&g_zones.little_heap, chunk);
+	else if (chunk->zone_type == MEDIUM)
+        return desalocator_zone(&g_zones.medium_heap, chunk);
 }

@@ -21,7 +21,7 @@ int		add_priority_queue(struct priority_queue *pq,\
 
 	if (pq->lenght == pq->size)
 	{
-		if ((new_vec = mmap(pq->vec,\
+		if ((new_vec = mmap(NULL,\
 						pq->size * sizeof(*pq->vec) + g_zones.page_size,\
 						PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0))\
 				== MAP_FAILED)
@@ -42,10 +42,16 @@ int		add_priority_queue(struct priority_queue *pq,\
 void	del_priority_queue(struct priority_queue *pq, size_t pos,\
 		enum e_zone_type zone_type)
 {
-	munmap(pq->vec[pos].ptr, get_zone_size(zone_type));
-	pq->vec[pos] = pq->vec[pq->lenght - 1];
-	pq->lenght--;
-	sift_down(pq, pos);
+	munmap(pq->vec[pos].ptr, zone_size_from_zone_type(zone_type));
+	if (pos != pq->lenght - 1) {
+		pq->vec[pos] = pq->vec[pq->lenght - 1];
+		pq->vec[pos].ptr->parent = &pq->vec[pos];
+		bzero(&pq->vec[pq->lenght - 1], sizeof(pq->vec[pq->lenght - 1]));
+		pq->lenght--;
+		sift_down(pq, pos);
+	}
+	else
+		pq->lenght--;
 }
 
 void	update_priority_queue(struct priority_queue *pq,\
@@ -74,7 +80,7 @@ bool	is_in_priority_queue(struct priority_queue *pq, void *ptr,
 
 	while (i < pq->lenght)
 	{
-		if (ptr >= (void *)pq->vec[i].ptr && ptr <= (void *)pq->vec[i].ptr + get_zone_size(zone_type))
+		if (ptr >= (void *)pq->vec[i].ptr && ptr <= (void *)pq->vec[i].ptr + zone_size_from_zone_type(zone_type))
 			return true;
 		i++;
 	}

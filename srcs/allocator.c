@@ -7,22 +7,22 @@ void	*try_add_chunk_zone_reference(struct zone_reference *zone_ref,\
 {
 	__uint128_t		bitmask;
 	int				offset;
-	struct chunk	*chunk_cast;
+	struct chunk	*chunk;
 
-	bitmask = size_block_bitmask(size_block);
+	bitmask = bitmask_from_size_block(size_block);
 	if ((offset = offset_place_chunk(zone_ref->allocated_chunks, size_block, bitmask)) == -1)
 		return (NULL);
 	zone_ref->allocated_chunks |= bitmask << offset;
 	zone_ref->free_space -= size_block;
 	printf("offset %i\n", offset);
-	chunk_cast = (struct chunk *)((size_t)zone_ref->ptr +\
-			get_offset_zone_header(zone_type) +\
-			offset * get_zone_block(zone_type));
-	chunk_cast->size_block = size_block;
-	chunk_cast->offset_block = offset;
-	chunk_cast->zone_type = zone_type;
-	chunk_cast->is_free = false;
-	return (chunk_cast + 1);
+	chunk = (struct chunk *)((size_t)zone_ref->ptr +\
+			offset_zone_header(zone_type) +\
+			offset * zone_block_from_zone_type(zone_type));
+	chunk->size_block = size_block;
+	chunk->offset_block = offset;
+	chunk->zone_type = zone_type;
+	chunk->is_free = false;
+	return (chunk + 1);
 }
 
 void	*move_another_place(struct priority_queue *pq,\
@@ -74,8 +74,8 @@ void	*allocator_large_zone(struct chunk_large_zone **first,\
 void	*allocator(struct zones *z, size_t size)
 {
 	// TODO: see the + 1
-	enum e_zone_type	zone_type = get_zone_type_from_size(size);
+	enum e_zone_type	zone_type = zone_type_from_size(size);
 	if (zone_type == LARGE)
 		return (allocator_large_zone(&z->large_zone_first, size));
-	return (allocator_in_zone(get_priority_queue(z,zone_type), get_nb_block_from_size(size, zone_type), zone_type));
+	return (allocator_in_zone(get_priority_queue(z,zone_type), size_block_from_size(size, zone_type), zone_type));
 }

@@ -15,12 +15,12 @@ extern struct zones g_zones;
 #define LITTLE_HEADER_SIZE (128 * 8)
 #define LITTLE_BLOCK (32 - 8)
 /* Litlle_zone_size must be > 100 * little_max an a multiple of 4096 */
-#define LITTLE_ZONE_SIZE (128 * LITTLE_BLOCK)
+#define LITTLE_ZONE_SIZE (128 * LITTLE_BLOCK + LITTLE_HEADER_SIZE)
 #define LITTLE_MAX (31 * LITTLE_BLOCK)
 
 #define MEDIUM_HEADER_SIZE (128 * 8)
 #define MEDIUM_BLOCK (33 * 32 - 8) //
-#define MEDIUM_ZONE_SIZE ((128 * MEDIUM_BLOCK) + MEDIUM_HEADER_SIZE)
+#define MEDIUM_ZONE_SIZE (128 * MEDIUM_BLOCK + MEDIUM_HEADER_SIZE)
 /* medium_zone_size must be > 100 * little_max an a multiple of 4096 */
 #define MEDIUM_MAX (31 * MEDIUM_BLOCK)
 
@@ -86,11 +86,11 @@ struct  zones {
 void    print_binary(__uint128_t nb);
 void    unimplemented(char *mess);
 
-size_t  get_zone_size(enum e_zone_type zone_type);
-size_t  get_zone_block(enum e_zone_type zone_type);
-size_t  get_offset_zone_header(enum e_zone_type zone_type);
+size_t  zone_size_from_zone_type(enum e_zone_type zone_type);
+size_t  zone_block_from_zone_type(enum e_zone_type zone_type);
+size_t  offset_zone_header(enum e_zone_type zone_type);
 int     new_zone_reference(enum e_zone_type zone_type, struct zone_reference *new_zone_ref);
-size_t  size_block_bitmask(size_t size_block);
+size_t  bitmask_from_size_block(size_t size_block);
 int     offset_place_chunk(__uint128_t  allocated_chunks, size_t size_block, __uint128_t bitmask);
 bool	pointer_belong_to_us(void *ptr);
 
@@ -116,12 +116,12 @@ void	desalocator(void *ptr);
 void	*reallocator(void *ptr, size_t size);
 void    *allocator(struct zones *z, size_t size);
 
-struct	zone_reference	*get_zone_ref(struct chunk *chunk);
+struct	zone_reference	*zone_ref_from_chunk(struct chunk *chunk);
 bool	check_header(struct header_zone *header);
 
 struct priority_queue	*get_priority_queue(struct zones *zones, enum e_zone_type zone_type);
-enum e_zone_type	get_zone_type_from_size(size_t size);
+enum e_zone_type	zone_type_from_size(size_t size);
 
 void	panic(char *mess);
-size_t	get_nb_block_from_size(size_t size, enum e_zone_type zone_type);
+size_t	size_block_from_size(size_t size, enum e_zone_type zone_type);
 #endif
