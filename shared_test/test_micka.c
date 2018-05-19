@@ -9,7 +9,7 @@ void    *ft_malloc(size_t size);
 void    ft_free(void *ptr);
 void    ft_show_alloc_mem(void);
 void    *ft_realloc(void *ptr, size_t size);
-#define TEST_LENGTH  1000
+#define TEST_LENGTH  10000
 #define MAX_ALLOC 40000
 #define NB_TESTS 10000000
 struct test {

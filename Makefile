@@ -42,7 +42,7 @@ all: $(NAME)
 
 $(NAME): $(OBJ_DIR) $(OBJ)
 	echo $(SRCS)
-	$(CC) $(CFLAGS) -shared -o $(LIBRARY) $(OBJ) $(IFLAGS)
+	$(CC) $(CFLAGS) -fPIC -shared -exported_symbols_list symbol_list -o $(LIBRARY) $(OBJ) $(IFLAGS)
 	ln -s $(LIBRARY) $(NAME)
 
 test:
