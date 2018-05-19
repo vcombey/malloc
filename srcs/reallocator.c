@@ -14,26 +14,26 @@ void	*realloc_another_place(void *ptr, size_t old_size, size_t new_size)
 
 void	*realloc_large_zone(void *ptr, size_t size)
 {
-	struct chunk_large_zone	*node;
+	struct s_chunk_large_zone	*node;
 	
-	node = ((struct chunk_large_zone *)ptr) - 1;
+	node = ((struct s_chunk_large_zone *)ptr) - 1;
 	if (node->data.size_block / g_zones.page_size >= size / g_zones.page_size)
 		return (ptr);
 	return realloc_another_place(ptr, node->size_octet, size);
 }
 
-void	*realloc_zone(struct priority_queue *pq, void *ptr, struct chunk *chunk, size_t size)
+void	*realloc_zone(struct s_heap *pq, void *ptr, struct s_chunk *chunk, size_t size)
 {
 	size_t					new_size_block;
-	struct zone_reference	*zone_ref;
+	struct s_zone_ref	*zone_ref;
 	__uint128_t				bitmask;
 	__uint128_t				new_bitmask;
 
 	enum e_zone_type new_zone_type = zone_type_from_size(size);
 	//TODO:chunk->size_block * zone_block_from_zone_type(chunk->zone_type) - sizeof
-	//structchunk
+	//struct s_chunk
 	if (new_zone_type != chunk->zone_type)
-		return realloc_another_place(ptr, chunk->size_block * zone_block_from_zone_type(chunk->zone_type) - sizeof(struct chunk), size);
+		return realloc_another_place(ptr, chunk->size_block * zone_block_from_zone_type(chunk->zone_type) - sizeof(struct s_chunk), size);
 	new_size_block = size_block_from_size(size, chunk->zone_type);
 	if ((zone_ref = zone_ref_from_chunk(chunk)) == NULL)
 		return NULL;
@@ -59,16 +59,16 @@ void	*realloc_zone(struct priority_queue *pq, void *ptr, struct chunk *chunk, si
 		sift_down(pq, zone_ref - pq->vec);
 		return (ptr);
 	}
-	return realloc_another_place(ptr, chunk->size_block * zone_block_from_zone_type(chunk->zone_type) - sizeof(struct chunk), size);
+	return realloc_another_place(ptr, chunk->size_block * zone_block_from_zone_type(chunk->zone_type) - sizeof(struct s_chunk), size);
 }
 
 void	*reallocator(void *ptr, size_t size)
 {
-	struct chunk	*chunk = ((struct chunk *)ptr) - 1;
+	struct s_chunk	*chunk = ((struct s_chunk *)ptr) - 1;
 
 	printf("reallocator\n");
 #ifndef UNSAFE_ALLOC
-	if (!pointer_belong_to_us(((struct chunk *)ptr) - 1))
+	if (!pointer_belong_to_us(((struct s_chunk *)ptr) - 1))
 	{
 		printf("pointer being reallocated was not allocated\n");
 		return NULL;

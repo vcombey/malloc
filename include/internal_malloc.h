@@ -10,7 +10,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-extern struct zones g_zones;
+extern struct s_zones g_zones;
 
 #define LITTLE_HEADER_SIZE (128 * 8)
 #define LITTLE_BLOCK (32 - 8)
@@ -36,92 +36,110 @@ extern struct zones g_zones;
  **
  */
 
-enum    e_zone_type {
+enum	e_zone_type {
 	LITTLE = 0,
 	MEDIUM,
 	LARGE
 };
 
-struct  chunk {
-	uint8_t                 offset_block;
-	uint8_t                 size_block;
-	bool                 	is_free;
-	enum    e_zone_type     zone_type;
+struct s_chunk {
+	uint8_t				offset_block;
+	uint8_t				size_block;
+	bool			 	is_free;
+	enum e_zone_type	zone_type;
 };
 
-struct  chunk_large_zone {
-	struct chunk_large_zone *next;
-	struct chunk_large_zone *prev;
-	size_t                  size_octet;
-	struct  chunk           data;
+struct s_chunk_large_zone {
+	struct s_chunk_large_zone	*next;
+	struct s_chunk_large_zone	*prev;
+	size_t						size_octet;
+	struct s_chunk				data;
 };
 
 /* 8 */
-struct  header_zone {
-	void                *parent;
+struct s_header_zone {
+	void				*parent;
 	size_t				magic;
 };
 
 /* 32 */
-struct  zone_reference {
-	__uint128_t             allocated_chunks; //bitmask of allocated area
-	struct  header_zone     *ptr; //memory pointer
-	uint8_t                 free_space; //free space in zone
+struct s_zone_ref {
+	__uint128_t				allocated_chunks; //bitmask of allocated area
+	struct s_header_zone	*ptr; //memory pointer
+	uint8_t					free_space; //free space in zone
 };
 
-struct  priority_queue {
-	size_t                  lenght;
-	size_t                  size;
-	struct zone_reference   *vec;
+struct s_heap {
+	size_t					lenght;
+	size_t					size;
+	struct s_zone_ref	*vec;
 };
 
-struct  zones {
-	struct priority_queue     little_heap;
-	struct priority_queue     medium_heap;
-	struct  chunk_large_zone  *large_zone_first;
-	size_t                    page_size;
-	bool                      init;
+struct s_zones {
+	struct s_heap		little_heap;
+	struct s_heap		medium_heap;
+	struct s_chunk_large_zone	*large_zone_first;
+	size_t						page_size;
+	bool						init;
 };
 
-void    print_binary(__uint128_t nb);
-void    unimplemented(char *mess);
+void	print_binary(__uint128_t nb);
+void	unimplemented(char *mess);
 
 size_t  zone_size_from_zone_type(enum e_zone_type zone_type);
 size_t  zone_block_from_zone_type(enum e_zone_type zone_type);
 size_t  offset_zone_header(enum e_zone_type zone_type);
-int     new_zone_reference(enum e_zone_type zone_type, struct zone_reference *new_zone_ref);
+int	 new_zone_reference(enum e_zone_type zone_type,\
+		struct s_zone_ref *new_zone_ref);
 size_t  bitmask_from_size_block(size_t size_block);
-int     offset_place_chunk(__uint128_t  allocated_chunks, size_t size_block, __uint128_t bitmask);
+int	 offset_place_chunk(__uint128_t  allocated_chunks,\
+		size_t size_block,\
+		__uint128_t bitmask);
 bool	pointer_belong_to_us(void *ptr);
 
-void	add_chunk_large_zone(struct  chunk_large_zone  **first, struct  chunk_large_zone  *new);
-void	del_chunk_large_zone(struct  chunk_large_zone  **first, struct  chunk_large_zone  *node);
-size_t  len_chunk_large_zone(struct chunk_large_zone *first);
-bool	is_in_chunk_large_zone(struct chunk_large_zone *node, struct chunk_large_zone *first);
+void	add_chunk_large_zone(struct s_chunk_large_zone  **first,\
+		struct s_chunk_large_zone  *new);
+void	del_chunk_large_zone(struct s_chunk_large_zone  **first,\
+		struct s_chunk_large_zone  *node);
+size_t  len_chunk_large_zone(struct s_chunk_large_zone *first);
+bool	is_in_chunk_large_zone(struct s_chunk_large_zone *node,\
+		struct s_chunk_large_zone *first);
 
-void    show_alloc_priority_queue(struct priority_queue pq, enum e_zone_type zone_type);
-void    show_alloc_zone(struct zone_reference zone_ref, enum e_zone_type zone_type);
-void    show_alloc_chunk(void *ptr, enum e_zone_type zone_type, size_t *i);
-struct  chunk_large_zone  *find_min_large_zone(struct chunk_large_zone  *first, void *previous_min);
-void	show_alloc_large_zone(struct  chunk_large_zone  *large_zone_first);
+void	show_alloc_heap(struct s_heap pq,\
+		enum e_zone_type zone_type);
+void	show_alloc_zone(struct s_zone_ref zone_ref,\
+		enum e_zone_type zone_type);
+void	show_alloc_chunk(void *ptr, enum e_zone_type zone_type, size_t *i);
+struct s_chunk_large_zone  *find_min_large_zone(struct s_chunk_large_zone  *first,\
+		void *previous_min);
+void	show_alloc_large_zone(struct s_chunk_large_zone  *large_zone_first);
 
-void    sift_down(struct priority_queue *pq, size_t pos);
-void    sift_up(struct priority_queue *pq, size_t pos);;
-int     add_priority_queue(struct priority_queue *pq, struct zone_reference new);
-void    del_priority_queue(struct priority_queue *pq, size_t pos, enum e_zone_type zone_type);
-void    update_priority_queue(struct  priority_queue *pq, struct zone_reference *zone_ref, enum e_zone_type zone_type);
-bool	is_in_priority_queue(struct priority_queue *pq, void *ptr, enum e_zone_type zone_type);
+void	sift_down(struct s_heap *pq, size_t pos);
+void	sift_up(struct s_heap *pq, size_t pos);;
+int	 add_heap(struct s_heap *pq,\
+		struct s_zone_ref new);
+void	del_heap(struct s_heap *pq,\
+		size_t pos,\
+		enum e_zone_type zone_type);
+void	update_heap(struct s_heap *pq,\
+		struct s_zone_ref *zone_ref,\
+		enum e_zone_type zone_type);
+bool	is_in_heap(struct s_heap *pq,\
+		void *ptr,\
+		enum e_zone_type zone_type);
 
 void	desalocator(void *ptr);
 void	*reallocator(void *ptr, size_t size);
-void    *allocator(struct zones *z, size_t size);
+void	*allocator(struct s_zones *z, size_t size);
 
-struct	zone_reference	*zone_ref_from_chunk(struct chunk *chunk);
-bool	check_header(struct header_zone *header);
+struct s_zone_ref	*zone_ref_from_chunk(struct s_chunk *chunk);
+bool	check_header(struct s_header_zone *header);
 
-struct priority_queue	*get_priority_queue(struct zones *zones, enum e_zone_type zone_type);
+struct s_heap	*get_heap(struct s_zones *zones,\
+		enum e_zone_type zone_type);
 enum e_zone_type	zone_type_from_size(size_t size);
 
 void	panic(char *mess);
 size_t	size_block_from_size(size_t size, enum e_zone_type zone_type);
+
 #endif

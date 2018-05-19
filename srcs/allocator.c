@@ -1,13 +1,13 @@
 #include "malloc.h"
 #include "internal_malloc.h"
 
-void	*try_add_chunk_zone_reference(struct zone_reference *zone_ref,\
+void	*try_add_chunk_zone_reference(struct s_zone_ref *zone_ref,\
 		size_t size_block,\
 		enum e_zone_type zone_type)
 {
 	__uint128_t		bitmask;
 	int				offset;
-	struct chunk	*chunk;
+	struct s_chunk	*chunk;
 
 	bitmask = bitmask_from_size_block(size_block);
 	if ((offset = offset_place_chunk(zone_ref->allocated_chunks, size_block, bitmask)) == -1)
@@ -15,7 +15,7 @@ void	*try_add_chunk_zone_reference(struct zone_reference *zone_ref,\
 	zone_ref->allocated_chunks |= bitmask << offset;
 	zone_ref->free_space -= size_block;
 	printf("offset %i\n", offset);
-	chunk = (struct chunk *)((size_t)zone_ref->ptr +\
+	chunk = (struct s_chunk *)((size_t)zone_ref->ptr +\
 			offset_zone_header(zone_type) +\
 			offset * zone_block_from_zone_type(zone_type));
 	chunk->size_block = size_block;
@@ -25,23 +25,23 @@ void	*try_add_chunk_zone_reference(struct zone_reference *zone_ref,\
 	return (chunk + 1);
 }
 
-void	*move_another_place(struct priority_queue *pq,\
+void	*move_another_place(struct s_heap *pq,\
 		size_t size_block,\
 		enum e_zone_type zone_type)
 {
 	void					*addr;
-	struct zone_reference	new_zone_ref;
+	struct s_zone_ref	new_zone_ref;
 
 	if (new_zone_reference(zone_type, &new_zone_ref) == -1)
 		return (NULL);
 	addr = try_add_chunk_zone_reference(&new_zone_ref, size_block, zone_type);
 	//TODO: free the zone
-	if (add_priority_queue(pq, new_zone_ref) == -1)
+	if (add_heap(pq, new_zone_ref) == -1)
 		return (NULL);
 	return (addr);
 }
 
-void	*allocator_in_zone(struct priority_queue *pq,\
+void	*allocator_in_zone(struct s_heap *pq,\
 		size_t size_block,\
 		enum e_zone_type zone_type)
 {
@@ -49,7 +49,8 @@ void	*allocator_in_zone(struct priority_queue *pq,\
 
 	if (pq->lenght != 0 && pq->vec[0].free_space >= size_block)
 	{
-		if ((addr = try_add_chunk_zone_reference(&pq->vec[0], size_block, zone_type)) == NULL)
+		if ((addr = try_add_chunk_zone_reference(&pq->vec[0],\
+						size_block, zone_type)) == NULL)
 			return (move_another_place(pq, size_block, zone_type));
 		sift_down(pq, 0);
 		return (addr);
@@ -58,12 +59,15 @@ void	*allocator_in_zone(struct priority_queue *pq,\
 		return (move_another_place(pq, size_block, zone_type));
 }
 
-void	*allocator_large_zone(struct chunk_large_zone **first,\
+void	*allocator_large_zone(struct s_chunk_large_zone **first,\
 		size_t size_octet)
 {
-	struct chunk_large_zone		*addr;
+	struct s_chunk_large_zone		*addr;
 
-	if ((addr = mmap(NULL, size_octet + sizeof(struct  chunk_large_zone), PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0)) == MAP_FAILED)
+	if ((addr = mmap(NULL,\
+					size_octet + sizeof(struct s_chunk_large_zone),\
+					PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE,\
+					-1, 0)) == MAP_FAILED)
 		return (NULL);
 	addr->data.zone_type = LARGE;
 	addr->size_octet = size_octet;
@@ -71,11 +75,11 @@ void	*allocator_large_zone(struct chunk_large_zone **first,\
 	return (addr + 1);
 }
 
-void	*allocator(struct zones *z, size_t size)
+void	*allocator(struct s_zones *z, size_t size)
 {
 	// TODO: see the + 1
 	enum e_zone_type	zone_type = zone_type_from_size(size);
 	if (zone_type == LARGE)
 		return (allocator_large_zone(&z->large_zone_first, size));
-	return (allocator_in_zone(get_priority_queue(z,zone_type), size_block_from_size(size, zone_type), zone_type));
+	return (allocator_in_zone(get_heap(z,zone_type), size_block_from_size(size, zone_type), zone_type));
 }

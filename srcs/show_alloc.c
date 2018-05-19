@@ -5,14 +5,14 @@ void					show_alloc_chunk(void *ptr,\
 		enum e_zone_type zone_type,\
 		size_t *i)
 {
-	struct chunk *c = (struct chunk *)((size_t)ptr + offset_zone_header(zone_type) + *i * zone_block_from_zone_type(zone_type));
+	struct s_chunk *c = (struct s_chunk *)((size_t)ptr + offset_zone_header(zone_type) + *i * zone_block_from_zone_type(zone_type));
 	size_t inf = (size_t)c + sizeof(*c);
 	size_t sup = (size_t)c + c->size_block * zone_block_from_zone_type(zone_type);
 	printf("%#zx - %#zx: %zu octets\n", inf, sup, sup - inf);
 	*i += c->size_block;
 }
 
-void					show_alloc_zone(struct zone_reference zone_ref,\
+void					show_alloc_zone(struct s_zone_ref zone_ref,\
 		enum e_zone_type zone_type)
 {
 	size_t		i;
@@ -32,14 +32,14 @@ void					show_alloc_zone(struct zone_reference zone_ref,\
 	}
 }
 
-struct zone_reference	find_minimum_addr(struct priority_queue pq,\
-		struct zone_reference previous_min)
+struct s_zone_ref	find_minimum_addr(struct s_heap pq,\
+		struct s_zone_ref previous_min)
 {
 	size_t					i;
-	struct zone_reference	new_min;
+	struct s_zone_ref	new_min;
 
 	i = 0;
-	new_min = (struct zone_reference){.ptr=NULL};
+	new_min = (struct s_zone_ref){.ptr=NULL};
 	while (i < pq.lenght)
 	{
 		if ((new_min.ptr == NULL || pq.vec[i].ptr < new_min.ptr)\
@@ -52,14 +52,14 @@ struct zone_reference	find_minimum_addr(struct priority_queue pq,\
 	return (new_min);
 }
 
-void					show_alloc_priority_queue(struct priority_queue pq,\
+void					show_alloc_heap(struct s_heap pq,\
 		enum e_zone_type zone_type)
 {
 	size_t					i;
-	struct zone_reference	min;
+	struct s_zone_ref	min;
 
 	i = 0;
-	min = (struct zone_reference){.ptr=NULL};
+	min = (struct s_zone_ref){.ptr=NULL};
 	while (i < pq.lenght)
 	{
 		printf("i %zu, length %zu\n", i, pq.lenght);
@@ -72,7 +72,7 @@ void					show_alloc_priority_queue(struct priority_queue pq,\
 
 #include <math.h>
 
-void	show_priority_queue_largeur(struct priority_queue pq, enum e_zone_type zone_type)
+void	show_heap_largeur(struct s_heap pq, enum e_zone_type zone_type)
 {
 	size_t i = 0;
 	int nb_parcour = 0;
@@ -94,11 +94,11 @@ void	show_priority_queue_largeur(struct priority_queue pq, enum e_zone_type zone
 void	show_alloc_mem(void)
 {
 	printf("TINY: \n");
-	//show_alloc_priority_queue(g_zones.little_heap, LITTLE);
-	show_priority_queue_largeur(g_zones.little_heap, LITTLE);
+	//show_alloc_heap(g_zones.little_heap, LITTLE);
+	show_heap_largeur(g_zones.little_heap, LITTLE);
 	printf("SMALL: \n");
-	//show_alloc_priority_queue(g_zones.medium_heap, MEDIUM);
-	show_priority_queue_largeur(g_zones.medium_heap, MEDIUM);
+	//show_alloc_heap(g_zones.medium_heap, MEDIUM);
+	show_heap_largeur(g_zones.medium_heap, MEDIUM);
 	printf("LARGE: \n");
 	show_alloc_large_zone(g_zones.large_zone_first);
 }

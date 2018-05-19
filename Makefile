@@ -22,7 +22,7 @@ CFLAGS = -Wall -Wextra -Werror -g -O0 $(ASAN)
 
 ### SOURCES ###
 
-SRC_CORE = malloc priority_queue zone_reference utils chunck allocator show_alloc sift show_alloc_large_zone reallocator desallocator
+SRC_CORE = malloc priority_queue zone_reference utils chunck_large_zone allocator show_alloc sift show_alloc_large_zone reallocator desallocator size
 SRC_DIR = srcs
 
 OBJ_DIR = objs

@@ -2,7 +2,7 @@
 #include "internal_malloc.h"
 #include <string.h>
 
-void	recalc_header_zone(struct zone_reference *new_vec, size_t size)
+static void	recalc_header_zone(struct s_zone_ref *new_vec, size_t size)
 {
 	size_t i;
 
@@ -14,8 +14,8 @@ void	recalc_header_zone(struct zone_reference *new_vec, size_t size)
 	}
 }
 
-int		add_priority_queue(struct priority_queue *pq,\
-		struct zone_reference new_node)
+int		add_heap(struct s_heap *pq,\
+		struct s_zone_ref new_node)
 {
 	void *new_vec;
 
@@ -39,7 +39,7 @@ int		add_priority_queue(struct priority_queue *pq,\
 	return (0);
 }
 
-void	del_priority_queue(struct priority_queue *pq, size_t pos,\
+void	del_heap(struct s_heap *pq, size_t pos,\
 		enum e_zone_type zone_type)
 {
 	munmap(pq->vec[pos].ptr, zone_size_from_zone_type(zone_type));
@@ -54,8 +54,8 @@ void	del_priority_queue(struct priority_queue *pq, size_t pos,\
 		pq->lenght--;
 }
 
-void	update_priority_queue(struct priority_queue *pq,\
-		struct zone_reference *zone_ref,\
+void	update_heap(struct s_heap *pq,\
+		struct s_zone_ref *zone_ref,\
 		enum e_zone_type zone_type)
 {
 	size_t	pos;
@@ -63,8 +63,8 @@ void	update_priority_queue(struct priority_queue *pq,\
 	pos = zone_ref - pq->vec;
 	if (zone_ref->free_space == 128 && pq->vec[0].free_space == 128 && pos != 0)
 	{
-		printf("del priority_queue\n");
-		del_priority_queue(pq, pos, zone_type);
+		printf("del heap\n");
+		del_heap(pq, pos, zone_type);
 	}
 	else
 	{
@@ -73,7 +73,7 @@ void	update_priority_queue(struct priority_queue *pq,\
 	}
 }
 
-bool	is_in_priority_queue(struct priority_queue *pq, void *ptr,
+bool	is_in_heap(struct s_heap *pq, void *ptr,
 		enum e_zone_type zone_type)
 {
 	size_t	i = 0;
@@ -87,7 +87,7 @@ bool	is_in_priority_queue(struct priority_queue *pq, void *ptr,
 	return false;
 }
 
-struct priority_queue	*get_priority_queue(struct zones *zones, enum e_zone_type zone_type)
+struct s_heap	*get_heap(struct s_zones *zones, enum e_zone_type zone_type)
 {
 	if (zone_type == LITTLE)
 		return &zones->little_heap;

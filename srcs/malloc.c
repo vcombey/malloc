@@ -11,9 +11,9 @@ void	ft_putstr(char *str)
 		str++;
 	}
 }
-struct zones g_zones;
+struct s_zones g_zones;
 
-void	constructor(struct zones *z)
+void	constructor(struct s_zones *z)
 {
 	z->init = true;
 	z->page_size = getpagesize();
@@ -21,13 +21,11 @@ void	constructor(struct zones *z)
 
 void	*malloc(size_t size)
 {
-	ft_putstr("malloc\n");
 	if (size <= 0)
 		return (NULL);
 	if (!g_zones.init)
 		constructor(&g_zones);
 	void *addr = allocator(&g_zones, size);
-	ft_putstr("tout va bien\n");
 	assert((size_t)addr % 8 == 0);
 	return (addr);
 }
@@ -36,7 +34,6 @@ void	*calloc(size_t count, size_t size)
 {
 	void *addr;
 
-	ft_putstr("calloc\n");
 	addr = malloc(count * size);
 	if (addr)
 		bzero(addr, count * size);
@@ -50,7 +47,6 @@ void	*valloc(size_t size)
 
 void	free(void *ptr)
 {
-	ft_putstr("free\n");
 	if (ptr == NULL || (size_t)ptr % 8 != 0)
 	{
 		ft_putstr("bad alignement free\n");
@@ -59,17 +55,16 @@ void	free(void *ptr)
 	if (!g_zones.init)
 		constructor(&g_zones);
 	desalocator(ptr);
-	ft_putstr("tout va bien\n");
 }
 
 void	*realloc(void *ptr, size_t size)
 {
 	if (!g_zones.init)
 		constructor(&g_zones);
-	ft_putstr("realloc\n");
-	if (ptr == NULL) {
-		return malloc(size);
-	}
+	if (ptr == NULL)
+		return (malloc(size));
+	//if (size == 0)
+	//	return (free(size));
 	//TODO: size = 0 -> free
 	if ((size_t)ptr % 8 != 0)
 	{
@@ -77,7 +72,6 @@ void	*realloc(void *ptr, size_t size)
 		return (NULL);
 	}
 	void *addr = reallocator(ptr, size);
-	ft_putstr("tout va bien\n");
 	return (addr);
 }
 

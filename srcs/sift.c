@@ -1,10 +1,10 @@
 #include "malloc.h"
 #include "internal_malloc.h"
 
-void					swap_nodes(struct zone_reference *a,\
-		struct zone_reference *b)
+void					swap_nodes(struct s_zone_ref *a,\
+		struct s_zone_ref *b)
 {
-	struct zone_reference tmp;
+	struct s_zone_ref tmp;
 
 	tmp = *a;
 	*a = *b;
@@ -13,8 +13,8 @@ void					swap_nodes(struct zone_reference *a,\
 	b->ptr->parent = b;
 }
 
-struct zone_reference	*max_free_space(struct zone_reference *a,\
-		struct zone_reference *b)
+struct s_zone_ref	*max_free_space(struct s_zone_ref *a,\
+		struct s_zone_ref *b)
 {
 	if (!a)
 		return (b);
@@ -23,12 +23,12 @@ struct zone_reference	*max_free_space(struct zone_reference *a,\
 	return (a->free_space > b->free_space ? a : b);
 }
 
-struct zone_reference	*max_free_space_children(struct priority_queue *pq,\
+struct s_zone_ref	*max_free_space_children(struct s_heap *pq,\
 		size_t pos)
 {
-	struct zone_reference *node;
-	struct zone_reference *left;
-	struct zone_reference *right;
+	struct s_zone_ref *node;
+	struct s_zone_ref *left;
+	struct s_zone_ref *right;
 
 	node = &pq->vec[pos];
 	left = (pos * 2 + 1 < pq->lenght) ? &pq->vec[pos * 2 + 1] : NULL;
@@ -36,10 +36,10 @@ struct zone_reference	*max_free_space_children(struct priority_queue *pq,\
 	return (max_free_space(max_free_space(right, left), node));
 }
 
-void					sift_down(struct priority_queue *pq, size_t pos)
+void					sift_down(struct s_heap *pq, size_t pos)
 {
-	struct zone_reference *max;
-	struct zone_reference *node;
+	struct s_zone_ref *max;
+	struct s_zone_ref *node;
 
 	while (true)
 	{
@@ -53,7 +53,7 @@ void					sift_down(struct priority_queue *pq, size_t pos)
 	}
 }
 
-void					sift_up(struct priority_queue *pq, size_t pos)
+void					sift_up(struct s_heap *pq, size_t pos)
 {
 	while (pos > 0 && pq->vec[pos].free_space > pq->vec[pos / 2].free_space)
 	{

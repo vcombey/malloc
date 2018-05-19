@@ -1,11 +1,11 @@
 #include "malloc.h"
 #include "internal_malloc.h"
 
-struct chunk_large_zone	*find_min_large_zone(struct chunk_large_zone *first,\
+struct s_chunk_large_zone	*find_min_large_zone(struct s_chunk_large_zone *first,\
 		void *previous_min)
 {
 	void					*new_min;
-	struct chunk_large_zone	*tmp;
+	struct s_chunk_large_zone	*tmp;
 
 	new_min = NULL;
 	tmp = first;
@@ -22,11 +22,11 @@ struct chunk_large_zone	*find_min_large_zone(struct chunk_large_zone *first,\
 }
 
 void					show_alloc_large_zone(\
-		struct chunk_large_zone *large_zone_first)
+		struct s_chunk_large_zone *large_zone_first)
 {
 	size_t					len;
 	size_t					i;
-	struct chunk_large_zone	*min;
+	struct s_chunk_large_zone	*min;
 
 	len = len_chunk_large_zone(large_zone_first);
 	i = 0;
