@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 13:54:29 by vcombey           #+#    #+#             */
-/*   Updated: 2018/05/20 14:31:09 by vcombey          ###   ########.fr       */
+/*   Updated: 2018/05/20 20:34:57 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	ft_memcpy_align(void *dest, void *src, size_t size)
 
 void	print_binary(__uint128_t nb)
 {
-	for (int i = 0; i < 128; i++)
+	for (int i = 0; i < NB_BLOCK_ZONE; i++)
 	{
 		printf("%i", (int)(nb % 2));
 		nb >>= 1;

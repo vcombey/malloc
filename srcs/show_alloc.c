@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 13:54:29 by vcombey           #+#    #+#             */
-/*   Updated: 2018/05/20 13:54:36 by vcombey          ###   ########.fr       */
+/*   Updated: 2018/05/20 20:34:56 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void					show_alloc_zone(struct s_zone_ref zone_ref,\
 	printf("free_space: %i\n", zone_ref.free_space);
 	print_binary(zone_ref.allocated_chunks);
 	i = 0;
-	while (i < 128)
+	while (i < NB_BLOCK_ZONE)
 	{
 		bitmask = 1;
 		bitmask <<= i;

@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 13:54:29 by vcombey           #+#    #+#             */
-/*   Updated: 2018/05/20 14:34:26 by vcombey          ###   ########.fr       */
+/*   Updated: 2018/05/20 20:34:57 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void		update_heap(struct s_heap *pq,\
 	size_t	pos;
 
 	pos = zone_ref - pq->vec;
-	if (zone_ref->free_space == 128 && pq->vec[0].free_space == 128 && pos != 0)
+	if (zone_ref->free_space == NB_BLOCK_ZONE && pq->vec[0].free_space == NB_BLOCK_ZONE && pos != 0)
 	{
 		del_heap(pq, pos, zone_type);
 	}

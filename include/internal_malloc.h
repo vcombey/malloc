@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 13:54:29 by vcombey           #+#    #+#             */
-/*   Updated: 2018/05/20 18:27:02 by vcombey          ###   ########.fr       */
+/*   Updated: 2018/05/20 20:35:32 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,20 @@
 
 extern struct s_zones g_zones;
 
-#define LITTLE_HEADER_SIZE (128 * 8)
-#define LITTLE_BLOCK (32 - 16)
+#define LITTLE_BLOCK (32)
+#define LITTLE_HEADER_SIZE (LITTLE_BLOCK)
 /* Litlle_zone_size must be > 100 * little_max an a multiple of 4096 */
-#define LITTLE_ZONE_SIZE (128 * LITTLE_BLOCK + LITTLE_HEADER_SIZE)
+#define LITTLE_ZONE_SIZE (128 * LITTLE_BLOCK)
 #define LITTLE_MAX (31 * LITTLE_BLOCK)
 
-#define MEDIUM_HEADER_SIZE (128 * 8)
-#define MEDIUM_BLOCK (33 * 32 - 16) //
-#define MEDIUM_ZONE_SIZE (128 * MEDIUM_BLOCK + MEDIUM_HEADER_SIZE)
+/* */
+
+#define MEDIUM_BLOCK (33 * 32) //
+#define MEDIUM_HEADER_SIZE (MEDIUM_BLOCK)
+#define MEDIUM_ZONE_SIZE (128 * MEDIUM_BLOCK)
 /* medium_zone_size must be > 100 * little_max an a multiple of 4096 */
 #define MEDIUM_MAX (31 * MEDIUM_BLOCK)
+#define NB_BLOCK_ZONE 127
 
 #define MAGIC 1234567891011121314
 /*

@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 13:54:29 by vcombey           #+#    #+#             */
-/*   Updated: 2018/05/20 14:33:33 by vcombey          ###   ########.fr       */
+/*   Updated: 2018/05/20 20:34:57 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	*realloc_zone(struct s_heap *pq, void *ptr, struct s_chunk *chunk, size_t s
 	if ((new_bitmask > bitmask) &&\
 			(((zone_ref->allocated_chunks & ((bitmask ^ new_bitmask)\
 						<< chunk->offset_block)) == 0)\
-				&& chunk->offset_block + new_size_block <= 128))
+				&& chunk->offset_block + new_size_block <= NB_BLOCK_ZONE))
 	{
 		zone_ref->allocated_chunks |= new_bitmask << chunk->offset_block;
 		zone_ref->free_space -= new_size_block - chunk->size_block;

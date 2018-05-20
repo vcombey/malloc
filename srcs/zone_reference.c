@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 13:54:29 by vcombey           #+#    #+#             */
-/*   Updated: 2018/05/20 14:02:03 by vcombey          ###   ########.fr       */
+/*   Updated: 2018/05/20 20:34:57 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int					new_zone_reference(enum e_zone_type zone_type,\
 	new_zone_ref->ptr->parent = NULL;
 	new_zone_ref->ptr->magic = MAGIC;
 	new_zone_ref->allocated_chunks = 0;
-	new_zone_ref->free_space = 128;
+	new_zone_ref->free_space = NB_BLOCK_ZONE;
 	return (0);
 }
 
@@ -68,7 +68,7 @@ int					offset_place_chunk(__uint128_t allocated_chunks,\
 	int		i;
 
 	i = 0;
-	while (i <= 128 - (int)size_block)
+	while (i <= NB_BLOCK_ZONE - (int)size_block)
 	{
 		if ((bitmask & allocated_chunks) == 0)
 			return (i);
