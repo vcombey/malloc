@@ -14,23 +14,37 @@ static void	recalc_header_zone(struct s_zone_ref *new_vec, size_t size)
 	}
 }
 
+static	int	realloc_heap(struct s_heap *pq)
+{
+	void	*new_vec;
+	size_t	new_size;
+
+	new_size = pq->size == 0 ? 1 : 2 * pq->size;
+	if (new_size <= g_zones.page_size && new_size != 1)
+	{
+		pq->size = new_size;
+		return (0);
+	}
+	if ((new_vec = mmap(NULL,\
+					new_size * sizeof(*pq->vec),\
+					PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0))\
+			== MAP_FAILED)
+		return (-1);
+	memmove(new_vec, pq->vec, pq->lenght * sizeof(*pq->vec));
+	recalc_header_zone(new_vec, pq->lenght);
+	munmap(pq->vec, pq->size * sizeof(*pq->vec));
+	pq->size = new_size;
+	pq->vec = new_vec;
+	return (0);
+}
+
 int		add_heap(struct s_heap *pq,\
 		struct s_zone_ref new_node)
 {
-	void *new_vec;
-
 	if (pq->lenght == pq->size)
 	{
-		if ((new_vec = mmap(NULL,\
-						pq->size * sizeof(*pq->vec) + g_zones.page_size,\
-						PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0))\
-				== MAP_FAILED)
-			return (-1);
-		memmove(new_vec, pq->vec, pq->lenght * sizeof(*pq->vec));
-		recalc_header_zone(new_vec, pq->lenght);
-		munmap(pq->vec, pq->size * sizeof(*pq->vec));
-		pq->size += g_zones.page_size / sizeof(*pq->vec);
-		pq->vec = new_vec;
+		if (realloc_heap(pq) == -1)
+			return -1;
 	}
 	new_node.ptr->parent = &pq->vec[pq->lenght];
 	pq->vec[pq->lenght] = new_node;

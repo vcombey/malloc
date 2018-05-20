@@ -5,3 +5,6 @@ _show_alloc_mem
 _calloc
 _valloc
 _reallocf
+_ft_free
+_ft_malloc
+_ft_realloc

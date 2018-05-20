@@ -114,6 +114,7 @@ static void real_sodo(
     if (ptr == NULL || x == 0)
         return ;
     tab_ptr[i].ptr = ft_realloc(tab_ptr[i].ptr, x);
+//	printf("arg: %d %zu", x, (size_t)tab_ptr[i].ptr);
     if (tab_ptr[i].ptr == NULL) {
         printf("BAD REALLOC\n");
         exit (1);
@@ -135,6 +136,7 @@ static void real_sodo(
     tab_ptr[i].c = x % 256;
     memset(tab_ptr[i].ptr, tab_ptr[i].c, x);
 }
+
 void        sodo_ft_realloc(void)
 {
     srand(GetTimeStamp());
@@ -173,7 +175,7 @@ void        sodo_ft_realloc(void)
 }
 int         main(void)
 {
-    sodo_test();
+//    sodo_test();
     sodo_ft_realloc();
     return 0;
 }

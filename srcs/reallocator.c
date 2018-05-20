@@ -66,11 +66,12 @@ void	*reallocator(void *ptr, size_t size)
 	struct s_chunk	*chunk = ((struct s_chunk *)ptr) - 1;
 
 #ifndef UNSAFE_ALLOC
-	if (!pointer_belong_to_us(((struct s_chunk *)ptr) - 1))
+	if (!pointer_belong_to_us(ptr))
 	{
 		printf("pointer being reallocated was not allocated\n");
 		return NULL;
 	}
+
 #endif
 	if (chunk->is_free)
 	{

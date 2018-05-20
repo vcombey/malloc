@@ -29,6 +29,7 @@ void	*malloc(size_t size)
 		constructor(&g_zones);
 	void *addr = allocator(&g_zones, size);
 	assert((size_t)addr % 8 == 0);
+	//ft_putstr("out malloc\n");
 	return (addr);
 }
 
@@ -43,18 +44,13 @@ void	*calloc(size_t count, size_t size)
 	return (addr);
 }
 
-void	*valloc(size_t size)
-{
-	return (allocator_large_zone(&g_zones.large_zone_first, size));
-}
-
 void	free(void *ptr)
 {
 	if (ptr == NULL)
 		return ;
 	if ( (size_t)ptr % 8 != 0)
 	{
-		ft_putstr("bad alignement free\n");
+		//ft_putstr("bad alignement free\n");
 		return ;
 	}
 	if (!g_zones.init)
@@ -78,11 +74,12 @@ void	*realloc(void *ptr, size_t size)
 		return (NULL);
 	}
 	void *addr = reallocator(ptr, size);
+//	printf("addr: %zu\n", (size_t)addr);
 	return (addr);
 }
 
 void	*reallocf(void *ptr, size_t size)
 {
-	ft_putstr("reallocf\n");
+	//ft_putstr("reallocf\n");
 	return realloc(ptr, size);
 }

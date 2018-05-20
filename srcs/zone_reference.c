@@ -30,7 +30,10 @@ struct s_zone_ref	*zone_ref_from_chunk(struct s_chunk *chunk)
 		panic("bad header magic");
 #ifndef UNSAFE_ALLOC
 	if (!pointer_belong_to_us((void *)header))
+	{
+		printf("header doesnt belong to us");
 		return NULL;
+	}
 #endif
 	return (header->parent);
 }
@@ -64,10 +67,10 @@ int		offset_place_chunk(__uint128_t allocated_chunks,\
 bool	pointer_belong_to_us(void *ptr)
 {
 	if (is_in_chunk_large_zone(((struct s_chunk_large_zone *)ptr) - 1, g_zones.large_zone_first) ||
-			(is_in_heap(&g_zones.little_heap, ((struct s_chunk *)ptr) - 1, LITTLE)) ||
-			(is_in_heap(&g_zones.medium_heap, ((struct s_chunk *)ptr) - 1, MEDIUM)))
+			(is_in_heap(&g_zones.little_heap, ((struct s_chunk *)ptr), LITTLE)) ||
+			(is_in_heap(&g_zones.medium_heap, ((struct s_chunk *)ptr), MEDIUM)))
 	{
-		printf("pointer belong to us\n");
+	//	printf("pointer belong to us\n");
 		return true;
 	}
 	return false;

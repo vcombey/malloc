@@ -32,7 +32,7 @@ void	desalocator(void *ptr)
 #ifndef UNSAFE_ALLOC
 	if (!pointer_belong_to_us(ptr))
 	{
-		printf("pointer being freed was not allocated\n");
+	 	printf("pointer being freed was not allocated\n");
 		return ;
 	}
 #endif
