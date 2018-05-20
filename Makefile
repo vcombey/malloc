@@ -43,13 +43,13 @@ ifeq ($(UNAME_S),Darwin)
 	LDFLAGS = -shared -fPIC -exported_symbols_list symbol_list
 endif
 ifeq ($(UNAME_S),Linux)
-	LDFLAGS = -shared -fPIC -Wl,--version-script=exportmap
+	LDFLAGS = -shared -fPIC -Wl,--version-script=export_map
 endif
 
 .PHONY: all clean fclean re help
 all:  $(NAME).so
 
-$(NAME).so: $(OBJ) symbol_list
+$(NAME).so: $(OBJ) symbol_list export_map
 	$(CC) $(CFLAGS) -o $(NAME)_$(HOSTTYPE).so $(OBJ) $(LDFLAGS)
 	rm -f $(NAME).so
 	ln -s libft_malloc_$(HOSTTYPE).so $(NAME).so
