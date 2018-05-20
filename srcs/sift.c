@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sift.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/05/20 13:54:29 by vcombey           #+#    #+#             */
+/*   Updated: 2018/05/20 14:06:49 by vcombey          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "malloc.h"
 #include "internal_malloc.h"
 
-void					swap_nodes(struct s_zone_ref *a,\
+void				swap_nodes(struct s_zone_ref *a,\
 		struct s_zone_ref *b)
 {
 	struct s_zone_ref tmp;
@@ -36,7 +48,7 @@ struct s_zone_ref	*max_free_space_children(struct s_heap *pq,\
 	return (max_free_space(max_free_space(right, left), node));
 }
 
-void					sift_down(struct s_heap *pq, size_t pos)
+void				sift_down(struct s_heap *pq, size_t pos)
 {
 	struct s_zone_ref *max;
 	struct s_zone_ref *node;
@@ -53,7 +65,7 @@ void					sift_down(struct s_heap *pq, size_t pos)
 	}
 }
 
-void					sift_up(struct s_heap *pq, size_t pos)
+void				sift_up(struct s_heap *pq, size_t pos)
 {
 	while (pos > 0 && pq->vec[pos].free_space > pq->vec[pos / 2].free_space)
 	{

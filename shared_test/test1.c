@@ -13,7 +13,6 @@ int main()
     {
         addr = (char*)malloc(1024);
         addr[0] = 42;
-        addr[1023] = 42;
         i++;
     }
     return (0);

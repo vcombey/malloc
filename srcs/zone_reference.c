@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   zone_reference.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/05/20 13:54:29 by vcombey           #+#    #+#             */
+/*   Updated: 2018/05/20 14:02:03 by vcombey          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "malloc.h"
 #include "internal_malloc.h"
 
-int		new_zone_reference(enum e_zone_type zone_type,\
+int					new_zone_reference(enum e_zone_type zone_type,\
 		struct s_zone_ref *new_zone_ref)
 {
 	void	*addr;
@@ -21,24 +33,26 @@ int		new_zone_reference(enum e_zone_type zone_type,\
 
 struct s_zone_ref	*zone_ref_from_chunk(struct s_chunk *chunk)
 {
-    struct s_header_zone      *header;
+	struct s_header_zone	*header;
 
 	header = (struct s_header_zone *)((size_t)chunk -\
-            chunk->offset_block * zone_block_from_zone_type(chunk->zone_type)\
-            - offset_zone_header(chunk->zone_type));
+			chunk->offset_block * zone_block_from_zone_type(chunk->zone_type)\
+			- offset_zone_header(chunk->zone_type));
 	if (!check_header(header))
 		panic("bad header magic");
 #ifndef UNSAFE_ALLOC
+
 	if (!pointer_belong_to_us((void *)header))
 	{
 		printf("header doesnt belong to us");
-		return NULL;
+		return (NULL);
 	}
 #endif
+
 	return (header->parent);
 }
 
-size_t	offset_zone_header(enum e_zone_type zone_type)
+size_t				offset_zone_header(enum e_zone_type zone_type)
 {
 	if (zone_type == LITTLE)
 		return (LITTLE_HEADER_SIZE);
@@ -47,7 +61,7 @@ size_t	offset_zone_header(enum e_zone_type zone_type)
 	return (-1);
 }
 
-int		offset_place_chunk(__uint128_t allocated_chunks,\
+int					offset_place_chunk(__uint128_t allocated_chunks,\
 		size_t size_block,
 		__uint128_t bitmask)
 {
@@ -62,21 +76,4 @@ int		offset_place_chunk(__uint128_t allocated_chunks,\
 		i++;
 	}
 	return (-1);
-}
-
-bool	pointer_belong_to_us(void *ptr)
-{
-	if (is_in_chunk_large_zone(((struct s_chunk_large_zone *)ptr) - 1, g_zones.large_zone_first) ||
-			(is_in_heap(&g_zones.little_heap, ((struct s_chunk *)ptr), LITTLE)) ||
-			(is_in_heap(&g_zones.medium_heap, ((struct s_chunk *)ptr), MEDIUM)))
-	{
-	//	printf("pointer belong to us\n");
-		return true;
-	}
-	return false;
-}
-
-bool	check_header(struct s_header_zone *header)
-{
-	return (header->magic == MAGIC);
 }

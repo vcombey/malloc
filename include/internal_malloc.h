@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   internal_malloc.h                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/05/20 13:54:29 by vcombey           #+#    #+#             */
+/*   Updated: 2018/05/20 18:27:02 by vcombey          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef INTERNAL_MALLOC_H
 # define INTERNAL_MALLOC_H
 
@@ -13,13 +25,13 @@
 extern struct s_zones g_zones;
 
 #define LITTLE_HEADER_SIZE (128 * 8)
-#define LITTLE_BLOCK (32 - 8)
+#define LITTLE_BLOCK (32 - 16)
 /* Litlle_zone_size must be > 100 * little_max an a multiple of 4096 */
 #define LITTLE_ZONE_SIZE (128 * LITTLE_BLOCK + LITTLE_HEADER_SIZE)
 #define LITTLE_MAX (31 * LITTLE_BLOCK)
 
 #define MEDIUM_HEADER_SIZE (128 * 8)
-#define MEDIUM_BLOCK (33 * 32 - 8) //
+#define MEDIUM_BLOCK (33 * 32 - 16) //
 #define MEDIUM_ZONE_SIZE (128 * MEDIUM_BLOCK + MEDIUM_HEADER_SIZE)
 /* medium_zone_size must be > 100 * little_max an a multiple of 4096 */
 #define MEDIUM_MAX (31 * MEDIUM_BLOCK)
@@ -47,14 +59,14 @@ struct s_chunk {
 	uint8_t				size_block;
 	bool			 	is_free;
 	enum e_zone_type	zone_type;
-};
+} __attribute__((aligned(16)));
 
 struct s_chunk_large_zone {
 	struct s_chunk_large_zone	*next;
 	struct s_chunk_large_zone	*prev;
 	size_t						size_octet;
 	struct s_chunk				data;
-};
+} __attribute__((aligned(16)));
 
 /* 8 */
 struct s_header_zone {
@@ -143,5 +155,6 @@ void	panic(char *mess);
 size_t	size_block_from_size(size_t size, enum e_zone_type zone_type);
 void	*allocator_large_zone(struct s_chunk_large_zone **first,\
 		size_t size_octet);
+void	ft_memcpy_align(void *dest, void *src, size_t size);
 
 #endif

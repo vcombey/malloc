@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   malloc.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/05/20 13:54:29 by vcombey           #+#    #+#             */
+/*   Updated: 2018/05/20 18:29:51 by vcombey          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "malloc.h"
 #include "internal_malloc.h"
 #include <string.h>
@@ -22,7 +34,7 @@ void	constructor(struct s_zones *z)
 
 void	*malloc(size_t size)
 {
-	//ft_putstr("malloc\n");
+//	ft_putstr("malloc\n");
 	if (size <= 0)
 		return (NULL);
 	if (!g_zones.init)

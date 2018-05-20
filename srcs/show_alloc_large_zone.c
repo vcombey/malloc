@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   show_alloc_large_zone.c                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/05/20 13:54:29 by vcombey           #+#    #+#             */
+/*   Updated: 2018/05/20 14:07:18 by vcombey          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "malloc.h"
 #include "internal_malloc.h"
 
 struct s_chunk_large_zone	*find_min_large_zone(struct s_chunk_large_zone *first,\
 		void *previous_min)
 {
-	void					*new_min;
+	void						*new_min;
 	struct s_chunk_large_zone	*tmp;
 
 	new_min = NULL;

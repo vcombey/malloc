@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   allocator.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/05/20 13:54:29 by vcombey           #+#    #+#             */
+/*   Updated: 2018/05/20 14:25:12 by vcombey          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "malloc.h"
 #include "internal_malloc.h"
 
@@ -29,7 +41,7 @@ void	*move_another_place(struct s_heap *pq,\
 		enum e_zone_type zone_type)
 {
 	void					*addr;
-	struct s_zone_ref	new_zone_ref;
+	struct s_zone_ref		new_zone_ref;
 
 	if (new_zone_reference(zone_type, &new_zone_ref) == -1)
 		return (NULL);
@@ -76,9 +88,12 @@ void	*allocator_large_zone(struct s_chunk_large_zone **first,\
 
 void	*allocator(struct s_zones *z, size_t size)
 {
+	enum e_zone_type	zone_type;
+
 	// TODO: see the + 1
-	enum e_zone_type	zone_type = zone_type_from_size(size);
+	zone_type = zone_type_from_size(size);
 	if (zone_type == LARGE)
 		return (allocator_large_zone(&z->large_zone_first, size));
-	return (allocator_in_zone(get_heap(z,zone_type), size_block_from_size(size, zone_type), zone_type));
+	return (allocator_in_zone(get_heap(z, zone_type), \
+				size_block_from_size(size, zone_type), zone_type));
 }

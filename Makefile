@@ -1,88 +1,69 @@
+NAME = libft_malloc
 CC = gcc
-
 ### MAIN FLAGS ###
-
-APPEND=
-DEBUG=
-ASAN=
-
-ifeq ($(DEBUG),yes)
-	ASAN=-fsanitize=address -g -O0
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Darwin)
+	ifeq ($(DEBUG),yes)
+	CFLAGS = -std=c99 -fPIC -Wextra -Wall -Werror -g -O0 -fsanitize=address
+else
+	CFLAGS = -std=c99 -fPIC -Wextra -Wall -Werror -Ofast
+endif
 endif
 
-ifeq ($(HOSTTYPE),)
-	HOSTTYPE := $(shell uname -m)_$(shell uname -s)
+ifeq ($(UNAME_S),Linux)
+	ifeq ($(DEBUG),yes)
+	CFLAGS = -std=c99 -fPIC -Wextra -Wall -Werror -g -O0 -fsanitize=address -D _POSIX_C_SOURCE=200809L
+else
+	CFLAGS = -std=c99 -fPIC -Wextra -Wall -Werror -Ofast -D _POSIX_C_SOURCE=200809L
+endif
 endif
 
-LIBRARY = libft_malloc_$(HOSTTYPE).so
-
-NAME = libft_malloc.so
-
-CFLAGS = -Wall -Wextra -Werror  -g -O0 $(ASAN)
+### LIBRAIRIES ###
 
 ### SOURCES ###
+MAIN = malloc priority_queue zone_reference utils chunck_large_zone allocator show_alloc sift show_alloc_large_zone reallocator desallocator size safe_alloc
 
-SRC_CORE = malloc priority_queue zone_reference utils chunck_large_zone allocator show_alloc sift show_alloc_large_zone reallocator desallocator size
-SRC_DIR = srcs
+SRC_LIST = $(MAIN)
+VPATH = srcs include
 
+## HEADERS
+MAIN_HEADER = libft_alloc.h
+_HEADERS = malloc.h
+ifeq ($(HOSTTYPE),)
+	HOSTTYPE = $(shell uname -m)_$(shell uname -s)
+endif
+SRC = $(addsuffix .c, $(SRC_LIST))
 OBJ_DIR = objs
+__OBJ__ = $(basename $(notdir $(SRC)))
+OBJ = $(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(__OBJ__)))
+__H__ = $(basename $(notdir $(_HEADERS)))
+HEADERS = $(addsuffix .h, $(__H__))
+IFLAGS = -I ./include
+ifeq ($(UNAME_S),Darwin)
+	LDFLAGS = -shared -fPIC -exported_symbols_list symbol_list
+endif
+ifeq ($(UNAME_S),Linux)
+	LDFLAGS = -shared -fPIC -Wl,--version-script=exportmap
+endif
 
-SRCS = $(addprefix $(SRC_DIR)/, $(addsuffix .c, $(SRC_CORE)))
-OBJ = $(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(SRC_CORE)))
+.PHONY: all clean fclean re help
+all:  $(NAME).so
 
-#TMP = $(basename $(notdir $(SRC_CORE)))
-#OBJ = $(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(TMP)))
+$(NAME).so: $(OBJ) symbol_list
+	$(CC) $(CFLAGS) -o $(NAME)_$(HOSTTYPE).so $(OBJ) $(LDFLAGS)
+	rm -f $(NAME).so
+	ln -s libft_malloc_$(HOSTTYPE).so $(NAME).so
 
-IFLAGS = -I ./include/
-LDFLAGS = -L ./libft -lft
-
-.PHONY: all clean fclean re help test
-
-all: $(NAME)
-
-$(NAME): $(OBJ_DIR) $(OBJ)
-	echo $(SRCS)
-	$(CC) $(CFLAGS) -fPIC -shared -exported_symbols_list symbol_list -o $(LIBRARY) $(OBJ) $(IFLAGS)
-	ln -s $(LIBRARY) $(NAME)
-
-test:
-	gcc -o ptest0 test/ptest0.c $(IFLAGS)  -L. -lft_malloc -I include
-	gcc -o ptest1 test/ptest1.c $(IFLAGS)  -L. -lft_malloc -I include
-	gcc -o ptest2 test/ptest2.c $(IFLAGS)  -L. -lft_malloc -I include
-	gcc -o test0 test/test0.c $(IFLAGS)  -L. -lft_malloc -I include
-	gcc -o test1 test/test1.c $(IFLAGS) -L. -lft_malloc -I include
-	gcc -o test2 test/test2.c $(IFLAGS) -L. -lft_malloc -I include
-	gcc -o test3 test/test3.c $(IFLAGS) -L. -lft_malloc  -I include
-	gcc -o test3_2 test/test3_2.c $(IFLAGS) -L. -lft_malloc  -I include
-	gcc -o test4 test/test4.c $(IFLAGS) -L. -lft_malloc  -I include
-	gcc -o test5 test/test5.c $(IFLAGS) -L. -lft_malloc -I include
-	gcc -o test6 test/test6.c $(IFLAGS) -L. -lft_malloc -I include
-	gcc -o test7 test/test7.c $(IFLAGS) -L. -lft_malloc -I include
-
-test_shared:
-	gcc -o test0 shared_test/test0.c $(IFLAGS) -I include
-	gcc -o test1 shared_test/test1.c $(IFLAGS) -I include
-	gcc -o test2 shared_test/test2.c $(IFLAGS) -I include
-	gcc -o test3 shared_test/test3.c $(IFLAGS) -I include
-	gcc -o test4 shared_test/test4.c $(IFLAGS) -I include
-	gcc -o test5 shared_test/test5.c $(IFLAGS) -I include
-	gcc -o test6 shared_test/test6.c $(IFLAGS) -I include
-
-test_clean:
-	rm -f test*
-
-$(OBJ_DIR):
-	mkdir -p objs
-
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
-	$(CC) $(CFLAGS) -o $@ -c $< $(IFLAGS) $(APPEND)
+$(OBJ_DIR)/%.o: %.c $(HEADERS) Makefile
+	$(CC) -c $(CFLAGS) -o $@ $< $(IFLAGS)
 
 clean:
 	rm -f $(OBJ)
 
-fclean: clean
-	rm -f $(LIBRARY)
-	rm -f $(NAME)
+fclean:
+	rm -f $(OBJ)
+	rm -f $(NAME)_$(HOSTTYPE).so
+	rm -f $(NAME).so
 
 re: fclean all
 

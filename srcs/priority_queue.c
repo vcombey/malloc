@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   priority_queue.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/05/20 13:54:29 by vcombey           #+#    #+#             */
+/*   Updated: 2018/05/20 14:34:26 by vcombey          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "malloc.h"
 #include "internal_malloc.h"
 #include <string.h>
@@ -19,12 +31,7 @@ static	int	realloc_heap(struct s_heap *pq)
 	void	*new_vec;
 	size_t	new_size;
 
-	new_size = pq->size == 0 ? 1 : 2 * pq->size;
-	if (new_size <= g_zones.page_size && new_size != 1)
-	{
-		pq->size = new_size;
-		return (0);
-	}
+	new_size = pq->size == 0 ? 4096 : 2 * pq->size;
 	if ((new_vec = mmap(NULL,\
 					new_size * sizeof(*pq->vec),\
 					PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0))\
@@ -38,13 +45,13 @@ static	int	realloc_heap(struct s_heap *pq)
 	return (0);
 }
 
-int		add_heap(struct s_heap *pq,\
+int			add_heap(struct s_heap *pq,\
 		struct s_zone_ref new_node)
 {
 	if (pq->lenght == pq->size)
 	{
 		if (realloc_heap(pq) == -1)
-			return -1;
+			return (-1);
 	}
 	new_node.ptr->parent = &pq->vec[pq->lenght];
 	pq->vec[pq->lenght] = new_node;
@@ -53,11 +60,12 @@ int		add_heap(struct s_heap *pq,\
 	return (0);
 }
 
-void	del_heap(struct s_heap *pq, size_t pos,\
+void		del_heap(struct s_heap *pq, size_t pos,\
 		enum e_zone_type zone_type)
 {
 	munmap(pq->vec[pos].ptr, zone_size_from_zone_type(zone_type));
-	if (pos != pq->lenght - 1) {
+	if (pos != pq->lenght - 1)
+	{
 		pq->vec[pos] = pq->vec[pq->lenght - 1];
 		pq->vec[pos].ptr->parent = &pq->vec[pos];
 		bzero(&pq->vec[pq->lenght - 1], sizeof(pq->vec[pq->lenght - 1]));
@@ -68,7 +76,7 @@ void	del_heap(struct s_heap *pq, size_t pos,\
 		pq->lenght--;
 }
 
-void	update_heap(struct s_heap *pq,\
+void		update_heap(struct s_heap *pq,\
 		struct s_zone_ref *zone_ref,\
 		enum e_zone_type zone_type)
 {
@@ -85,25 +93,27 @@ void	update_heap(struct s_heap *pq,\
 	}
 }
 
-bool	is_in_heap(struct s_heap *pq, void *ptr,
+bool		is_in_heap(struct s_heap *pq, void *ptr,
 		enum e_zone_type zone_type)
 {
-	size_t	i = 0;
+	size_t	i;
 
+	i = 0;
 	while (i < pq->lenght)
 	{
-		if (ptr >= (void *)pq->vec[i].ptr && ptr <= (void *)pq->vec[i].ptr + zone_size_from_zone_type(zone_type))
-			return true;
+		if (ptr >= (void *)pq->vec[i].ptr && ptr <= (void *)pq->vec[i].ptr +\
+				zone_size_from_zone_type(zone_type))
+			return (true);
 		i++;
 	}
-	return false;
+	return (false);
 }
 
 struct s_heap	*get_heap(struct s_zones *zones, enum e_zone_type zone_type)
 {
 	if (zone_type == LITTLE)
-		return &zones->little_heap;
+		return (&zones->little_heap);
 	else if (zone_type == MEDIUM)
-		return &zones->medium_heap;
-	return NULL;
+		return (&zones->medium_heap);
+	return (NULL);
 }
