@@ -155,7 +155,7 @@ struct s_heap	*get_heap(struct s_zones *zones,\
 enum e_zone_type	zone_type_from_size(size_t size);
 
 void	panic(char *mess);
-size_t	size_block_from_size(size_t size, enum e_zone_type zone_type);
+size_t	size_block_from_size(size_t size);
 void	*allocator_large_zone(struct s_chunk_large_zone **first,\
 		size_t size_octet);
 void	ft_memcpy_align(void *dest, void *src, size_t size);

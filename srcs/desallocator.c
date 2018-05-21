@@ -41,6 +41,13 @@ void	desalocator(void *ptr)
 {
 	struct s_chunk		*chunk;
 
+	if (ptr == NULL)
+		return ;
+	if ( (size_t)ptr % 8 != 0)
+	{
+		//ft_putstr("bad alignement free\n");
+		return ;
+	}
 #ifndef UNSAFE_ALLOC
 	if (!pointer_belong_to_us(ptr))
 	{

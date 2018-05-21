@@ -91,9 +91,11 @@ void	*allocator(struct s_zones *z, size_t size)
 	enum e_zone_type	zone_type;
 
 	// TODO: see the + 1
+	if (size <= 0)
+		return (NULL);
 	zone_type = zone_type_from_size(size);
 	if (zone_type == LARGE)
 		return (allocator_large_zone(&z->large_zone_first, size));
 	return (allocator_in_zone(get_heap(z, zone_type), \
-				size_block_from_size(size, zone_type), zone_type));
+				size_block_from_size(size), zone_type));
 }
