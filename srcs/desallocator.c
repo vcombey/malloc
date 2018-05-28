@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 13:54:29 by vcombey           #+#    #+#             */
-/*   Updated: 2018/05/20 14:18:42 by vcombey          ###   ########.fr       */
+/*   Updated: 2018/05/26 23:10:37 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,14 @@ void	desalocator(void *ptr)
 #ifndef UNSAFE_ALLOC
 	if (!pointer_belong_to_us(ptr))
 	{
-		printf("pointer being freed was not allocated\n");
+//		//printf("pointer being freed was not allocated\n");
 		return ;
 	}
 #endif
 	chunk = ((struct s_chunk *)ptr) - 1;
 	if (chunk->is_free)
 	{
-		printf("double free\n");
+//		//printf("double free\n");
 		return ;
 	}
 	chunk->is_free = true;

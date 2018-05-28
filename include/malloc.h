@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 13:54:29 by vcombey           #+#    #+#             */
-/*   Updated: 2018/05/20 16:59:28 by vcombey          ###   ########.fr       */
+/*   Updated: 2018/05/28 01:33:43 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 # define MALLOC_H
 
 #include <stdlib.h>
-
+/*
 #define malloc ft_malloc
 #define free ft_free
 #define realloc ft_realloc
 #define calloc ft_calloc
-
+*/
 void	free(void *ptr);
 void	*malloc(size_t size);
 void	*realloc(void *ptr, size_t size);

@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 13:57:10 by vcombey           #+#    #+#             */
-/*   Updated: 2018/05/20 14:25:32 by vcombey          ###   ########.fr       */
+/*   Updated: 2018/05/26 23:10:37 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ bool	pointer_belong_to_us(void *ptr)
 			(is_in_heap(&g_zones.little_heap, ((struct s_chunk *)ptr), LITTLE)) ||
 			(is_in_heap(&g_zones.medium_heap, ((struct s_chunk *)ptr), MEDIUM)))
 	{
-	//	printf("pointer belong to us\n");
+	//	//printf("pointer belong to us\n");
 		return (true);
 	}
 	return (false);

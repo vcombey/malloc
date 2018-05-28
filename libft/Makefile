@@ -1,235 +1,114 @@
-#fields ************************** DEFINING COLORS ************************************** #
+NAME = libft.a
+CC = gcc
 
-COLOR_CLEAR		= \033[2K
-COLOR_UP		= \033[A
-COLOR_NOCOLOR	= \033[0m
-COLOR_BOLD		= \033[1m
-COLOR_UNDERLINE	= \033[4m
-COLOR_BLINKING	= \033[5m
-COLOR_BLACK		= \033[1;30m
-COLOR_RED		= \033[1;31m
-COLOR_GREEN		= \033[1;32m
-COLOR_YELLOW	= \033[1;33m
-COLOR_BLUE		= \033[1;34m
-COLOR_VIOLET	= \033[1;35m
-COLOR_CYAN		= \033[1;36m
-COLOR_WHITE		= \033[1;37m
+LIBDIR	= ./
+SRCDIR	= srcs
+INCDIR	= includes
+OBJDIR	= objs
+HEADER	= libft.h btree.h
 
-# **************************************************************************** #
-
-SRC = \
-	fatal.c \
-	str/string.c \
-	ft_digit_count.c \
-	ft_is_1.c \
-	ft_is_2.c \
-	ft_is_3.c \
-	get_next_line.c \
-	array/ft_arraychr.c \
-	array/ft_arrayjoin.c \
-	array/ft_arraydel.c \
-	array/ft_arraydup.c \
-	array/ft_arraylen.c \
-	array/ft_arraymax_f.c \
-	btree/btree_add.c \
-	btree/btree_new.c \
-	btree/btree_print.c \
-	io/ft_putchar.c \
-	io/ft_putnbr.c \
-	io/ft_putnbr_fd.c \
-	io/ft_putnstr.c \
-	io/ft_putstr.c \
-	lst/ft_lst_add.c \
-	lst/ft_lst_pop.c \
-	lst/ft_lst_del_one.c \
-	lst/ft_lst_for_n.c \
-	lst/ft_lst_foreach.c \
-	lst/ft_lst_get_n.c \
-	lst/ft_lst_iteri.c \
-	lst/ft_lst_last.c \
-	lst/ft_lst_len.c \
-	lst/ft_lst_pushback.c \
-	lst/ft_lst_remove.c \
-	lst/ft_lst_return_if.c \
-	lst/ft_lst_rev.c \
-	math/ft_abs.c \
-	math/ft_power.c \
-	math/ft_sort_int_tab.c \
-	math/ft_sqrt.c \
-	mem/free.c \
-	mem/ft_bzero.c \
-	mem/ft_calloc.c \
-	mem/ft_memalloc.c \
-	mem/ft_memccpy.c \
-	mem/ft_memchr.c \
-	mem/ft_memcmp.c \
-	mem/ft_memcpy.c \
-	mem/ft_memdel.c \
-	mem/ft_memmove.c \
-	mem/ft_memset.c \
-	mem/ft_realloc.c \
-	mem/palloc.c \
-	str/ft_str_isdigit.c \
-	str/ft_atoi_safe.c \
-	str/ft_itoa_word.c \
-	str/ft_is_backslash.c \
-	str/charcmp.c \
-	str/ft_atoi.c \
-	str/ft_buff_wchar.c \
-	str/ft_chartostr.c \
-	str/ft_itoa.c \
-	str/ft_str_is_clr.c \
-	str/ft_strcat.c \
-	str/ft_strchange.c \
-	str/ft_strchr.c \
-	str/ft_strclr.c \
-	str/ft_strcmp.c \
-	str/ft_strcpy.c \
-	str/ft_strdel.c \
-	str/ft_strdup.c \
-	str/ft_strequ.c \
-	str/ft_strichr.c \
-	str/ft_striter.c \
-	str/ft_striteri.c \
-	str/ft_strjoin.c \
-	str/ft_strjoin3_free.c \
-	str/ft_strlcat.c \
-	str/ft_strlen.c \
-	str/ft_strmap.c \
-	str/ft_strmapi.c \
-	str/ft_strmatch.c \
-	str/ft_strncat.c \
-	str/ft_strncmp.c \
-	str/ft_strncpy.c \
-	str/ft_strnequ.c \
-	str/ft_strnew.c \
-	str/ft_strnreplace.c \
-	str/ft_strnstr.c \
-	str/ft_strrchr.c \
-	str/ft_strrcmp.c \
-	str/ft_strrequ.c \
-	str/ft_strrev.c \
-	str/ft_strrstr.c \
-	str/ft_strsplit.c \
-	str/ft_strsplit_keep.c \
-	str/ft_strstr.c \
-	str/ft_strsub.c \
-	str/ft_strsurround.c \
-	str/ft_strtrim.c \
-	str/ft_strtrunc.c \
-	str/ft_tolower.c \
-	str/ft_toupper.c \
-	str/ft_strpush.c \
-	str/ft_strspush.c \
-	system/ft_is_executable.c \
-	system/get_home.c \
-	system/size_term.c \
-	system/put_termcap.c \
-	system/pfork.c \
-	system/ppipe.c \
-	parr/ft_parrlen.c \
-	parr/ft_parrnew.c \
-	parr/ft_parrpush.c \
-	parr/ft_strarrstrn.c \
-	get_opt/get_opt.c \
-	get_opt/get_opt_display.c \
-	\
-	io/ft_printf.c \
-	io/ft_printfd.c \
-
-NAME ?= libft.a
-
-
-INCLUDE_FILES=\
-	alloc.h \
-	array.h \
-	btree.h \
-	color.h \
-	get_next_line.h \
-	get_opt.h \
-	libft.h \
-	list.h \
-	mem.h \
-	printf.h \
-	select.h \
-	str.h \
-	string.h \
-	system.h
-
-# Defining those variables allows auto completion to occure.
-APPEND=
-ASAN=
-TEST_FILE=
-
-OPTIMIZATION ?= -O0
-
-ifeq ($(ASAN),yes)
-	SANITIZER ?= -fsanitize=address -fno-omit-frame-pointer
+ifeq ($(DEBUG),yes)
+	CFLAGS = -std=c99 -fPIC -Wextra -Wall -Werror -g -O0 -fsanitize=address -I./$(INCDIR)
+else
+	CFLAGS = -Ofast -std=c99 -fPIC -Wextra -Wall -Werror -I./$(INCDIR)
 endif
 
-SRC_DIR = srcs
-OBJ_DIR = objs
-LOCAL_INC = includes
-CFLAGS ?= -g -Wall -Wextra -Werror
-CC = gcc
-OBJ = $(addprefix $(OBJ_DIR)/,$(SRC:.c=.o))
-SRCS = $(addprefix $(SRC_DIR)/,$(SRC:.c=.c))
-FULL_INCLUDE_PATH = $(addprefix includes/,$(INCLUDE_FILES:.h=.h))
+SRC_USUALS	= ft_memset ft_bzero ft_memcpy ft_memccpy ft_memmove ft_memchr ft_memcmp \
+	ft_strlen ft_strcpy ft_strncpy ft_strcat ft_strncat ft_strlcat \
+	ft_strchr ft_strrchr ft_strstr ft_strnstr ft_strcmp ft_strncmp \
+	ft_atoi ft_isalpha ft_isdigit ft_isalnum ft_isascii ft_isprint ft_toupper ft_tolower \
+	ft_strclr ft_striter ft_striteri \
+	ft_strequ ft_strnequ \
+	ft_putchar ft_putstr ft_putendl ft_putnbr ft_putchar_fd ft_putstr_fd \
+	ft_putendl_fd ft_putnbr_fd ft_secure_atoi \
+	ft_aligned_memcpy ft_aligned_bzero
 
+SRC_PRINTF	= beacon op_main modifiers extract_args \
+	s_string s_char s_numeric_u s_numeric_i \
+	s_pointer s_logical_b s_logical_o s_logical_xmin s_logical_xmaj	\
+	cast buffer norme
 
-all: Hello_word $(OBJ_DIR) $(NAME)
-	@printf "$(COLOR_CLEAR)$(COLOR_GREEN)Successfully created $(COLOR_BLUE)$(NAME) !!!$(COLOR_NOCOLOR)\n"
+SRC_BTREE	= btree_apply_infix btree_apply_prefix btree_apply_suffix \
+	btree_apply_by_level btree_get_node btree_level_count \
+	btree_check_binary_tree btree_memory_move \
+	btree_delete_node btree_delete_rnb_node btree_insert_node btree_insert_rnb_node \
+	btree_limit_items btree_ctor btree_check_rnb_property btree_atomics_op \
+	btree_rotation_node btree_family_node \
+	btree_insert_strategy btree_delete_strategy \
+	btree_smash_checker \
+	btree_get_last_valid btree_get_neighbours btree_swap_content \
+	btree_try_to_insert
 
-Hello_word:
-	@printf "$(COLOR_VIOLET)$(COLOR_UNDERLINE)Compiling$(COLOR_NOCOLOR) $(COLOR_BLUE)$(NAME) ...$(COLOR_NOCOLOR)\n"
+SRC_CHAINED	= lst_new lst_del_one lst_del lst_add lst_iter lst_map lst_invert_rec \
+	lst_push_front lst_push_back lst_pre_alloc lst_merge lst_create_elem lst_invert_it
 
-$(NAME): $(OBJ)
-	@printf "$(COLOR_GREEN)Successfully created objects files for library $(COLOR_BLUE)$(NAME) !!!$(COLOR_NOCOLOR)\n"
-	@printf "$(COLOR_VIOLET)Creating $(NAME) ... $(COLOR_NOCOLOR)\n"
-	@ar rc $(NAME) $(OBJ)
-	@ranlib $(NAME)
-	@printf "$(COLOR_UP)$(COLOR_CLEAR)"
+SRC_SORT    = fusion_merge_tab fusion_merge_chain_list
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
-	@printf "$(COLOR_VIOLET)Creating objects files for library $(COLOR_BLUE)$(NAME) ... \n$(COLOR_CYAN)"
-	$(CC) $(OPTIMIZATION) $(CFLAGS) -I$(LOCAL_INC) $(SANITIZER) $(APPEND) -c -o $@ $^ 
-	@printf "\n$(COLOR_NOCOLOR)$(COLOR_UP)$(COLOR_CLEAR)$(COLOR_UP)$(COLOR_CLEAR)$(COLOR_UP)$(COLOR_CLEAR)"
+SRC_GNL     = gnl
 
-$(OBJ_DIR):
-	@mkdir -p $(OBJ_DIR)
-	@mkdir -p $(OBJ_DIR)/printf
-	@mkdir -p $(OBJ_DIR)/array
-	@mkdir -p $(OBJ_DIR)/btree
-	@mkdir -p $(OBJ_DIR)/io
-	@mkdir -p $(OBJ_DIR)/io/printf
-	@mkdir -p $(OBJ_DIR)/lst
-	@mkdir -p $(OBJ_DIR)/math
-	@mkdir -p $(OBJ_DIR)/mem
-	@mkdir -p $(OBJ_DIR)/str
-	@mkdir -p $(OBJ_DIR)/system
-	@mkdir -p $(OBJ_DIR)/parr
-	@mkdir -p $(OBJ_DIR)/get_opt
+USUALS_DIR	= usuals_tools
+PRINTF_DIR  = ft_printf
+BTREE_DIR   = binary_tree
+CHAINED_DIR = chained_tools
+SORT_DIR    = sort_tools
+GNL_DIR		= gnl
+
+SRC = 	$(addprefix $(USUALS_DIR)/, $(addsuffix .c, $(SRC_USUALS))) \
+		$(addprefix $(PRINTF_DIR)/, $(addsuffix .c, $(SRC_PRINTF))) \
+		$(addprefix $(BTREE_DIR)/, $(addsuffix .c, $(SRC_BTREE))) \
+		$(addprefix $(CHAINED_DIR)/, $(addsuffix .c, $(SRC_CHAINED))) \
+		$(addprefix $(SORT_DIR)/, $(addsuffix .c, $(SRC_SORT))) \
+		$(addprefix $(GNL_DIR)/, $(addsuffix .c, $(SRC_GNL)))
+
+TMP = $(basename $(notdir $(SRC)))
+OBJ = $(addprefix $(OBJDIR)/, $(addsuffix .o, $(TMP)))
+
+.PHONY: all re clean fclean help
+
+all: $(NAME)
+
+$(NAME): $(OBJ) includes/libft.h includes/btree.h includes/chained_tools.h srcs/gnl/private_gnl.h srcs/ft_printf/internal_printf.h
+	ar rc $(NAME) $(OBJ)
+	ranlib $(NAME)
+
+$(OBJDIR)/%.o: $(SRCDIR)/$(USUALS_DIR)/%.c includes/libft.h
+	$(CC) -c $(CFLAGS) -o $@ $<
+
+$(OBJDIR)/%.o: $(SRCDIR)/$(PRINTF_DIR)/%.c srcs/ft_printf/internal_printf.h
+	$(CC) -c $(CFLAGS) -o $@ $<
+
+$(OBJDIR)/%.o: $(SRCDIR)/$(SORT_DIR)/%.c includes/libft.h
+	$(CC) -c $(CFLAGS) -o $@ $<
+
+$(OBJDIR)/%.o: $(SRCDIR)/$(BTREE_DIR)/%.c includes/btree.h srcs/binary_tree/btree_internal_header.h
+	$(CC) -c $(CFLAGS) -o $@ $<
+
+$(OBJDIR)/%.o: $(SRCDIR)/$(CHAINED_DIR)/%.c includes/chained_tools.h
+	$(CC) -c $(CFLAGS) -o $@ $<
+
+$(OBJDIR)/%.o: $(SRCDIR)/$(GNL_DIR)/%.c srcs/gnl/private_gnl.h
+	$(CC) -c $(CFLAGS) -o $@ $<
 
 clean:
-	@printf "$(COLOR_RED)Removing object files ...$(COLOR_NOCOLOR)\n"
-	@rm -rf $(OBJ_DIR)
-	@printf "$(COLOR_UP)$(COLOR_CLEAR)$(COLOR_GREEN)Removed object files !!!$(COLOR_NOCOLOR)\n"
+	rm -vf $(OBJ)
 
-fclean: clean
-	@printf "$(COLOR_RED)Removing library $(COLOR_BLUE)$(NAME) ...$(COLOR_NOCOLOR)\n"
-	@rm -rf $(NAME)
-	@printf "$(COLOR_UP)$(COLOR_CLEAR)$(COLOR_GREEN)Removed library $(COLOR_BLUE)$(NAME) !!!$(COLOR_NOCOLOR)\n"
+fclean:
+	rm -vf $(OBJ)
+	rm -vf $(NAME)
 
 re: fclean all
 
-norminette:
-	@norminette $(SRCS)
-	@norminette $(FULL_INCLUDE_PATH)
-
-test: all 
-	@printf "$(COLOR_VIOLET)Compiling test $(TEST_FILE) ... $(COLOR_RESET)\n"
-	@$(CC) -g $(TEST_FILE) -I$(LOCAL_INC) -L. -lft $(SANITIZER) $(APPEND)
-	@printf "$(COLOR_GREEN)Done !!! Launching $(TEST_FILE) now !!!\n$(COLOR_NOCOLOR)"
-	@./a.out
-
-.PHONY: all clean fclean re
+help:
+	@echo
+	@echo "Librairy $(NAME)"
+	@echo
+	@echo "--------------------------------------------------------------------------"
+	@echo " Disp rules."
+	@echo
+	@echo " all     : Compile the librairy if a file has changed, stored in $(LIBDIR)."
+	@echo " re      : Recompile all objets of the librairy."
+	@echo " clean   : Remove objects."
+	@echo " fclean  : Remove objects and executable."
+	@echo " help    : Display this."
+	@echo "--------------------------------------------------------------------------"
+	@echo

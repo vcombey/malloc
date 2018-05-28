@@ -46,7 +46,7 @@ static void del_sodo(
     {
         if (*ptr != tab_ptr[i].c)
         {
-            printf("BAD VALUE: Got %hhx instead of %hhx at index %i of size %zu\n", *ptr, tab_ptr[i].c, index, tab_ptr[i].size);
+            ft_printf("BAD VALUE: Got %hhx instead of %hhx at index %i of size %zu\n", *ptr, tab_ptr[i].c, index, tab_ptr[i].size);
             exit (1);
         }
         ptr++;
@@ -79,7 +79,7 @@ void        sodo_test(void)
         }
         i++;
     }
-    printf("%i ft_malloc made and %i ft_free made\n", count_add, count_del);
+    ft_printf("%i ft_malloc made and %i ft_free made\n", count_add, count_del);
     ft_show_alloc_mem();
     i = 0;
     while (i < nb_elmt)
@@ -87,7 +87,7 @@ void        sodo_test(void)
         ft_free(tab_ptr[i].ptr);
         i++;
     }
-	printf("alloc meme final\n");
+	ft_printf("alloc meme final\n");
     ft_show_alloc_mem();
 }
 static void real_sodo(
@@ -103,7 +103,7 @@ static void real_sodo(
     {
         if (*ptr != tab_ptr[i].c)
         {
-            printf("BAD VALUE: Got %hhx instead of %hhx at index %i of size %zu\n", *ptr, tab_ptr[i].c, index, tab_ptr[i].size);
+            ft_printf("BAD VALUE: Got %hhx instead of %hhx at index %i of size %zu\n", *ptr, tab_ptr[i].c, index, tab_ptr[i].size);
             exit (1);
         }
 		index++;
@@ -114,9 +114,9 @@ static void real_sodo(
     if (ptr == NULL || x == 0)
         return ;
     tab_ptr[i].ptr = ft_realloc(tab_ptr[i].ptr, x);
-//	printf("arg: %d %zu", x, (size_t)tab_ptr[i].ptr);
+//	ft_printf("arg: %d %zu", x, (size_t)tab_ptr[i].ptr);
     if (tab_ptr[i].ptr == NULL) {
-        printf("BAD REALLOC\n");
+        ft_printf("BAD REALLOC\n");
         exit (1);
     }
     n = 0;
@@ -126,7 +126,7 @@ static void real_sodo(
     {
         if (*ptr != tab_ptr[i].c)
         {
-            printf("BAD VALUE: Got %hhx instead of %hhx at index %zu of size %zu\n", *ptr, tab_ptr[i].c, n, tab_ptr[i].size);
+            ft_printf("BAD VALUE: Got %hhx instead of %hhx at index %zu of size %zu\n", *ptr, tab_ptr[i].c, n, tab_ptr[i].size);
             exit (1);
         }
         ptr++;
@@ -163,7 +163,7 @@ void        sodo_ft_realloc(void)
         }
         i++;
     }
-    printf("%i ft_realloc made, %i ft_mallocs and %i ft_free made\n", count_ft_realloc, count_add, count_del);
+    ft_printf("%i ft_realloc made, %i ft_mallocs and %i ft_free made\n", count_ft_realloc, count_add, count_del);
     ft_show_alloc_mem();
     i = 0;
     while (i < nb_elmt - 1)
@@ -175,7 +175,7 @@ void        sodo_ft_realloc(void)
 }
 int         main(void)
 {
-//    sodo_test();
+    sodo_test();
     sodo_ft_realloc();
     return 0;
 }

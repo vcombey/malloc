@@ -3,133 +3,85 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ade-sede <adrien.de.sede@gmail.com>        +#+  +:+       +#+        */
+/*   By: bmickael <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/24 23:13:41 by ade-sede          #+#    #+#             */
-/*   Updated: 2017/11/24 23:15:27 by ade-sede         ###   ########.fr       */
+/*   Created: 2017/04/10 20:25:00 by bmickael          #+#    #+#             */
+/*   Updated: 2018/04/21 23:27:01 by bmickael         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
-# include <stdlib.h>
-# include <unistd.h>
-# include <stdint.h>
+
 # include <string.h>
-# include "color.h"
-# include "str.h"
-# include "mem.h"
-# include "alloc.h"
-# include "list.h"
-# include "array.h"
-# include "system.h"
-# include "btree.h"
-# include "string.h"
-# define MALLOC_ERROR 666
-# define TRUE 1
-# define FALSE 0
-# define EXIT_FAILURE 1
-# define EXIT_SUCCESS 0
-# define WHITESPACES " 	\n\t\v"
-# define IS_WHITESPACE(c) (c == 32 || c == 9 || c == 10)
-# ifndef T_ULONG
-#  define T_ULONG
+# include <stdint.h>
+# include <unistd.h>
+# include <limits.h>
+# include <stdbool.h>
 
-typedef unsigned long int	t_ulong;
-# endif
+# define HEX_T(x)	"0123456789ABCDEF"[x]
 
-typedef struct		s_coor
-{
-	int		x;
-	int		y;
-}					t_coor;
+void				*ft_memset(void *b, int c, size_t len);
+void				ft_bzero(void *s, size_t n);
+void				*ft_memcpy(void *restrict dst, const void *restrict src,
+		size_t n);
+void				*ft_memccpy(void *restrict dest,
+		const void *restrict src, int c, size_t n);
+void				*ft_memmove(void *dst, const void *src, size_t len);
+void				*ft_memchr(const void *s, int c, size_t n);
+int					ft_memcmp(const void *s1, const void *s2, size_t n);
 
-/*
-** In file ft_abs.c
-*/
-
-intmax_t			ft_abs(intmax_t value);
-
-/*
-** In file ft_atoi.c
-*/
-
+size_t				ft_strlen(const char *s);
+char				*ft_strcpy(char *dst, const char *src);
+char				*ft_strncpy(char *dst, const char *src, size_t len);
+char				*ft_strcat(char *restrict s1, const char *restrict s2);
+char				*ft_strncat(char *restrict s1, const char *restrict s2,
+		size_t n);
+size_t				ft_strlcat(char *restrict dst, const char *restrict src,
+		size_t size);
+char				*ft_strchr(const char *s, int c);
+char				*ft_strrchr(const char *s, int c);
+char				*ft_strstr(const char *big, const char *little);
+char				*ft_strnstr(const char *big, const char *little,
+		size_t len);
+int					ft_strcmp(const char *s1, const char *s2);
+int					ft_strncmp(const char *s1, const char *s2, size_t n);
 int					ft_atoi(const char *str);
-int					ft_atoi_safe(const char *str, int *result);
-intmax_t			ft_atoi_base(char *str, int base);
 
-/*
-**	In file ft_is_1.c
-*/
-
+int					ft_isalpha(int c);
 int					ft_isdigit(int c);
+int					ft_isalnum(int c);
 int					ft_isascii(int c);
 int					ft_isprint(int c);
-int					ft_isalpha(int c);
-int					ft_isalnum(int c);
-
-/*
-**	In file ft_is_2.c
-*/
-
-int					ft_is_hex(int c);
-int					ft_is_upper(char c);
-int					ft_is_lower(char c);
-int					ft_is_space(char c);
-int					ft_is_one_of(char c, const char *that);
-
-/*
-**	In file ft_is_3.c
-*/
-
-int					is_quote(int c);
-
-/*
-** 	In file toupper.c
-*/
-
 int					ft_toupper(int c);
-char				*ft_upstr(char *s);
-
-/*
-**	In file tolower.c
-*/
-
 int					ft_tolower(int c);
-char				*ft_lowstr(char *s);
 
-/*
-**	In file itoa.c
-*/
+void				ft_strclr(char *s);
+void				ft_striter(char *s, void (*f)(char *));
+void				ft_striteri(char *s, void (*f)(unsigned int, char *));
+int					ft_strequ(char const *s1, char const *s2);
+int					ft_strnequ(char const *s1, char const *s2, size_t n);
 
-char				*ft_itoa(int n);
-char				*ft_itoa_base(intmax_t value, int base);
-char				*ft_itoa_base(intmax_t value, int base);
-char                *ft_sizetoa_base_str(size_t value, char *str, int base);
-char            	*ft_sizetoa_base_word(size_t n, char nbr[20], int base);
-char	            *ft_itoa_base_str(intmax_t value, char *str, int base);
-char				*ft_unsigned_itoa_base(uintmax_t value, int base);
-int					uitoa_base_len(uintmax_t value, int base);
-int					itoa_base_len(intmax_t value, int base);
-
-/*
-**	Fatal.c
-*/
-
-/*
-**	in fule putnbr.c
-*/
-
+void				ft_putchar(char c);
+void				ft_putstr(char const *s);
+void				ft_putendl(char const *s);
 void				ft_putnbr(int n);
+void				ft_putchar_fd(char c, int fd);
+void				ft_putstr_fd(char const *s, int fd);
+void				ft_putendl_fd(char const *s, int fd);
+void				ft_putnbr_fd(int n, int fd);
 
-void				fatal(const char *error_str);
-int					ft_is_executable(char *dir, char *file);
+int					ft_secure_atoi(const char *nptr, bool *error);
 
-void				ft_strpush(char **str, char c);
-int					ft_strarrstrn(char **array, char *str, unsigned int n);
-unsigned int		ft_parrlen(void **array);
-void				ft_parrpush(void ***tablo, void *elem);
-void				**ft_parrnew(void);
-void				ft_strspush(char **str, char *push);
+void				*ft_aligned_memcpy(void *restrict dst,
+		const void *restrict src, size_t n);
+void				ft_aligned_bzero(void *s, size_t n);
+
+int					ft_printf(const char *restrict format, ...);
+int					ft_eprintf(const char *restrict format, ...);
+int					ft_fprintf(int const fd, const char *restrict format,
+																		...);
+int					ft_dprintf(bool display, const char *restrict format, ...);
+int					ft_sprintf(char *str, const char *restrict format, ...);
 
 #endif

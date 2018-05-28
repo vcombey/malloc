@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 13:54:29 by vcombey           #+#    #+#             */
-/*   Updated: 2018/05/20 14:25:12 by vcombey          ###   ########.fr       */
+/*   Updated: 2018/05/28 01:28:03 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,8 +91,8 @@ void	*allocator(struct s_zones *z, size_t size)
 	enum e_zone_type	zone_type;
 
 	// TODO: see the + 1
-	if (size <= 0)
-		return (NULL);
+	if (size == 0)
+		size = 32;
 	zone_type = zone_type_from_size(size);
 	if (zone_type == LARGE)
 		return (allocator_large_zone(&z->large_zone_first, size));

@@ -4,9 +4,9 @@ CC = gcc
 UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Darwin)
 	ifeq ($(DEBUG),yes)
-	CFLAGS = -std=c99 -fPIC -Wextra -Wall -Werror -g -O0 -fsanitize=address
+	CFLAGS = -std=c99 -fPIC -Wextra -Wall -g -O0 #-fsanitize=address
 else
-	CFLAGS = -std=c99 -fPIC -Wextra -Wall -Werror -Ofast
+	CFLAGS = -std=c99 -fPIC
 endif
 endif
 

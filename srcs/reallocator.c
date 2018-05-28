@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 13:54:29 by vcombey           #+#    #+#             */
-/*   Updated: 2018/05/20 20:34:57 by vcombey          ###   ########.fr       */
+/*   Updated: 2018/05/26 23:10:37 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,13 +104,13 @@ void	*reallocator(void *ptr, size_t size)
 #ifndef UNSAFE_ALLOC
 	if (!pointer_belong_to_us(ptr))
 	{
-		printf("pointer being reallocated was not allocated\n");
+		//printf("pointer being reallocated was not allocated\n");
 		return (NULL);
 	}
 #endif
 	if (chunk->is_free)
 	{
-		printf("double free\n");
+		//printf("double free\n");
 		return (NULL);
 	}
 	if (chunk->zone_type == LARGE)

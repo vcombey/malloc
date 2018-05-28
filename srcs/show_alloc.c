@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 13:54:29 by vcombey           #+#    #+#             */
-/*   Updated: 2018/05/20 20:34:56 by vcombey          ###   ########.fr       */
+/*   Updated: 2018/05/26 23:10:37 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void					show_alloc_chunk(void *ptr,\
 	struct s_chunk *c = (struct s_chunk *)((size_t)ptr + offset_zone_header(zone_type) + *i * zone_block_from_zone_type(zone_type));
 	size_t inf = (size_t)c + sizeof(*c);
 	size_t sup = (size_t)c + c->size_block * zone_block_from_zone_type(zone_type);
-	printf("%#zx - %#zx: %zu octets\n", inf, sup, sup - inf);
+	//printf("%#zx - %#zx: %zu octets\n", inf, sup, sup - inf);
 	*i += c->size_block;
 }
 
@@ -30,7 +30,7 @@ void					show_alloc_zone(struct s_zone_ref zone_ref,\
 	size_t		i;
 	__uint128_t	bitmask;
 
-	printf("free_space: %i\n", zone_ref.free_space);
+	//printf("free_space: %i\n", zone_ref.free_space);
 	print_binary(zone_ref.allocated_chunks);
 	i = 0;
 	while (i < NB_BLOCK_ZONE)
@@ -74,10 +74,10 @@ void					show_alloc_heap(struct s_heap pq,\
 	min = (struct s_zone_ref){.ptr=NULL};
 	while (i < pq.lenght)
 	{
-		printf("i %zu, length %zu\n", i, pq.lenght);
+		//printf("i %zu, length %zu\n", i, pq.lenght);
 		min = find_minimum_addr(pq, min);
 		show_alloc_zone(min, zone_type);
-		printf("\n");
+		//printf("\n");
 		i++;
 	}
 }
@@ -92,7 +92,7 @@ void	show_heap_largeur(struct s_heap pq, enum e_zone_type zone_type)
 	while (i < pq.lenght)
 	{
 		size_t j = 0;
-		printf("\n\n depth %i \n\n", nb_parcour);
+		//printf("\n\n depth %i \n\n", nb_parcour);
 		while (j < pow(2, nb_parcour) && i + j < pq.lenght)
 		{
 			show_alloc_zone(pq.vec[i + j], zone_type);
@@ -105,12 +105,12 @@ void	show_heap_largeur(struct s_heap pq, enum e_zone_type zone_type)
 
 void	show_alloc_mem(void)
 {
-	printf("TINY: \n");
+	//printf("TINY: \n");
 	//show_alloc_heap(g_zones.little_heap, LITTLE);
 	show_heap_largeur(g_zones.little_heap, LITTLE);
-	printf("SMALL: \n");
+	//printf("SMALL: \n");
 	//show_alloc_heap(g_zones.medium_heap, MEDIUM);
 	show_heap_largeur(g_zones.medium_heap, MEDIUM);
-	printf("LARGE: \n");
+	//printf("LARGE: \n");
 	show_alloc_large_zone(g_zones.large_zone_first);
 }

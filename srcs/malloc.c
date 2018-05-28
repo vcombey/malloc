@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 13:54:29 by vcombey           #+#    #+#             */
-/*   Updated: 2018/05/20 18:29:51 by vcombey          ###   ########.fr       */
+/*   Updated: 2018/05/28 01:31:26 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,16 @@
 #include <assert.h>
 #include <pthread.h>
 
-//static pthread_mutex_t g_mutex = PTHREAD_MUTEX_INITIALIZER;
+static pthread_mutex_t g_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 void	ft_putstr(char *str)
 {
-	while (*str)
+	(void)str;
+/*	while (*str)
 	{ 
 		write(1, str, 1);
 		str++;
-	}
+	}*/
 }
 
 struct s_zones g_zones;
@@ -38,40 +39,47 @@ void	constructor(struct s_zones *z)
 
 void	*malloc(size_t size)
 {
-//	ft_putstr("malloc\n");
-	//pthread_mutex_lock(&g_mutex);
+	ft_putstr("malloc\n");
+	pthread_mutex_lock(&g_mutex);
 	if (!g_zones.init)
 		constructor(&g_zones);
 	void *addr = allocator(&g_zones, size);
 	assert((size_t)addr % 8 == 0);
-	//ft_putstr("out malloc\n");
-	//pthread_mutex_unlock(&g_mutex);
+	pthread_mutex_unlock(&g_mutex);
+	ft_putstr("out malloc\n");
 	return (addr);
 }
 
 void	*calloc(size_t count, size_t size)
 {
-	//ft_putstr("calloc\n");
+	ft_putstr("calloc\n");
 	void *addr;
-
-	addr = malloc(count * size);
+	size_t	global_size = count * size;
+	
+	if (global_size == 0)
+		global_size = 32;
+	addr = malloc(global_size);
 	if (addr)
-		bzero(addr, count * size);
+		bzero(addr, global_size);
 	return (addr);
 }
 
 void	free(void *ptr)
 {
-	//pthread_mutex_lock(&g_mutex);
+	ft_putstr("free\n");
+	pthread_mutex_lock(&g_mutex);
+	ft_putstr("free 2\n");
 	if (!g_zones.init)
 		constructor(&g_zones);
 	desalocator(ptr);
-	//pthread_mutex_unlock(&g_mutex);
+	ft_putstr("free 3\n");
+	pthread_mutex_unlock(&g_mutex);
+	ft_putstr("out free\n");
 }
 
 void	*realloc(void *ptr, size_t size)
 {
-	//ft_putstr("realloc\n");
+	ft_putstr("realloc\n");
 	if (ptr == NULL)
 		return (malloc(size));
 	if (size == 0)
@@ -79,23 +87,23 @@ void	*realloc(void *ptr, size_t size)
 		free(ptr);
 		return NULL;
 	}
-	//pthread_mutex_lock(&g_mutex);
+	pthread_mutex_lock(&g_mutex);
 	if (!g_zones.init)
 		constructor(&g_zones);
 	if ((size_t)ptr % 8 != 0)
 	{
-		printf("bad allignement\n");
-		//pthread_mutex_unlock(&g_mutex);
+		//printf("bad allignement\n");
+		pthread_mutex_unlock(&g_mutex);
 		return (NULL);
 	}
 	void *addr = reallocator(ptr, size);
-//	printf("addr: %zu\n", (size_t)addr);
-	//pthread_mutex_unlock(&g_mutex);
+//	//printf("addr: %zu\n", (size_t)addr);
+	pthread_mutex_unlock(&g_mutex);
 	return (addr);
 }
 
 void	*reallocf(void *ptr, size_t size)
 {
-	//ft_putstr("reallocf\n");
+	ft_putstr("reallocf\n");
 	return realloc(ptr, size);
 }
