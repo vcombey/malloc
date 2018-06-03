@@ -6,12 +6,14 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 13:57:10 by vcombey           #+#    #+#             */
-/*   Updated: 2018/06/03 19:51:13 by vcombey          ###   ########.fr       */
+/*   Updated: 2018/06/03 20:32:26 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 #include "internal_malloc.h"
+
+#ifndef UNSAFE_ALLOC
 
 bool	pointer_belong_to_us(void *ptr)
 {
@@ -24,6 +26,15 @@ bool	pointer_belong_to_us(void *ptr)
 	}
 	return (false);
 }
+
+#else
+
+bool	pointer_belong_to_us(void *ptr)
+{
+	return (false);
+}
+
+#endif
 
 bool	check_header(struct s_header_zone *header)
 {

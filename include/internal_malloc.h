@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 13:54:29 by vcombey           #+#    #+#             */
-/*   Updated: 2018/05/20 20:35:32 by vcombey          ###   ########.fr       */
+/*   Updated: 2018/06/03 20:04:44 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <stdint.h>
 #include <sys/mman.h>
 #include "malloc.h"
+#include "libft.h"
 #include <stdio.h>
 #include <stdbool.h>
 

@@ -39,7 +39,7 @@ OBJ = $(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(__OBJ__)))
 __H__ = $(basename $(notdir $(_HEADERS)))
 HEADERS = $(addsuffix .h, $(__H__))
 LIBRARIES = -L ./libft -lft
-IFLAGS = -I ./include -I ./libft/include
+IFLAGS = -I ./include -I ./libft/includes
 ifeq ($(UNAME_S),Darwin)
 	LDFLAGS = -shared -fPIC -exported_symbols_list symbol_list
 endif

@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 13:54:29 by vcombey           #+#    #+#             */
-/*   Updated: 2018/06/03 19:51:13 by vcombey          ###   ########.fr       */
+/*   Updated: 2018/06/03 20:28:56 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,18 +37,4 @@ void	print_binary(__uint128_t nb)
 		nb >>= 1;
 	}
 	ft_printf("\n");
-}
-
-void	unimplemented(char *mess)
-{
-    (void)mess;
-	ft_printf("%s", mess);
-	exit(1);
-}
-
-void	panic(char *mess)
-{
-    (void)mess;
-	ft_printf("%s", mess);
-	exit(1);
 }

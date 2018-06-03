@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 13:54:29 by vcombey           #+#    #+#             */
-/*   Updated: 2018/06/03 19:51:13 by vcombey          ###   ########.fr       */
+/*   Updated: 2018/06/03 20:33:29 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,15 +40,8 @@ struct s_zone_ref	*zone_ref_from_chunk(struct s_chunk *chunk)
 			- offset_zone_header(chunk->zone_type));
 	if (!check_header(header))
 		panic("bad header magic");
-#ifndef UNSAFE_ALLOC
-
 	if (!pointer_belong_to_us((void *)header))
-	{
-		ft_printf("header doesnt belong to us");
 		return (NULL);
-	}
-#endif
-
 	return (header->parent);
 }
 
