@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 13:54:29 by vcombey           #+#    #+#             */
-/*   Updated: 2018/05/26 23:10:37 by vcombey          ###   ########.fr       */
+/*   Updated: 2018/06/03 19:51:13 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ struct s_zone_ref	*zone_ref_from_chunk(struct s_chunk *chunk)
 
 	if (!pointer_belong_to_us((void *)header))
 	{
-		//printf("header doesnt belong to us");
+		ft_printf("header doesnt belong to us");
 		return (NULL);
 	}
 #endif

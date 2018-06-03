@@ -4,9 +4,9 @@ CC = gcc
 UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Darwin)
 	ifeq ($(DEBUG),yes)
-	CFLAGS = -std=c99 -fPIC -Wextra -Wall -g -O0 #-fsanitize=address
+	CFLAGS = -std=c99 -fPIC -Werror -Wextra -Wall -g -O0 #-fsanitize=address
 else
-	CFLAGS = -std=c99 -fPIC
+	CFLAGS = -std=c99 -fPIC -Werror -Wextra -Wall 
 endif
 endif
 
@@ -38,7 +38,8 @@ __OBJ__ = $(basename $(notdir $(SRC)))
 OBJ = $(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(__OBJ__)))
 __H__ = $(basename $(notdir $(_HEADERS)))
 HEADERS = $(addsuffix .h, $(__H__))
-IFLAGS = -I ./include
+LIBRARIES = -L ./libft -lft
+IFLAGS = -I ./include -I ./libft/include
 ifeq ($(UNAME_S),Darwin)
 	LDFLAGS = -shared -fPIC -exported_symbols_list symbol_list
 endif
@@ -50,7 +51,8 @@ endif
 all:  $(NAME).so
 
 $(NAME).so: $(OBJ) symbol_list export_map
-	$(CC) $(CFLAGS) -o $(NAME)_$(HOSTTYPE).so $(OBJ) $(LDFLAGS)
+	make -C ./libft
+	$(CC) $(CFLAGS) -o $(NAME)_$(HOSTTYPE).so $(OBJ) $(LDFLAGS) $(LIBRARIES)
 	rm -f $(NAME).so
 	ln -s libft_malloc_$(HOSTTYPE).so $(NAME).so
 
@@ -59,8 +61,10 @@ $(OBJ_DIR)/%.o: %.c $(HEADERS) Makefile
 
 clean:
 	rm -f $(OBJ)
+	make clean -C ./libft
 
 fclean:
+	make fclean -C ./libft
 	rm -f $(OBJ)
 	rm -f $(NAME)_$(HOSTTYPE).so
 	rm -f $(NAME).so

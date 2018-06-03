@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 13:54:29 by vcombey           #+#    #+#             */
-/*   Updated: 2018/05/28 01:31:26 by vcombey          ###   ########.fr       */
+/*   Updated: 2018/06/03 19:51:13 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,12 +92,12 @@ void	*realloc(void *ptr, size_t size)
 		constructor(&g_zones);
 	if ((size_t)ptr % 8 != 0)
 	{
-		//printf("bad allignement\n");
+		ft_printf("bad allignement\n");
 		pthread_mutex_unlock(&g_mutex);
 		return (NULL);
 	}
 	void *addr = reallocator(ptr, size);
-//	//printf("addr: %zu\n", (size_t)addr);
+//	ft_printf("addr: %zu\n", (size_t)addr);
 	pthread_mutex_unlock(&g_mutex);
 	return (addr);
 }

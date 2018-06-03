@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 13:54:29 by vcombey           #+#    #+#             */
-/*   Updated: 2018/05/26 23:10:37 by vcombey          ###   ########.fr       */
+/*   Updated: 2018/06/03 19:51:13 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void					show_alloc_large_zone(\
 	while (i < len)
 	{
 		min = find_min_large_zone(large_zone_first, min);
-		//printf("%#zx - %#zx: %zu octets\n", (size_t)min + sizeof(*min), (size_t)min + (min->data.size_block / g_zones.page_size + 1) * g_zones.page_size, min->size_octet);
+		ft_printf("%#zx - %#zx: %zu octets\n", (size_t)min + sizeof(*min), (size_t)min + (min->data.size_block / g_zones.page_size + 1) * g_zones.page_size, min->size_octet);
 		i++;
 	}
 }

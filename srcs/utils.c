@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 13:54:29 by vcombey           #+#    #+#             */
-/*   Updated: 2018/05/26 23:11:18 by vcombey          ###   ########.fr       */
+/*   Updated: 2018/06/03 19:51:13 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,22 +33,22 @@ void	print_binary(__uint128_t nb)
 {
 	for (int i = 0; i < NB_BLOCK_ZONE; i++)
 	{
-		//printf("%i", (int)(nb % 2));
+		ft_printf("%i", (int)(nb % 2));
 		nb >>= 1;
 	}
-	//printf("\n");
+	ft_printf("\n");
 }
 
 void	unimplemented(char *mess)
 {
     (void)mess;
-	//printf("%s", mess);
+	ft_printf("%s", mess);
 	exit(1);
 }
 
 void	panic(char *mess)
 {
     (void)mess;
-	//printf("%s", mess);
+	ft_printf("%s", mess);
 	exit(1);
 }
