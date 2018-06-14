@@ -13,7 +13,8 @@
 #include "malloc.h"
 #include "internal_malloc.h"
 
-struct s_chunk_large_zone	*find_min_large_zone(struct s_chunk_large_zone *first,\
+struct s_chunk_large_zone	*find_min_large_zone(
+	struct s_chunk_large_zone *first,\
 		void *previous_min)
 {
 	void						*new_min;
@@ -33,11 +34,11 @@ struct s_chunk_large_zone	*find_min_large_zone(struct s_chunk_large_zone *first,
 	return (new_min);
 }
 
-void					show_alloc_large_zone(\
+void						show_alloc_large_zone(\
 		struct s_chunk_large_zone *large_zone_first)
 {
-	size_t					len;
-	size_t					i;
+	size_t						len;
+	size_t						i;
 	struct s_chunk_large_zone	*min;
 
 	len = len_chunk_large_zone(large_zone_first);
@@ -46,7 +47,10 @@ void					show_alloc_large_zone(\
 	while (i < len)
 	{
 		min = find_min_large_zone(large_zone_first, min);
-		ft_printf("%#zx - %#zx: %zu octets\n", (size_t)min + sizeof(*min), (size_t)min + (min->data.size_block / g_zones.page_size + 1) * g_zones.page_size, min->size_octet);
+		ft_printf("%#zx - %#zx: %zu octets\n",\
+				(size_t)min + sizeof(*min), (size_t)min + \
+				(min->data.size_block / g_zones.page_size + 1)\
+				* g_zones.page_size, min->size_octet);
 		i++;
 	}
 }
