@@ -46,7 +46,7 @@ struct s_zone_ref	*zone_ref_from_chunk(struct s_chunk *chunk)
 			chunk->offset_block * zone_block_from_zone_type(chunk->zone_type)\
 			- offset_zone_header(chunk->zone_type));
 	if (!check_header(header))
-		panic("bad header magic");
+		return (NULL);
 	if (!pointer_belong_to_us((void *)header))
 		return (NULL);
 	return (header->parent);

@@ -39,7 +39,6 @@ size_t				zone_block_from_zone_type(enum e_zone_type zone_type)
 		return (LITTLE_BLOCK);
 	else if (zone_type == MEDIUM)
 		return (MEDIUM_BLOCK);
-	panic("get One block call with a bad zone type");
 	return (-1);
 }
 
