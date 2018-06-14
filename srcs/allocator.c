@@ -22,7 +22,8 @@ void	*try_add_chunk_zone_reference(struct s_zone_ref *zone_ref,\
 	struct s_chunk	*chunk;
 
 	bitmask = bitmask_from_size_block(size_block);
-	if ((offset = offset_place_chunk(zone_ref->allocated_chunks, size_block, bitmask)) == -1)
+	if ((offset = offset_place_chunk(zone_ref->allocated_chunks,\
+									 size_block, bitmask)) == -1)
 		return (NULL);
 	zone_ref->allocated_chunks |= bitmask << offset;
 	zone_ref->free_space -= size_block;
@@ -90,7 +91,6 @@ void	*allocator(struct s_zones *z, size_t size)
 {
 	enum e_zone_type	zone_type;
 
-	// TODO: see the + 1
 	if (size == 0)
 		size = 32;
 	zone_type = zone_type_from_size(size);

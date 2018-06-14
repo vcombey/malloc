@@ -43,7 +43,7 @@ void	desalocator(void *ptr)
 
 	if (ptr == NULL)
 		return ;
-	if ( (size_t)ptr % 8 != 0)
+	if ((size_t)ptr % 8 != 0)
 	{
 		//ft_putstr("bad alignement free\n");
 		return ;
