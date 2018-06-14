@@ -45,8 +45,8 @@ size_t				zone_block_from_zone_type(enum e_zone_type zone_type)
 
 size_t				size_block_from_size(size_t size)
 {
-	return (size + \
-			sizeof(struct s_chunk)) / zone_block_from_zone_type(zone_type_from_size(size)) + 1;
+	return ((size + sizeof(struct s_chunk)) / \
+		zone_block_from_zone_type(zone_type_from_size(size)) + 1);
 }
 
 size_t				bitmask_from_size_block(size_t size_block)

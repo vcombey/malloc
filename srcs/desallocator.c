@@ -43,22 +43,15 @@ void	desalocator(void *ptr)
 
 	if (ptr == NULL)
 		return ;
-	if ((size_t)ptr % 8 != 0)
+	if ((size_t)ptr % 16 != 0 || !pointer_belong_to_us(ptr))
 	{
-		//ft_putstr("bad alignement free\n");
+		ft_printf("pointer being freed was not allocated\n");
 		return ;
 	}
-#ifndef UNSAFE_ALLOC
-	if (!pointer_belong_to_us(ptr))
-	{
-//		ft_printf("pointer being freed was not allocated\n");
-		return ;
-	}
-#endif
 	chunk = ((struct s_chunk *)ptr) - 1;
 	if (chunk->is_free)
 	{
-//		ft_printf("double free\n");
+		ft_printf("double free\n");
 		return ;
 	}
 	chunk->is_free = true;

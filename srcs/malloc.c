@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 13:54:29 by vcombey           #+#    #+#             */
-/*   Updated: 2018/06/03 20:40:15 by vcombey          ###   ########.fr       */
+/*   Updated: 2018/06/14 19:14:51 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,9 +84,4 @@ void	*realloc(void *ptr, size_t size)
 	addr = reallocator(ptr, size);
 	pthread_mutex_unlock(&g_mutex);
 	return (addr);
-}
-
-void	*reallocf(void *ptr, size_t size)
-{
-	return (realloc(ptr, size));
 }

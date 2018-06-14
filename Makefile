@@ -21,7 +21,7 @@ endif
 ### LIBRAIRIES ###
 
 ### SOURCES ###
-MAIN = malloc priority_queue zone_reference utils chunck_large_zone allocator show_alloc sift show_alloc_large_zone reallocator desallocator size safe_alloc
+MAIN = malloc priority_queue zone_reference chunck_large_zone allocator show_alloc sift show_alloc_large_zone reallocator.next reallocator desallocator size safe_alloc add_priority_queue
 
 SRC_LIST = $(MAIN)
 VPATH = srcs include

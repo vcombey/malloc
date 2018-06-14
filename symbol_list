@@ -3,4 +3,3 @@ _malloc
 _realloc
 _show_alloc_mem
 _calloc
-_reallocf

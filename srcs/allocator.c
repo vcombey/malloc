@@ -23,7 +23,7 @@ void	*try_add_chunk_zone_reference(struct s_zone_ref *zone_ref,\
 
 	bitmask = bitmask_from_size_block(size_block);
 	if ((offset = offset_place_chunk(zone_ref->allocated_chunks,\
-									 size_block, bitmask)) == -1)
+									size_block, bitmask)) == -1)
 		return (NULL);
 	zone_ref->allocated_chunks |= bitmask << offset;
 	zone_ref->free_space -= size_block;
@@ -47,9 +47,11 @@ void	*move_another_place(struct s_heap *pq,\
 	if (new_zone_reference(zone_type, &new_zone_ref) == -1)
 		return (NULL);
 	addr = try_add_chunk_zone_reference(&new_zone_ref, size_block, zone_type);
-	//TODO: free the zone
 	if (add_heap(pq, new_zone_ref) == -1)
+	{
+		del_zone_reference(zone_type, &new_zone_ref);
 		return (NULL);
+	}
 	return (addr);
 }
 

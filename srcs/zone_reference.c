@@ -31,6 +31,13 @@ int					new_zone_reference(enum e_zone_type zone_type,\
 	return (0);
 }
 
+void				del_zone_reference(enum e_zone_type zone_type,\
+		struct s_zone_ref *new_zone_ref)
+{
+	munmap(new_zone_ref,
+		zone_size_from_zone_type(zone_type));
+}
+
 struct s_zone_ref	*zone_ref_from_chunk(struct s_chunk *chunk)
 {
 	struct s_header_zone	*header;

@@ -107,6 +107,8 @@ size_t  zone_block_from_zone_type(enum e_zone_type zone_type);
 size_t  offset_zone_header(enum e_zone_type zone_type);
 int	 new_zone_reference(enum e_zone_type zone_type,\
 		struct s_zone_ref *new_zone_ref);
+void				del_zone_reference(enum e_zone_type zone_type,\
+		struct s_zone_ref *new_zone_ref);
 size_t  bitmask_from_size_block(size_t size_block);
 int	 offset_place_chunk(__uint128_t  allocated_chunks,\
 		size_t size_block,\
@@ -146,6 +148,8 @@ bool	is_in_heap(struct s_heap *pq,\
 
 void	desalocator(void *ptr);
 void	*reallocator(void *ptr, size_t size);
+void	*realloc_large_zone(void *ptr, size_t size);
+void	*realloc_zone(void *ptr, struct s_chunk *chunk, size_t size);
 void	*allocator(struct s_zones *z, size_t size);
 
 struct s_zone_ref	*zone_ref_from_chunk(struct s_chunk *chunk);
