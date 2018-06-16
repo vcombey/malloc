@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 13:54:29 by vcombey           #+#    #+#             */
-/*   Updated: 2018/05/20 20:34:57 by vcombey          ###   ########.fr       */
+/*   Updated: 2018/06/16 19:39:23 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void			del_heap(struct s_heap *pq, size_t pos,\
 	{
 		pq->vec[pos] = pq->vec[pq->lenght - 1];
 		pq->vec[pos].ptr->parent = &pq->vec[pos];
-		bzero(&pq->vec[pq->lenght - 1], sizeof(pq->vec[pq->lenght - 1]));
+		ft_bzero(&pq->vec[pq->lenght - 1], sizeof(pq->vec[pq->lenght - 1]));
 		pq->lenght--;
 		sift_down(pq, pos);
 	}

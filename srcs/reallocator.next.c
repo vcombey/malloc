@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 13:54:29 by vcombey           #+#    #+#             */
-/*   Updated: 2018/06/03 20:32:48 by vcombey          ###   ########.fr       */
+/*   Updated: 2018/06/16 20:07:13 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void	*realloc_another_place(void *ptr, size_t old_size, size_t new_size)
 
 	new_ptr = allocator(&g_zones, new_size);
 	min_size = old_size < new_size ? old_size : new_size;
-	memcpy(new_ptr, ptr, min_size);
+	ft_memcpy(new_ptr, ptr, min_size);
 	desalocator(ptr);
 	return (new_ptr);
 }

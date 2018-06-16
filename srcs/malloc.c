@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 13:54:29 by vcombey           #+#    #+#             */
-/*   Updated: 2018/06/14 19:14:51 by vcombey          ###   ########.fr       */
+/*   Updated: 2018/06/16 20:09:32 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	*calloc(size_t count, size_t size)
 		global_size = 32;
 	addr = malloc(global_size);
 	if (addr)
-		bzero(addr, global_size);
+		ft_bzero(addr, global_size);
 	return (addr);
 }
 

@@ -1,28 +1,4 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   btree.h                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bmickael <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/03/24 01:42:50 by bmickael          #+#    #+#             */
-/*   Updated: 2017/03/24 02:37:21 by bmickael         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef BTREE_H
-# define BTREE_H
-
-/*
-** This PACK provide a suitable interface to manipulate binary tree.
-** Including black and white color self balanced.
-*/
-
-# include <stdlib.h>
-# include <stdint.h>
-
-struct s_node;
-
 enum			e_check_result {
 	FAILED = 0,
 	OK

@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 13:54:29 by vcombey           #+#    #+#             */
-/*   Updated: 2018/06/03 19:51:13 by vcombey          ###   ########.fr       */
+/*   Updated: 2018/06/16 20:11:27 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	desalocator_large_zone(void *ptr)
 	node = ((struct s_chunk_large_zone *)ptr) - 1;
 	del_chunk_large_zone(&g_zones.large_zone_first, node);
 	if (munmap(node, node->size_octet) == -1)
-		perror("munmap failed");
+		ft_printf("munmap failed\n");
 	return ;
 }
 

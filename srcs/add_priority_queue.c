@@ -6,7 +6,7 @@
 /*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/05/20 13:54:29 by vcombey           #+#    #+#             */
-/*   Updated: 2018/05/20 20:34:57 by vcombey          ###   ########.fr       */
+/*   Updated: 2018/06/16 20:12:39 by vcombey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static	int	realloc_heap(struct s_heap *pq)
 					PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0))\
 			== MAP_FAILED)
 		return (-1);
-	memmove(new_vec, pq->vec, pq->lenght * sizeof(*pq->vec));
+	ft_memmove(new_vec, pq->vec, pq->lenght * sizeof(*pq->vec));
 	recalc_header_zone(new_vec, pq->lenght);
 	munmap(pq->vec, pq->size * sizeof(*pq->vec));
 	pq->size = new_size;
