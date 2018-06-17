@@ -5,7 +5,7 @@ LIBDIR	= ./
 SRCDIR	= srcs
 INCDIR	= includes
 OBJDIR	= objs
-HEADER	= libft.h btree.h
+HEADER	= libft.h
 
 ifeq ($(DEBUG),yes)
 	CFLAGS = -std=c99 -fPIC -Wextra -Wall -Werror -g -O0 -fsanitize=address -I./$(INCDIR)
@@ -54,7 +54,7 @@ OBJ = $(addprefix $(OBJDIR)/, $(addsuffix .o, $(TMP)))
 
 all: $(NAME)
 
-$(NAME): $(OBJ) includes/libft.h includes/btree.h includes/chained_tools.h srcs/gnl/private_gnl.h srcs/ft_printf/internal_printf.h
+$(NAME): $(OBJ) includes/libft.h includes/chained_tools.h srcs/gnl/private_gnl.h srcs/ft_printf/internal_printf.h
 	ar rc $(NAME) $(OBJ)
 	ranlib $(NAME)
 

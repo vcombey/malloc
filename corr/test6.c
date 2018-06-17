@@ -1,23 +1,35 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   test6.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/06/17 17:04:33 by vcombey           #+#    #+#             */
+/*   Updated: 2018/06/17 17:09:14 by vcombey          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "malloc.h"
 
-int main()
+int	main(void)
 {
-    int i;
-    char *addr;
-    char *tab[129];
+	int		i;
+	char	*addr;
+	char	*tab[129];
 
-    i = 0;
-    while (i < 129)
-    {
-        tab[i] = (char*)malloc(1024);
-        i++;
-    }
-    i = 0;
+	i = 0;
+	while (i < 129)
+	{
+		tab[i] = (char*)malloc(1024);
+		i++;
+	}
+	i = 0;
 	show_alloc_mem();
-    while (i < 129)
-    {
-        free(tab[i]);
-        i++;
-    }
+	while (i < 129)
+	{
+		free(tab[i]);
+		i++;
+	}
 	show_alloc_mem();
 }

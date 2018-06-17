@@ -1,20 +1,32 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   test1.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vcombey <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/06/17 17:04:33 by vcombey           #+#    #+#             */
+/*   Updated: 2018/06/17 17:08:48 by vcombey          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "malloc.h"
 #include <stdio.h>
 
-int main()
+int	main(void)
 {
-    int i;
-    int j;
-    int k;
-    char *addr;
+	int		i;
+	int		j;
+	int		k;
+	char	*addr;
 
-    i = 0;
-    while (i < 1024)
-    {
-        addr = (char*)malloc(1024);
-        addr[0] = 42;
-        addr[1023] = 42;
-        i++;
-    }
-    return (0);
-} 
+	i = 0;
+	while (i < 1024)
+	{
+		addr = (char*)malloc(1024);
+		addr[0] = 42;
+		addr[1023] = 42;
+		i++;
+	}
+	return (0);
+}
