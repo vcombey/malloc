@@ -4,3 +4,4 @@
 *.o
 *.a
 !.gitignore
+objs/*.o
